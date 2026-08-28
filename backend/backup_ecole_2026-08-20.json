@@ -1,0 +1,2929 @@
+{
+  "export_date": "2026-08-20T22:01:38.261Z",
+  "school_name": "École Primaire",
+  "tables": {
+    "classes": [
+      {
+        "id": "ca3de727-88a1-484a-ad15-9593781c4a4b",
+        "name": "CE1",
+        "passing_grade": 5,
+        "created_at": "2026-08-11T03:35:09.295242+00:00",
+        "updated_at": "2026-08-19T23:44:16.476033+00:00"
+      },
+      {
+        "id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "name": "CE2",
+        "passing_grade": 5,
+        "created_at": "2026-08-11T03:35:09.295242+00:00",
+        "updated_at": "2026-08-19T23:44:16.816703+00:00"
+      },
+      {
+        "id": "56092579-4b35-4c7b-a4a4-77c5cce89214",
+        "name": "CM1",
+        "passing_grade": 5,
+        "created_at": "2026-08-11T03:35:09.295242+00:00",
+        "updated_at": "2026-08-19T23:44:16.971487+00:00"
+      },
+      {
+        "id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "name": "CM2",
+        "passing_grade": 5,
+        "created_at": "2026-08-11T03:35:09.295242+00:00",
+        "updated_at": "2026-08-19T23:44:17.123191+00:00"
+      },
+      {
+        "id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "name": "CP1",
+        "passing_grade": 5,
+        "created_at": "2026-08-11T03:35:09.295242+00:00",
+        "updated_at": "2026-08-19T23:44:17.273563+00:00"
+      },
+      {
+        "id": "9cf8c861-72bc-4aef-9dfd-881b185704b3",
+        "name": "CP2",
+        "passing_grade": 5,
+        "created_at": "2026-08-11T03:35:09.295242+00:00",
+        "updated_at": "2026-08-19T23:44:17.418182+00:00"
+      }
+    ],
+    "school_years": [
+      {
+        "id": "02f959e6-d1db-41dc-9c44-fd558b4a709c",
+        "year_label": "2027-2028",
+        "is_current": false,
+        "is_locked": false,
+        "start_date": "2027-09-01",
+        "end_date": "2028-06-30",
+        "created_at": "2026-08-20T02:03:31.985793+00:00",
+        "updated_at": "2026-08-20T02:03:31.985793+00:00"
+      },
+      {
+        "id": "527db625-f404-4f92-b868-c1371eb6f818",
+        "year_label": "2025-2026",
+        "is_current": false,
+        "is_locked": false,
+        "start_date": "2025-09-01",
+        "end_date": "2026-07-31",
+        "created_at": "2026-08-19T23:04:38.260418+00:00",
+        "updated_at": "2026-08-20T08:52:54.744997+00:00"
+      },
+      {
+        "id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "year_label": "2026-2027",
+        "is_current": true,
+        "is_locked": false,
+        "start_date": "2026-09-01",
+        "end_date": "2027-07-31",
+        "created_at": "2026-08-19T05:14:37.127283+00:00",
+        "updated_at": "2026-08-20T08:52:54.744997+00:00"
+      }
+    ],
+    "users": [
+      {
+        "id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "username": "ALEX",
+        "role": "teacher",
+        "first_name": "Alex",
+        "last_name": "BASSONO",
+        "is_active": true,
+        "created_at": "2026-08-11T05:30:55.020425+00:00"
+      },
+      {
+        "id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "username": "Inno",
+        "role": "founder",
+        "first_name": "Inno",
+        "last_name": "BASSONO",
+        "is_active": true,
+        "created_at": "2026-08-11T05:27:59.635955+00:00"
+      },
+      {
+        "id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "username": "DONALD",
+        "role": "teacher",
+        "first_name": "Donnald",
+        "last_name": "BASSONO",
+        "is_active": true,
+        "created_at": "2026-08-11T05:35:26.334166+00:00"
+      },
+      {
+        "id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "username": "Directeur",
+        "role": "director",
+        "first_name": "Directeur",
+        "last_name": "Test",
+        "is_active": true,
+        "created_at": "2026-08-16T13:46:41.406412+00:00"
+      }
+    ],
+    "students": [
+      {
+        "id": "9a0d5b33-d8f0-4df3-8050-40474cb4db6f",
+        "unique_identifier": "ID81826629874",
+        "matricule": "ECO260001",
+        "first_name": "steve",
+        "last_name": "landry",
+        "photo_url": null,
+        "parent_phone": "3454334",
+        "current_class_id": "56092579-4b35-4c7b-a4a4-77c5cce89214",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-16T12:03:47.350766+00:00",
+        "updated_at": "2026-08-16T12:03:47.350766+00:00",
+        "date_of_birth": "2026-08-12",
+        "gender": "M",
+        "parent_name": "fabrice",
+        "parent_address": "ouaga",
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "022921e0-8e57-4c59-988f-95fe5812fb20",
+        "unique_identifier": "ID83245982128",
+        "matricule": "ECO260002",
+        "first_name": "fabrice",
+        "last_name": "etan",
+        "photo_url": null,
+        "parent_phone": "356432",
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-16T12:27:26.796071+00:00",
+        "updated_at": "2026-08-16T12:27:26.796071+00:00",
+        "date_of_birth": "2026-08-05",
+        "gender": "M",
+        "parent_name": "eco",
+        "parent_address": "tanghin",
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "78419ed7-7067-4159-bd09-85dc9388fd09",
+        "unique_identifier": "ID83497832981",
+        "matricule": "ECO260003",
+        "first_name": "steve",
+        "last_name": "sam",
+        "photo_url": null,
+        "parent_phone": "23455",
+        "current_class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-16T12:31:38.5868+00:00",
+        "updated_at": "2026-08-16T12:31:38.5868+00:00",
+        "date_of_birth": "2026-08-14",
+        "gender": "M",
+        "parent_name": "fgdd",
+        "parent_address": "ford",
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "05549dae-cb7a-4dbd-a191-03f1afb2a399",
+        "unique_identifier": "ID688521832465951",
+        "matricule": "ECO24852183258523",
+        "first_name": "DSS",
+        "last_name": "CCSC",
+        "photo_url": null,
+        "parent_phone": "24432",
+        "current_class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-16T13:00:19.108426+00:00",
+        "updated_at": "2026-08-16T13:00:19.108426+00:00",
+        "date_of_birth": "2026-08-19",
+        "gender": "M",
+        "parent_name": "EDFSF",
+        "parent_address": "FSAF",
+        "created_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "school_year": "2024-2025",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "edc1aa0f-0794-4c77-8ce4-371a03a2d18b",
+        "unique_identifier": "ID51987623330",
+        "matricule": "ECO243786",
+        "first_name": "Jean",
+        "last_name": "Kaboré",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-18T11:19:48.503911+00:00",
+        "updated_at": "2026-08-18T11:19:48.503911+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "school_year": "2024-2025",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "fc040c16-ecc2-43c6-acc8-c06b9733c14d",
+        "unique_identifier": "ID51988551604",
+        "matricule": "ECO241346",
+        "first_name": "Marie",
+        "last_name": "Ouédraogo",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-18T11:19:48.90875+00:00",
+        "updated_at": "2026-08-18T11:19:48.90875+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "school_year": "2024-2025",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "e29fa2f7-6699-4918-8609-6eb5a53ce8b9",
+        "unique_identifier": "ID51988926107",
+        "matricule": "ECO241342",
+        "first_name": "Alassane",
+        "last_name": "Diallo",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-18T11:19:49.065685+00:00",
+        "updated_at": "2026-08-18T11:19:49.065685+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "school_year": "2024-2025",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "ce95d6bc-9530-4779-b5e7-e8a4e56d9f3d",
+        "unique_identifier": "ID8078543812",
+        "matricule": "MAT8078543812",
+        "first_name": "Élève1",
+        "last_name": "Test",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "9cf8c861-72bc-4aef-9dfd-881b185704b3",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-19T23:06:25.487524+00:00",
+        "updated_at": "2026-08-19T23:06:28.349965+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2025-2026",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "c712d699-3f7e-4c90-a295-f2fe400a3ac1",
+        "unique_identifier": "ID8078543804",
+        "matricule": "MAT8078543804",
+        "first_name": "Élève2",
+        "last_name": "Test",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "9cf8c861-72bc-4aef-9dfd-881b185704b3",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-19T23:06:25.670771+00:00",
+        "updated_at": "2026-08-19T23:06:28.830602+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2025-2026",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "9e8d8842-7a1c-4061-9594-7dfec3ec5652",
+        "unique_identifier": "ID51989079585",
+        "matricule": "ECO247906",
+        "first_name": "Fatou",
+        "last_name": "Sawadogo",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-18T11:19:49.2299+00:00",
+        "updated_at": "2026-08-20T03:13:26.410859+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "school_year": "2024-2025",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "68068be7-0d43-4417-b9b5-d0021ef88bf1",
+        "unique_identifier": "ID9545307948",
+        "matricule": "CE1A95453079",
+        "first_name": "Eleve",
+        "last_name": "CE1-A",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-20T03:10:53.485504+00:00",
+        "updated_at": "2026-08-20T03:13:26.72559+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "c7e9db7e-329b-4eb8-adf3-622209a50c83",
+        "unique_identifier": "ID8361830720",
+        "matricule": "MAT8361830720",
+        "first_name": "TestAdmis",
+        "last_name": "Sur10",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-19T23:53:38.437364+00:00",
+        "updated_at": "2026-08-19T23:53:38.437364+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2025-2026",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "8f4116eb-8871-4f57-bb6f-f074e82d3df0",
+        "unique_identifier": "ID8361830798",
+        "matricule": "MAT8361830798",
+        "first_name": "TestRedou",
+        "last_name": "Sur10",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-19T23:53:38.618199+00:00",
+        "updated_at": "2026-08-19T23:53:38.618199+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2025-2026",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "6bf28c41-d537-40a8-b915-2540e0cb53d4",
+        "unique_identifier": "ID8361830737",
+        "matricule": "MAT8361830737",
+        "first_name": "TestLimite",
+        "last_name": "Sur10",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-19T23:53:38.789488+00:00",
+        "updated_at": "2026-08-19T23:53:38.789488+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2025-2026",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "b976103a-1c53-4161-8835-45267a7e4e44",
+        "unique_identifier": "ID83889354121",
+        "matricule": "ECO240006",
+        "first_name": "Test",
+        "last_name": "ReqUser",
+        "photo_url": null,
+        "parent_phone": "70123456",
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-16T12:38:09.882435+00:00",
+        "updated_at": "2026-08-20T01:59:03.483465+00:00",
+        "date_of_birth": "2015-05-15",
+        "gender": "M",
+        "parent_name": "Parent",
+        "parent_address": "Adresse",
+        "created_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "school_year": "2024-2025",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "18555a9c-ecf7-41ca-b319-85e3913974d8",
+        "unique_identifier": "ID9545307938",
+        "matricule": "CE1B95453079",
+        "first_name": "Eleve",
+        "last_name": "CE1-B",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-20T03:10:53.677016+00:00",
+        "updated_at": "2026-08-20T03:13:27.02118+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "a838823d-ebea-4185-80bd-80e625c48f7d",
+        "unique_identifier": "ID51989250859",
+        "matricule": "ECO243307",
+        "first_name": "Abdoulaye",
+        "last_name": "Zongo",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-18T11:19:49.418044+00:00",
+        "updated_at": "2026-08-20T01:59:04.44455+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "school_year": "2024-2025",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "13f73601-4cd2-4c23-a0b6-796eac77c416",
+        "unique_identifier": "ID51989435680",
+        "matricule": "ECO243566",
+        "first_name": "Aminata",
+        "last_name": "Traoré",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-18T11:19:49.584487+00:00",
+        "updated_at": "2026-08-20T01:59:04.90865+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "school_year": "2024-2025",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "da2a9573-cfdd-4181-97ff-3a90393cb65e",
+        "unique_identifier": "ID9053070353",
+        "matricule": "CM2A90530703",
+        "first_name": "Eleve",
+        "last_name": "CM2-A",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "current_school_year_id": null,
+        "status": "repeating",
+        "final_grade": null,
+        "created_at": "2026-08-20T01:48:51.116592+00:00",
+        "updated_at": "2026-08-20T03:16:57.820808+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "8ace2215-1ac5-4ce1-a0a5-d195b10e6417",
+        "unique_identifier": "ID84095163953",
+        "matricule": "ECO260004",
+        "first_name": "sadad",
+        "last_name": "fsas",
+        "photo_url": null,
+        "parent_phone": "34212",
+        "current_class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "current_school_year_id": null,
+        "status": "repeating",
+        "final_grade": null,
+        "created_at": "2026-08-16T12:41:36.497495+00:00",
+        "updated_at": "2026-08-20T03:16:58.108645+00:00",
+        "date_of_birth": "2026-08-12",
+        "gender": "M",
+        "parent_name": "asc",
+        "parent_address": "cscx",
+        "created_by": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "ea80a666-472f-4496-a77c-6be88a3efe5d",
+        "unique_identifier": "ID9545307991",
+        "matricule": "CE1C95453079",
+        "first_name": "Eleve",
+        "last_name": "CE1-C",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-20T03:10:53.835557+00:00",
+        "updated_at": "2026-08-20T03:15:12.211+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "62587b8a-fcad-48b8-85a5-3360a0644887",
+        "unique_identifier": "ID9570423170",
+        "matricule": "CE1A95704231",
+        "first_name": "Eleve",
+        "last_name": "CE1-A",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-20T03:15:04.65048+00:00",
+        "updated_at": "2026-08-20T03:15:12.516938+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "c2427065-094d-4cf7-8242-c2af924d184c",
+        "unique_identifier": "ID9570423183",
+        "matricule": "CE1B95704231",
+        "first_name": "Eleve",
+        "last_name": "CE1-B",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-20T03:15:04.8358+00:00",
+        "updated_at": "2026-08-20T03:15:12.821608+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "8e148fb2-9ffe-488f-9943-9b372646d62a",
+        "unique_identifier": "ID8078543826",
+        "matricule": "MAT8078543826",
+        "first_name": "Élève3",
+        "last_name": "Test",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "current_school_year_id": null,
+        "status": "repeating",
+        "final_grade": null,
+        "created_at": "2026-08-19T23:06:25.857665+00:00",
+        "updated_at": "2026-08-20T03:16:58.401688+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "b51a0068-ac06-4e37-a76c-ff76b840a0de",
+        "unique_identifier": "ID9570423124",
+        "matricule": "CE1C95704231",
+        "first_name": "Eleve",
+        "last_name": "CE1-C",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "ca3de727-88a1-484a-ad15-9593781c4a4b",
+        "current_school_year_id": null,
+        "status": "active",
+        "final_grade": null,
+        "created_at": "2026-08-20T03:15:05.00081+00:00",
+        "updated_at": "2026-08-20T03:16:41.694895+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "647d173e-6252-499f-8e47-57a064a99f78",
+        "unique_identifier": "ID9580756961",
+        "matricule": "CM2A95807569",
+        "first_name": "Eleve",
+        "last_name": "CM2-A",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "current_school_year_id": null,
+        "status": "departed",
+        "final_grade": null,
+        "created_at": "2026-08-20T03:16:47.996094+00:00",
+        "updated_at": "2026-08-20T03:16:56.028432+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": "2026-08-20",
+        "departure_reason": "fin de cycle"
+      },
+      {
+        "id": "0420d53f-fb98-4c9d-94e5-ae498942c0b1",
+        "unique_identifier": "ID9580756909",
+        "matricule": "CM2B95807569",
+        "first_name": "Eleve",
+        "last_name": "CM2-B",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "current_school_year_id": null,
+        "status": "departed",
+        "final_grade": null,
+        "created_at": "2026-08-20T03:16:48.20177+00:00",
+        "updated_at": "2026-08-20T03:16:56.334836+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": "2026-08-20",
+        "departure_reason": "fin de cycle"
+      },
+      {
+        "id": "695ea553-0b1e-482a-b9e5-7661af942d97",
+        "unique_identifier": "ID9580756916",
+        "matricule": "CM2C95807569",
+        "first_name": "Eleve",
+        "last_name": "CM2-C",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "current_school_year_id": null,
+        "status": "repeating",
+        "final_grade": null,
+        "created_at": "2026-08-20T03:16:48.3557+00:00",
+        "updated_at": "2026-08-20T03:16:56.628722+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "23909f0d-ba44-4d4a-b30e-f800807bed6f",
+        "unique_identifier": "ID8078543835",
+        "matricule": "MAT8078543835",
+        "first_name": "Élève4",
+        "last_name": "Test",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "current_school_year_id": null,
+        "status": "repeating",
+        "final_grade": null,
+        "created_at": "2026-08-19T23:06:26.339235+00:00",
+        "updated_at": "2026-08-20T03:16:56.916019+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "d0914460-180a-4fd0-bb8b-25100f6fcf1b",
+        "unique_identifier": "ID9053070380",
+        "matricule": "CM2B90530703",
+        "first_name": "Eleve",
+        "last_name": "CM2-B",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "current_school_year_id": null,
+        "status": "repeating",
+        "final_grade": null,
+        "created_at": "2026-08-20T01:48:51.316097+00:00",
+        "updated_at": "2026-08-20T03:16:57.209603+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      },
+      {
+        "id": "16836a5c-a620-4df2-912a-14ef8b1469e3",
+        "unique_identifier": "ID9053070326",
+        "matricule": "CM2C90530703",
+        "first_name": "Eleve",
+        "last_name": "CM2-C",
+        "photo_url": null,
+        "parent_phone": null,
+        "current_class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "current_school_year_id": null,
+        "status": "repeating",
+        "final_grade": null,
+        "created_at": "2026-08-20T01:48:51.480946+00:00",
+        "updated_at": "2026-08-20T03:16:57.515708+00:00",
+        "date_of_birth": null,
+        "gender": null,
+        "parent_name": null,
+        "parent_address": null,
+        "created_by": null,
+        "school_year": "2026-2027",
+        "departure_date": null,
+        "departure_reason": null
+      }
+    ],
+    "tuition_rates": [
+      {
+        "id": "10a01849-cf80-46cf-bd55-b86c5ad95036",
+        "class_id": "ca3de727-88a1-484a-ad15-9593781c4a4b",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 15000,
+        "effective_date": "2026-08-18",
+        "created_at": "2026-08-18T22:10:26.434958+00:00",
+        "updated_at": "2026-08-19T05:14:37.489666+00:00"
+      },
+      {
+        "id": "7bfee4ba-6440-4c3d-89de-a5e484941689",
+        "class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 25000,
+        "effective_date": "2026-08-18",
+        "created_at": "2026-08-18T22:54:00.197355+00:00",
+        "updated_at": "2026-08-19T05:14:37.823642+00:00"
+      },
+      {
+        "id": "3f3d1e21-b29d-4195-936f-e3fb2f0696ab",
+        "class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 25000,
+        "effective_date": "2026-08-18",
+        "created_at": "2026-08-18T22:54:00.496398+00:00",
+        "updated_at": "2026-08-19T05:14:37.979695+00:00"
+      },
+      {
+        "id": "204b606b-0a30-4721-8023-e858540fe8de",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 50000,
+        "effective_date": "2026-08-19",
+        "created_at": "2026-08-19T09:10:56.513911+00:00",
+        "updated_at": "2026-08-19T09:10:56.513911+00:00"
+      },
+      {
+        "id": "388e0f40-de08-4a35-a51a-e928956b4bda",
+        "class_id": "56092579-4b35-4c7b-a4a4-77c5cce89214",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 19000,
+        "effective_date": "2026-08-19",
+        "created_at": "2026-08-18T22:53:59.835134+00:00",
+        "updated_at": "2026-08-19T10:23:40.208408+00:00"
+      },
+      {
+        "id": "2faa67c5-0e69-449a-9547-0ed0e8cdcb99",
+        "class_id": "9cf8c861-72bc-4aef-9dfd-881b185704b3",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 7000,
+        "effective_date": "2026-08-19",
+        "created_at": "2026-08-19T23:34:55.251385+00:00",
+        "updated_at": "2026-08-19T23:34:55.251385+00:00"
+      }
+    ],
+    "tuition_payments": [
+      {
+        "id": "3ee87a46-02b0-4808-8f78-dd23a6906f29",
+        "student_id": "9a0d5b33-d8f0-4df3-8050-40474cb4db6f",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 5000,
+        "payment_date": "2026-08-18",
+        "trimester": 1,
+        "receipt_number": "REC17870927379545098",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-18T22:38:58.292906+00:00"
+      },
+      {
+        "id": "dbec3ce2-785e-4b13-aab8-79ed155e1c62",
+        "student_id": "78419ed7-7067-4159-bd09-85dc9388fd09",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 10000,
+        "payment_date": "2026-08-18",
+        "trimester": 1,
+        "receipt_number": "REC70933901813927",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-18T22:49:50.785281+00:00"
+      },
+      {
+        "id": "cf4c3df2-a6b6-4f53-affe-0ac547f3b52f",
+        "student_id": "022921e0-8e57-4c59-988f-95fe5812fb20",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 5000,
+        "payment_date": "2026-08-18",
+        "trimester": 1,
+        "receipt_number": "REC70946132278268",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-18T23:10:13.839367+00:00"
+      },
+      {
+        "id": "870d7c39-9d0a-488c-9143-ccf7c7f03514",
+        "student_id": "022921e0-8e57-4c59-988f-95fe5812fb20",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 7000,
+        "payment_date": "2026-08-19",
+        "trimester": 1,
+        "receipt_number": "REC71156109372548",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-19T05:00:11.576397+00:00"
+      },
+      {
+        "id": "d70a45e5-f515-4fae-b761-321af447dac1",
+        "student_id": "022921e0-8e57-4c59-988f-95fe5812fb20",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "amount": 13000,
+        "payment_date": "2026-08-19",
+        "trimester": 1,
+        "receipt_number": "REC71156730848582",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-19T05:01:13.590641+00:00"
+      }
+    ],
+    "teacher_salaries": [
+      {
+        "id": "d31f04b0-e4cc-4ecd-ba31-cf8b827d708c",
+        "teacher_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "monthly_amount": 200000,
+        "effective_date": "2026-08-19",
+        "created_at": "2026-08-19T18:03:38.238375+00:00",
+        "updated_at": "2026-08-19T18:03:38.238375+00:00"
+      },
+      {
+        "id": "75e02334-e5ed-4542-b4fa-812eac415478",
+        "teacher_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "monthly_amount": 200000,
+        "effective_date": "2026-08-19",
+        "created_at": "2026-08-19T18:04:05.368395+00:00",
+        "updated_at": "2026-08-19T18:04:05.368395+00:00"
+      },
+      {
+        "id": "7dba8267-7b9d-4ac1-b9fd-1450df11dd81",
+        "teacher_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "monthly_amount": 600000,
+        "effective_date": "2026-08-19",
+        "created_at": "2026-08-19T21:52:32.328216+00:00",
+        "updated_at": "2026-08-19T21:52:32.328216+00:00"
+      }
+    ],
+    "salary_payments": [
+      {
+        "id": "bb62ecaf-c772-4d31-a425-2fd4ff54078d",
+        "salary_id": null,
+        "teacher_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "amount": 100000,
+        "payment_month": "2026-08-01",
+        "payment_date": "2026-08-19",
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-19T18:04:31.803537+00:00",
+        "receipt_number": "SAL71626725389043",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373"
+      },
+      {
+        "id": "01740f12-1915-4c46-8059-7709cffa93bf",
+        "salary_id": null,
+        "teacher_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "amount": 50000,
+        "payment_month": "2026-08-01",
+        "payment_date": "2026-08-19",
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-19T18:11:01.517112+00:00",
+        "receipt_number": "SAL71630622352860",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373"
+      },
+      {
+        "id": "0e5f5c08-b6d1-408d-917f-191c819ba869",
+        "salary_id": null,
+        "teacher_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "amount": 3000,
+        "payment_month": "2026-08-01",
+        "payment_date": "2026-08-19",
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-19T20:49:02.766282+00:00",
+        "receipt_number": "SAL71725434397941",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373"
+      },
+      {
+        "id": "4e37556b-3b2b-4f79-af50-afe34c318fc0",
+        "salary_id": null,
+        "teacher_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "amount": 3900,
+        "payment_month": "2026-08-01",
+        "payment_date": "2026-08-19",
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-19T20:52:49.130721+00:00",
+        "receipt_number": "SAL71727697978586",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373"
+      },
+      {
+        "id": "17aadda8-eb1b-430a-a935-4b10e54c7c66",
+        "salary_id": null,
+        "teacher_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "amount": 70000,
+        "payment_month": "2026-08-01",
+        "payment_date": "2026-08-19",
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-19T21:55:44.549282+00:00",
+        "receipt_number": "SAL71765447887806",
+        "cancelled": false,
+        "cancelled_by": null,
+        "cancelled_at": null,
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373"
+      }
+    ],
+    "expenses": [
+      {
+        "id": "06f090e7-5bba-4b0a-9f25-bd79cb40805f",
+        "category": "entretien",
+        "amount": 120000,
+        "expense_date": "2026-08-10",
+        "description": "Reparation toiture",
+        "receipt_url": "https://example.com/receipt2.pdf",
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-20T03:46:07.524468+00:00",
+        "updated_at": "2026-08-20T03:46:07.524468+00:00"
+      },
+      {
+        "id": "6568166a-136d-4ffc-849f-82f19df04763",
+        "category": "cantine",
+        "amount": 200000,
+        "expense_date": "2026-08-05",
+        "description": "Approvisionnement cantine",
+        "receipt_url": null,
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-20T03:46:07.674559+00:00",
+        "updated_at": "2026-08-20T03:46:07.674559+00:00"
+      },
+      {
+        "id": "96319612-7d1f-41d3-b72b-3b43ca361be9",
+        "category": "transport",
+        "amount": 45000,
+        "expense_date": "2026-07-25",
+        "description": "Carburant vehicule scolaire",
+        "receipt_url": "https://example.com/receipt3.pdf",
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-20T03:46:07.825501+00:00",
+        "updated_at": "2026-08-20T03:46:07.825501+00:00"
+      },
+      {
+        "id": "8a684787-74a4-4c79-a07d-45f276bb76eb",
+        "category": "fournitures",
+        "amount": 55000,
+        "expense_date": "2026-08-20",
+        "description": "Achat de cahiers et stylos (modifie)",
+        "receipt_url": "https://example.com/receipt1.pdf",
+        "created_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "created_at": "2026-08-20T03:46:06.986203+00:00",
+        "updated_at": "2026-08-20T03:46:06.986203+00:00"
+      }
+    ],
+    "passage_decisions": [
+      {
+        "id": "b1441871-807f-4ea2-a550-dce3f9c6e2fc",
+        "student_id": "647d173e-6252-499f-8e47-57a064a99f78",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "proposed_status": "passed",
+        "final_status": "passed",
+        "validated_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "validated_at": "2026-08-20T03:16:54.449+00:00",
+        "notes": null
+      },
+      {
+        "id": "720c2244-c91d-4842-9691-b8956d4f0653",
+        "student_id": "0420d53f-fb98-4c9d-94e5-ae498942c0b1",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "proposed_status": "passed",
+        "final_status": "passed",
+        "validated_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "validated_at": "2026-08-20T03:16:54.609+00:00",
+        "notes": null
+      },
+      {
+        "id": "70d38ea5-096a-4359-8f16-9526ce713998",
+        "student_id": "695ea553-0b1e-482a-b9e5-7661af942d97",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "proposed_status": "repeating",
+        "final_status": "repeating",
+        "validated_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "validated_at": "2026-08-20T03:16:54.762+00:00",
+        "notes": null
+      },
+      {
+        "id": "02b06f76-a2b6-48b3-a172-766e75393d3c",
+        "student_id": "23909f0d-ba44-4d4a-b30e-f800807bed6f",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "proposed_status": "repeating",
+        "final_status": "repeating",
+        "validated_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "validated_at": "2026-08-20T03:16:54.908+00:00",
+        "notes": null
+      },
+      {
+        "id": "59e27d93-1210-4ac8-a5fb-fbc7c293621c",
+        "student_id": "d0914460-180a-4fd0-bb8b-25100f6fcf1b",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "proposed_status": "repeating",
+        "final_status": "repeating",
+        "validated_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "validated_at": "2026-08-20T03:16:55.057+00:00",
+        "notes": null
+      },
+      {
+        "id": "ab8598aa-7c4f-461c-aa24-ab22ba81dfe3",
+        "student_id": "16836a5c-a620-4df2-912a-14ef8b1469e3",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "proposed_status": "repeating",
+        "final_status": "repeating",
+        "validated_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "validated_at": "2026-08-20T03:16:55.203+00:00",
+        "notes": null
+      },
+      {
+        "id": "4016030f-778a-4521-b707-fd682ab63a4d",
+        "student_id": "8ace2215-1ac5-4ce1-a0a5-d195b10e6417",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "proposed_status": "repeating",
+        "final_status": "repeating",
+        "validated_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "validated_at": "2026-08-20T03:16:55.498+00:00",
+        "notes": null
+      },
+      {
+        "id": "452c4019-0457-41b9-bfe5-e56e8cabd587",
+        "student_id": "8e148fb2-9ffe-488f-9943-9b372646d62a",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "proposed_status": "repeating",
+        "final_status": "repeating",
+        "validated_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "validated_at": "2026-08-20T03:16:55.657+00:00",
+        "notes": null
+      },
+      {
+        "id": "47b4207c-9cc5-46b0-bca4-fe8b82c579c6",
+        "student_id": "da2a9573-cfdd-4181-97ff-3a90393cb65e",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "proposed_status": "repeating",
+        "final_status": "passed",
+        "validated_by": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "validated_at": "2026-08-20T03:16:55.356+00:00",
+        "notes": null
+      }
+    ],
+    "student_academic_history": [
+      {
+        "id": "05291d00-5019-43be-a697-ed705389c89b",
+        "student_id": "647d173e-6252-499f-8e47-57a064a99f78",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": 8,
+        "status": "transferred",
+        "created_at": "2026-08-20T03:16:56.184333+00:00",
+        "school_year": null
+      },
+      {
+        "id": "3e4070a1-816a-475c-95cb-1f6bb1282661",
+        "student_id": "0420d53f-fb98-4c9d-94e5-ae498942c0b1",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": 6,
+        "status": "transferred",
+        "created_at": "2026-08-20T03:16:56.482366+00:00",
+        "school_year": null
+      },
+      {
+        "id": "c8bb2623-6bfe-40e6-8a08-57902baeab61",
+        "student_id": "695ea553-0b1e-482a-b9e5-7661af942d97",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": 4,
+        "status": "repeating",
+        "created_at": "2026-08-20T03:16:56.765763+00:00",
+        "school_year": null
+      },
+      {
+        "id": "022cbdbe-f78e-4b4b-86d0-ce6d5ddb7dad",
+        "student_id": "23909f0d-ba44-4d4a-b30e-f800807bed6f",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": 3,
+        "status": "repeating",
+        "created_at": "2026-08-20T03:16:57.060394+00:00",
+        "school_year": null
+      },
+      {
+        "id": "bd4347ba-fe2e-464f-85d8-dcbe255033fd",
+        "student_id": "d0914460-180a-4fd0-bb8b-25100f6fcf1b",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": null,
+        "status": "repeating",
+        "created_at": "2026-08-20T03:16:57.3662+00:00",
+        "school_year": null
+      },
+      {
+        "id": "45ddfcd0-75dd-4800-b266-95ffb6985fbd",
+        "student_id": "16836a5c-a620-4df2-912a-14ef8b1469e3",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": null,
+        "status": "repeating",
+        "created_at": "2026-08-20T03:16:57.66047+00:00",
+        "school_year": null
+      },
+      {
+        "id": "84d3c192-49f9-48fc-8acf-a44f839c389f",
+        "student_id": "da2a9573-cfdd-4181-97ff-3a90393cb65e",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": null,
+        "status": "repeating",
+        "created_at": "2026-08-20T03:16:57.965457+00:00",
+        "school_year": null
+      },
+      {
+        "id": "6e6e2871-d667-42b5-ad1c-eb37676ef150",
+        "student_id": "8ace2215-1ac5-4ce1-a0a5-d195b10e6417",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": null,
+        "status": "repeating",
+        "created_at": "2026-08-20T03:16:58.258891+00:00",
+        "school_year": null
+      },
+      {
+        "id": "ddd00a5f-1346-4f7a-901c-e39c313f85c7",
+        "student_id": "8e148fb2-9ffe-488f-9943-9b372646d62a",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": null,
+        "status": "repeating",
+        "created_at": "2026-08-20T03:16:58.55745+00:00",
+        "school_year": null
+      }
+    ],
+    "teacher_class_assignments": [
+      {
+        "id": "97c1c149-a9cb-4119-a845-984e3da024bb",
+        "teacher_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "class_id": "bbfd3138-e27d-4595-b42d-8d79178a65c9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "created_at": "2026-08-18T11:53:44.488138+00:00"
+      },
+      {
+        "id": "562d6324-9664-44eb-bc62-14ee0b09da09",
+        "teacher_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "created_at": "2026-08-18T11:53:44.654699+00:00"
+      },
+      {
+        "id": "02d276d2-4540-44b5-a767-6b57be2f5dd1",
+        "teacher_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "created_at": "2026-08-18T22:25:56.625529+00:00"
+      },
+      {
+        "id": "871f8df8-c804-493a-be31-ea45ad9eeb15",
+        "teacher_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "class_id": "701ced0f-ae9f-423e-971e-f4461c98e563",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "created_at": "2026-08-18T22:26:03.351149+00:00"
+      },
+      {
+        "id": "9efe37e8-2842-4b6d-b997-9e4e97e17a9c",
+        "teacher_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "class_id": "003cab75-95f2-4874-babd-916205a6a7a9",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "created_at": "2026-08-20T02:25:43.505084+00:00"
+      },
+      {
+        "id": "1727d805-6e91-456e-8f52-ead98ffc3142",
+        "teacher_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "class_id": "ca3de727-88a1-484a-ad15-9593781c4a4b",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "created_at": "2026-08-18T22:09:21.293012+00:00"
+      }
+    ],
+    "student_annual_grades": [
+      {
+        "id": "1a9d53b4-1d75-4e26-8f06-2d1df69d1dde",
+        "student_id": "ce95d6bc-9530-4779-b5e7-e8a4e56d9f3d",
+        "school_year_id": "527db625-f404-4f92-b868-c1371eb6f818",
+        "final_grade": 12.5,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-19T23:06:26.676129+00:00"
+      },
+      {
+        "id": "12652ce1-a875-4eda-82a1-f3c1e3bbd3a2",
+        "student_id": "c712d699-3f7e-4c90-a295-f2fe400a3ac1",
+        "school_year_id": "527db625-f404-4f92-b868-c1371eb6f818",
+        "final_grade": 8.5,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-19T23:06:26.833331+00:00"
+      },
+      {
+        "id": "d90e6d8b-8dcc-47d5-af2c-9c042b4fb5df",
+        "student_id": "8e148fb2-9ffe-488f-9943-9b372646d62a",
+        "school_year_id": "527db625-f404-4f92-b868-c1371eb6f818",
+        "final_grade": 15,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-19T23:06:26.98057+00:00"
+      },
+      {
+        "id": "c9c6d723-2bad-4ca2-92ea-b8c02c49a58f",
+        "student_id": "23909f0d-ba44-4d4a-b30e-f800807bed6f",
+        "school_year_id": "527db625-f404-4f92-b868-c1371eb6f818",
+        "final_grade": 9,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-19T23:06:27.127671+00:00"
+      },
+      {
+        "id": "2ed56382-7c2a-4002-905d-469b7d513409",
+        "student_id": "c7e9db7e-329b-4eb8-adf3-622209a50c83",
+        "school_year_id": "527db625-f404-4f92-b868-c1371eb6f818",
+        "final_grade": 7.5,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-19T23:53:39.11466+00:00"
+      },
+      {
+        "id": "4a44dd9f-db36-4d73-a422-d988fddcd37e",
+        "student_id": "8f4116eb-8871-4f57-bb6f-f074e82d3df0",
+        "school_year_id": "527db625-f404-4f92-b868-c1371eb6f818",
+        "final_grade": 3.5,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-19T23:53:39.271015+00:00"
+      },
+      {
+        "id": "18f13833-daca-4491-b9fe-6a8720ccaf3b",
+        "student_id": "6bf28c41-d537-40a8-b915-2540e0cb53d4",
+        "school_year_id": "527db625-f404-4f92-b868-c1371eb6f818",
+        "final_grade": 5,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-19T23:53:39.418764+00:00"
+      },
+      {
+        "id": "64ee4759-3b97-4cc3-b2be-529a371dc9ce",
+        "student_id": "647d173e-6252-499f-8e47-57a064a99f78",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": 8,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-20T03:16:53.892366+00:00"
+      },
+      {
+        "id": "281332cc-702a-4fd6-a0a2-5706ba63e205",
+        "student_id": "0420d53f-fb98-4c9d-94e5-ae498942c0b1",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": 6,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-20T03:16:54.049799+00:00"
+      },
+      {
+        "id": "d9e19c70-ef42-4c2a-a46a-be1c2b5a71f7",
+        "student_id": "695ea553-0b1e-482a-b9e5-7661af942d97",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": 4,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-20T03:16:54.208447+00:00"
+      },
+      {
+        "id": "8ff6c416-538a-439a-9f92-c8625eb600ad",
+        "student_id": "23909f0d-ba44-4d4a-b30e-f800807bed6f",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": 3,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-20T03:16:54.363403+00:00"
+      },
+      {
+        "id": "00aabc12-6323-4f18-9fc0-c0131fa91ac3",
+        "student_id": "da2a9573-cfdd-4181-97ff-3a90393cb65e",
+        "school_year_id": "5522efee-fa16-4c7f-b611-fcedfde7f373",
+        "final_grade": 9,
+        "recorded_by": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "recorded_at": "2026-08-20T03:19:24.216528+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "id": "96376109-c960-497a-8103-87e3081c68e4",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "CREATE_FOUNDER",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-11T05:27:59.964264+00:00"
+      },
+      {
+        "id": "789e4b44-6e38-48ae-a928-48b8b63c0f5a",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-11T05:28:53.240087+00:00"
+      },
+      {
+        "id": "e5a6f2e2-082a-4a05-bf38-c6532d549258",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "REGISTER",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "role": "teacher",
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-11T05:30:55.341848+00:00"
+      },
+      {
+        "id": "40ef921b-a024-4562-9021-7d142f863cb1",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-11T05:32:42.519265+00:00"
+      },
+      {
+        "id": "936f8af9-3e61-48b3-840e-0254fe844c39",
+        "user_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "action": "REGISTER",
+        "entity_type": "user",
+        "entity_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "details": {
+          "role": "teacher",
+          "username": "DONALD"
+        },
+        "created_at": "2026-08-11T05:35:26.654305+00:00"
+      },
+      {
+        "id": "1c4fdcd0-92a0-424d-b263-f51fac4b25b3",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-11T05:38:43.030245+00:00"
+      },
+      {
+        "id": "f6662c3e-e4fa-4397-9941-2fdeac57a154",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "VALIDATE_TEACHER",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-11T05:40:08.07734+00:00"
+      },
+      {
+        "id": "dcade5e9-cfb2-4317-9479-199f4fa34af2",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "VALIDATE_TEACHER",
+        "entity_type": "user",
+        "entity_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "details": {
+          "username": "DONALD"
+        },
+        "created_at": "2026-08-11T05:40:12.556557+00:00"
+      },
+      {
+        "id": "418cc9be-f314-455b-8337-98ea50cc70b0",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-11T05:40:23.978063+00:00"
+      },
+      {
+        "id": "026faf53-9b48-4d7b-be18-576b6f938786",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-11T05:59:10.269004+00:00"
+      },
+      {
+        "id": "46a8adac-28e6-430f-ad06-938d82c199c5",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-11T06:07:20.457469+00:00"
+      },
+      {
+        "id": "13432d54-584c-4c87-8aaf-5d819a50ac36",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-11T06:09:10.848971+00:00"
+      },
+      {
+        "id": "b4303b2d-8356-4c85-b583-7dca17a63bd3",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-11T11:32:16.26466+00:00"
+      },
+      {
+        "id": "0c5ef299-1d4a-4ff7-961e-14cf5a4b2d16",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-16T12:02:22.005196+00:00"
+      },
+      {
+        "id": "7bbe367e-0460-4853-a680-388ddb658b18",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:04:35.385832+00:00"
+      },
+      {
+        "id": "7d8a3daa-5137-489e-9482-2470824bff0b",
+        "user_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "details": {
+          "username": "DONALD"
+        },
+        "created_at": "2026-08-16T12:05:29.725288+00:00"
+      },
+      {
+        "id": "9616dfce-63cb-44b3-a0ac-34a29793c596",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:09:27.349315+00:00"
+      },
+      {
+        "id": "9581aede-b1df-4150-8d49-44e08bc8f541",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:12:57.333039+00:00"
+      },
+      {
+        "id": "2e0de8e5-579f-4f2a-b05d-7b281e364e4f",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:14:25.301084+00:00"
+      },
+      {
+        "id": "ba3a06e9-4da4-42cb-a554-08b6c1c0f48b",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:17:16.1163+00:00"
+      },
+      {
+        "id": "2b37c14b-9253-4d05-9ece-2893de5b5dd9",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:17:50.785915+00:00"
+      },
+      {
+        "id": "68ffadf3-17aa-4009-8ef2-fa41d7095495",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:18:30.804356+00:00"
+      },
+      {
+        "id": "c9c36961-ef08-474d-946b-96fe8c55a136",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:19:56.299593+00:00"
+      },
+      {
+        "id": "817c1ca0-9d5b-49b1-a890-b9a0a2d81dff",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:25:56.686577+00:00"
+      },
+      {
+        "id": "007f96c7-1327-405a-8f63-efe90a00c516",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-16T12:28:24.884402+00:00"
+      },
+      {
+        "id": "9f13473b-1c1e-4bfe-827d-3e7ed28153cf",
+        "user_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "details": {
+          "username": "DONALD"
+        },
+        "created_at": "2026-08-16T12:30:45.19154+00:00"
+      },
+      {
+        "id": "7ed98219-3a56-4a24-ad46-90ecd75967eb",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:35:16.793581+00:00"
+      },
+      {
+        "id": "d920f2db-35bc-4bb7-a370-7fd9bd37f7d1",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:36:37.161408+00:00"
+      },
+      {
+        "id": "1f08b0d5-1723-4380-b96f-f6aaa638168d",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:38:09.133716+00:00"
+      },
+      {
+        "id": "0564a141-119d-4309-8d7d-7eb7a773a771",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:38:16.529575+00:00"
+      },
+      {
+        "id": "bb9c934c-23cd-4753-bc0c-0fc8b7ae3cb8",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:42:39.951633+00:00"
+      },
+      {
+        "id": "752ee393-aea5-4612-bd2e-aabbe3e7ea40",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:47:12.43207+00:00"
+      },
+      {
+        "id": "ed99e5a5-886d-43f6-bd34-eec653c12652",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:47:59.460656+00:00"
+      },
+      {
+        "id": "de0f4fcc-8304-46aa-843d-8dfb634b6bd6",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:48:10.764816+00:00"
+      },
+      {
+        "id": "9656d47e-8f00-4122-96b6-acd931aad9c1",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:48:43.709985+00:00"
+      },
+      {
+        "id": "cfd89dbe-4665-4dab-8993-80d30abe7996",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:48:58.641858+00:00"
+      },
+      {
+        "id": "aad0b8c5-2163-4f58-bbdd-9da9c55f3d8a",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:49:13.264251+00:00"
+      },
+      {
+        "id": "9a4220af-ccf5-4775-93a9-d8c141b2e1f2",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:52:50.053504+00:00"
+      },
+      {
+        "id": "bbcb8130-7873-4eba-b515-e1eae5945f18",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:54:44.443728+00:00"
+      },
+      {
+        "id": "0810b3fe-42ee-46a8-bb93-36c1f2cac9ce",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:55:35.947062+00:00"
+      },
+      {
+        "id": "a5f76c6f-cc7a-4873-bb33-8930b1eb9b3d",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:56:38.559057+00:00"
+      },
+      {
+        "id": "3bafbab4-fecc-4dc9-84dc-abe11157e5d0",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:57:07.062509+00:00"
+      },
+      {
+        "id": "943cd5f5-c292-49f5-aa05-1dec0ab3b4b8",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:57:24.412206+00:00"
+      },
+      {
+        "id": "e68f95ea-dd7c-4bd0-a564-2d4e52d9321d",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:58:43.780352+00:00"
+      },
+      {
+        "id": "62a39ffc-62ea-4051-8573-c169cdb28a2e",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-16T12:59:18.745301+00:00"
+      },
+      {
+        "id": "d89eccbc-9113-4bd9-8288-01a8af9ada92",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-16T13:05:58.187421+00:00"
+      },
+      {
+        "id": "2b75119d-001e-417b-90e1-6c104c6955fc",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-16T13:46:47.158396+00:00"
+      },
+      {
+        "id": "a701506a-d489-43ba-bf66-21846723b97f",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-16T13:47:21.489605+00:00"
+      },
+      {
+        "id": "adc5b2e0-e49f-431e-b544-ec04b4418655",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-16T13:48:04.157849+00:00"
+      },
+      {
+        "id": "2210e92a-36f2-4e78-a863-6ccca0755eeb",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-16T13:48:38.277927+00:00"
+      },
+      {
+        "id": "006404d8-a2cb-44c5-8345-f127fcff60ea",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-17T08:13:59.745193+00:00"
+      },
+      {
+        "id": "9b034172-641e-40eb-98e8-485a384fa19d",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-17T08:23:43.082015+00:00"
+      },
+      {
+        "id": "87adfa16-3458-4266-a58e-d65e2e78d802",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-17T08:30:05.795304+00:00"
+      },
+      {
+        "id": "67a65708-7f8d-41e1-8ed3-0cbef20c55b5",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-17T08:31:34.804271+00:00"
+      },
+      {
+        "id": "abd03684-9056-4b84-b6f7-6116e51b8c1f",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-17T08:32:10.615693+00:00"
+      },
+      {
+        "id": "7b87d169-513e-409a-8dab-10baaebff770",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-17T08:33:02.938742+00:00"
+      },
+      {
+        "id": "c313bf9a-941e-42ba-9168-2607bea9d760",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-17T08:34:40.739869+00:00"
+      },
+      {
+        "id": "c687aefa-2fdf-4546-8ddb-f807293a110d",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T08:38:33.617779+00:00"
+      },
+      {
+        "id": "deb1e8a3-df8a-4404-806d-d350bff5fd28",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T08:46:11.771967+00:00"
+      },
+      {
+        "id": "b4d7f38b-a8b3-4bdb-8df4-2c4e9b54b4a8",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "DELETE_STUDENT",
+        "entity_type": "student",
+        "entity_id": "6a75c019-9fd7-459d-8599-19a9b1db2483",
+        "details": {
+          "matricule": "ECO240003"
+        },
+        "created_at": "2026-08-18T08:47:13.993563+00:00"
+      },
+      {
+        "id": "12793bcc-47c9-49fb-bff7-e7c526d71f44",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T09:21:32.664543+00:00"
+      },
+      {
+        "id": "bd983618-7841-4c71-886e-2dee2e820a4b",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T09:55:06.329226+00:00"
+      },
+      {
+        "id": "daf56194-fac8-4d85-bad1-22860d830c76",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T09:55:59.002071+00:00"
+      },
+      {
+        "id": "903935ae-f86e-4dd5-b681-cce2b2741d57",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T10:07:52.167449+00:00"
+      },
+      {
+        "id": "2e53ca25-dc58-4996-8083-3c39383ec5a7",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T10:14:55.382808+00:00"
+      },
+      {
+        "id": "d496c8c2-3b14-45f9-9747-4813edc53ae3",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T10:18:11.40456+00:00"
+      },
+      {
+        "id": "f94aafa7-e794-4f25-9440-30735488ecc5",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T10:21:40.311688+00:00"
+      },
+      {
+        "id": "aa4c108c-fddb-49ef-ba3d-78ed495cd72f",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T10:22:41.055501+00:00"
+      },
+      {
+        "id": "d28b5b98-d827-4ddd-b2f9-6550f5d0f3ef",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T10:22:53.502195+00:00"
+      },
+      {
+        "id": "f0ea5058-5627-468f-9101-24f2b649d85a",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T10:23:09.785541+00:00"
+      },
+      {
+        "id": "a24249bb-4307-4678-85e7-5488f21ad45e",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T10:23:22.973881+00:00"
+      },
+      {
+        "id": "9b13eb79-aa40-4078-ae0d-98ebb5c7eae4",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T10:43:10.728458+00:00"
+      },
+      {
+        "id": "a6cd148b-949b-48c2-8144-368e7bcf9435",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T10:48:44.468519+00:00"
+      },
+      {
+        "id": "d597ac32-834e-42ad-9f53-6c10ebb3ac0c",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T10:50:04.237332+00:00"
+      },
+      {
+        "id": "96507b81-f7fb-4b78-93fd-65558a415c96",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "RESET_PASSWORD",
+        "entity_type": "user",
+        "entity_id": "0a322338-d85e-492b-9e98-952744e9e4aa",
+        "details": {
+          "username": "DONALD"
+        },
+        "created_at": "2026-08-18T10:50:05.008647+00:00"
+      },
+      {
+        "id": "2e440229-0ec8-45c9-a23e-97ac4e3ed3df",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "RESET_PASSWORD",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T10:59:14.063591+00:00"
+      },
+      {
+        "id": "14a811d3-461f-4555-a781-101d1726a5ab",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T11:00:58.645257+00:00"
+      },
+      {
+        "id": "7bd01f8b-e26f-4f13-aea2-add209178179",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:01:51.6472+00:00"
+      },
+      {
+        "id": "e5c0e312-7b73-4988-9e0b-f5401848f1bb",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:01:57.527121+00:00"
+      },
+      {
+        "id": "00489fa0-9c7d-4853-bfb5-120eeb16d414",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:03:45.801646+00:00"
+      },
+      {
+        "id": "0b0c477e-c57d-4b85-860b-0af0713c0f31",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T11:05:35.132139+00:00"
+      },
+      {
+        "id": "6422152f-71b6-4e1f-bf65-031380976589",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:05:57.187477+00:00"
+      },
+      {
+        "id": "8814a971-520d-4796-a42b-feaf2b3d373b",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:06:48.942328+00:00"
+      },
+      {
+        "id": "b76fa42e-0f09-44f9-b4c1-b1c270899d45",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:17:26.141304+00:00"
+      },
+      {
+        "id": "3ccc3915-71a0-4919-8afa-7b1a29023021",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:18:02.781444+00:00"
+      },
+      {
+        "id": "43f22788-5efb-46ce-8da8-8c1397b65c6d",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:18:46.973184+00:00"
+      },
+      {
+        "id": "c941eee8-5150-4639-b56d-0befd85662b5",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:19:55.357145+00:00"
+      },
+      {
+        "id": "93a63606-33d7-4cb8-997c-79d02340dd53",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:22:02.43312+00:00"
+      },
+      {
+        "id": "cec2eea1-2100-49b3-9d68-b1f776ca355b",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:26:34.576139+00:00"
+      },
+      {
+        "id": "86365654-8014-47de-aaf9-29f502976205",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T11:38:05.49343+00:00"
+      },
+      {
+        "id": "d65d6edd-6870-4f24-bf59-b6bf77eb4b70",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T11:43:16.899247+00:00"
+      },
+      {
+        "id": "52b5b041-62c3-4030-a68e-42e33046465c",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T11:53:29.852997+00:00"
+      },
+      {
+        "id": "23211aad-279d-456a-97ba-54ab66338512",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T11:53:45.947308+00:00"
+      },
+      {
+        "id": "e3d97c92-631a-4303-af82-e53586da9d7d",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T11:54:14.288529+00:00"
+      },
+      {
+        "id": "3836f917-3ba9-4fb1-aa77-35369cfb4874",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T11:54:44.896143+00:00"
+      },
+      {
+        "id": "0688c165-0fd5-470a-a19c-db7a6ca0df42",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T11:55:05.20902+00:00"
+      },
+      {
+        "id": "bb9eaffd-c476-4957-906e-c7cff7cf7968",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T11:56:07.586558+00:00"
+      },
+      {
+        "id": "ac2a6467-9ee7-4355-9b80-3b83f87fc430",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T11:56:45.849964+00:00"
+      },
+      {
+        "id": "feee661b-071f-4f6e-925d-3944ae77047f",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T11:57:30.846804+00:00"
+      },
+      {
+        "id": "0f77be8c-c995-43ac-8ebf-cae57f5f2f9c",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-18T12:08:13.551725+00:00"
+      },
+      {
+        "id": "7a1f3830-7a0c-420b-8229-e223f42180f9",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-18T12:27:09.988659+00:00"
+      },
+      {
+        "id": "9a94c7a6-5b15-4e0a-8dce-d79500f13983",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T15:43:40.016131+00:00"
+      },
+      {
+        "id": "7a2224a1-733b-4e47-b773-9419097afb4a",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T16:17:42.455301+00:00"
+      },
+      {
+        "id": "29324e31-b7eb-4ad9-ba29-d9531b9840a7",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T19:43:54.157445+00:00"
+      },
+      {
+        "id": "efd3ecc6-833e-4b88-bac3-4b1a2a46db06",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T19:55:28.455008+00:00"
+      },
+      {
+        "id": "18961933-22bb-478e-a7fb-9041a5ca42cd",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T20:06:20.197234+00:00"
+      },
+      {
+        "id": "903cd6a4-100e-461d-983b-e4e73f433511",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T22:08:57.263695+00:00"
+      },
+      {
+        "id": "a20b8649-287e-48ac-8696-ba0f2276d879",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-18T22:25:02.409594+00:00"
+      },
+      {
+        "id": "aad24bea-e87c-447e-ac73-88b6133c8ad9",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T04:58:37.912354+00:00"
+      },
+      {
+        "id": "5bae34fc-1b1a-4b4e-ac72-7eb4a3dcf9c3",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T05:06:52.945375+00:00"
+      },
+      {
+        "id": "a03d4fef-9ba4-4e65-b77b-f526ddf577df",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T05:23:57.277351+00:00"
+      },
+      {
+        "id": "d0289aca-89cd-4ecc-b752-4d371e84c275",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T05:31:04.705075+00:00"
+      },
+      {
+        "id": "7906651e-d79c-4a5c-849e-aafa37aab0d1",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T08:47:57.973419+00:00"
+      },
+      {
+        "id": "0e0c1b54-09c7-4158-838b-cb32570a6a9b",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T09:33:27.782773+00:00"
+      },
+      {
+        "id": "bb491d53-a9e6-4aca-87da-382b8b60b05c",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T15:13:57.089386+00:00"
+      },
+      {
+        "id": "88db2337-1f89-4e1f-bed5-5d8b69d316f1",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-19T18:01:09.293864+00:00"
+      },
+      {
+        "id": "0cf7fbf3-5ce9-4de7-9177-c1b1f24d2675",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T18:02:46.555308+00:00"
+      },
+      {
+        "id": "f5d46007-4fb7-4485-918c-237870839e5f",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T21:09:06.331667+00:00"
+      },
+      {
+        "id": "673670b0-3641-4e79-a03c-daa18cbfa951",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T23:08:24.661038+00:00"
+      },
+      {
+        "id": "1e340e96-c596-41ec-ac0c-2ba5b3bae712",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-19T23:31:55.939161+00:00"
+      },
+      {
+        "id": "6d6ee65f-d812-4138-b948-f57cd4002ba8",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-19T23:44:10.339855+00:00"
+      },
+      {
+        "id": "446a87be-4807-4a54-851a-471bccc77ac7",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-20T00:20:29.652659+00:00"
+      },
+      {
+        "id": "dbbcd299-0fd8-4100-ab35-5f9261a59dc2",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-20T00:21:07.883247+00:00"
+      },
+      {
+        "id": "3999a6b5-a14c-4779-9347-8cb15a12f83b",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-20T00:29:49.454912+00:00"
+      },
+      {
+        "id": "0ec11d60-1019-4cc9-a791-8d19b19d2ddb",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-20T01:55:37.278178+00:00"
+      },
+      {
+        "id": "ee00591b-5304-463a-a399-7ecaf696e75b",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-20T01:58:01.179881+00:00"
+      },
+      {
+        "id": "38513d69-5bdc-4eb8-a1e3-a37f40811cd0",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-20T02:25:27.886196+00:00"
+      },
+      {
+        "id": "58b4987e-ea93-47df-adb1-17a2c4ddc05f",
+        "user_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "7155a6c7-a969-445c-914d-a7b7e04ea958",
+        "details": {
+          "username": "ALEX"
+        },
+        "created_at": "2026-08-20T02:26:06.413496+00:00"
+      },
+      {
+        "id": "3526cca2-cd98-4c84-ba3d-2fbeebd4d6f0",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-20T02:30:19.56591+00:00"
+      },
+      {
+        "id": "44c37d04-ca88-400f-b909-3275c68eda67",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-20T03:32:48.081421+00:00"
+      },
+      {
+        "id": "793e3943-c6d2-4150-b0da-c7f0ec205a97",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-20T03:41:24.494959+00:00"
+      },
+      {
+        "id": "8ad35d27-919c-4439-a0c1-f9280a6004f8",
+        "user_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "9247217b-1017-4872-9ec7-088e5b23393b",
+        "details": {
+          "username": "Directeur"
+        },
+        "created_at": "2026-08-20T03:50:35.603446+00:00"
+      },
+      {
+        "id": "a69de17d-8432-4f3e-8e69-0d54e32660e7",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-20T03:53:14.674692+00:00"
+      },
+      {
+        "id": "72c0cf45-18a0-473d-817d-cb3968656297",
+        "user_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "action": "LOGIN",
+        "entity_type": "user",
+        "entity_id": "64c50d04-d3a3-4044-a9d5-57a7f43fff10",
+        "details": {
+          "username": "Inno"
+        },
+        "created_at": "2026-08-20T13:26:49.33383+00:00"
+      }
+    ],
+    "notifications": []
+  }
+}

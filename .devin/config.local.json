@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Exec(ls)",
+      "Exec(mkdir frontend)",
+      "Exec(New-Item)",
+      "Exec(npm create)",
+      "Exec(npx tailwindcss)",
+      "Exec(node)",
+      "Exec(npm init)",
+      "Exec(npm run)",
+      "Exec(del)",
+      "Exec(Add-Content)",
+      "Exec(password=\"test12345\")",
+      "Exec(npx tsx)",
+      "Exec(npx tsc)",
+      "Exec(npm)",
+      "Exec(taskkill)",
+      "Exec(rm)",
+      "Exec(Get-Process)",
+      "Exec(npx nodemon)",
+      "Exec(findstr)",
+      "Exec((Get-Content)",
+      "Exec(timeout)",
+      "Exec(copy)",
+      "Exec(echo.)",
+      "Exec(<input)",
+      "Exec(password=\"nouveau123\"})",
+      "Exec(ConvertTo-Json)",
+      "Exec($response.Content)",
+      "Exec(ConvertFrom-Json)",
+      "Exec($data.token)",
+      "Exec(Content-Type)",
+      "Exec(eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzUwZDA0LWQzYTMtNDA0NC1hOWQ1LTU3YTdmNDNmZmYxMCIsInVzZXJuYW1lIjoiSW5ubyIsInJvbGUiOiJmb3VuZGVyIiwiaWF0IjoxNzg3NTE0NzMzLCJleHAiOjE3ODc2MDExMzN9.tbC0ZmNTKkcborUeJoGM48E_jNgZY11N-qSIXMr0gTc)",
+      "Exec(git status)",
+      "Exec(git init)",
+      "Exec(git add)"
+    ]
+  }
+}
