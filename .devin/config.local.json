@@ -34,7 +34,11 @@
       "Exec(eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzUwZDA0LWQzYTMtNDA0NC1hOWQ1LTU3YTdmNDNmZmYxMCIsInVzZXJuYW1lIjoiSW5ubyIsInJvbGUiOiJmb3VuZGVyIiwiaWF0IjoxNzg3NTE0NzMzLCJleHAiOjE3ODc2MDExMzN9.tbC0ZmNTKkcborUeJoGM48E_jNgZY11N-qSIXMr0gTc)",
       "Exec(git status)",
       "Exec(git init)",
-      "Exec(git add)"
+      "Exec(git add)",
+      "Exec(git commit)",
+      "Exec(git remote)",
+      "Exec(git branch)",
+      "Exec(git push)"
     ]
   }
 }
