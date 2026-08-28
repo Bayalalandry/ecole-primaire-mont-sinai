@@ -1,7 +1,7 @@
 {
-  "name": "ÉCOLE PRIMAIRE PRIVÉE LE MONT SINAÏ",
-  "short_name": "Mont Sinaï",
-  "description": "Système de gestion scolaire - ÉCOLE PRIMAIRE PRIVÉE LE MONT SINAÏ",
+  "name": "ECOLE PRIMAIRE PRIVEE LE MONT SINAI",
+  "short_name": "Mont Sinai",
+  "description": "Systeme de gestion scolaire - ECOLE PRIMAIRE PRIVEE LE MONT SINAI",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1e40af",
@@ -21,14 +21,5 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["education", "productivity"],
-  "shortcuts": [
-    {
-      "name": "Tableau de bord",
-      "short_name": "Dashboard",
-      "description": "Accéder au tableau de bord",
-      "url": "/dashboard",
-      "icons": [{ "src": "/logo_ecole_primaire_le_mont_sinai_app-BlT1xIG0.png", "sizes": "192x192" }]
-    }
-  ]
+  "categories": ["education", "productivity"]
 }
