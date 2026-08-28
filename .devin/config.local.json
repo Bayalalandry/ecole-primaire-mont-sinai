@@ -38,7 +38,8 @@
       "Exec(git commit)",
       "Exec(git remote)",
       "Exec(git branch)",
-      "Exec(git push)"
+      "Exec(git push)",
+      "Exec(git rm)"
     ]
   }
 }
