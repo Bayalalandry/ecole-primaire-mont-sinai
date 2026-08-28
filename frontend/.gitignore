@@ -8,7 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
 dist-ssr
 *.local
 
@@ -29,3 +28,8 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Build - mais on inclut les fichiers PWA
+dist/*
+!dist/manifest.json
+!dist/sw.js
