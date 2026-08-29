@@ -100,3 +100,15 @@ Le endpoint `/api/statistics` effectue plusieurs requêtes à la base de donnée
 5. Implémenter un cache côté serveur (Redis) pour les statistiques temporaires
 
 **Note :** Pour une petite école primaire, la performance actuelle est probablement acceptable. Ces optimisations sont recommandées pour une scalabilité future.
+
+## Avertissements de lint
+
+### meta[name=theme-color] non supporté par Firefox
+- **Fichier** : `frontend/index.html` ligne 10
+- **Avertissement** : `<meta name="theme-color">` n'est pas supporté par Firefox, Firefox pour Android et Opera
+- **Action** : **Ignorer** - C'est un avertissement de compatibilité, pas une erreur
+- **Justification** :
+  - Cette balise est une fonctionnalité standard pour les PWA
+  - Elle est pleinement supportée par Chrome, Edge et Safari (navigateurs les plus populaires)
+  - L'absence de support dans Firefox n'affecte pas le fonctionnement de l'application
+  - Supprimer cette balise dégraderait l'expérience utilisateur sur les navigateurs qui la supportent
