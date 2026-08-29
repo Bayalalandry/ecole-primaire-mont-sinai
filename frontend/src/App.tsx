@@ -13,6 +13,7 @@ import PassagePage from './pages/PassagePage';
 import ExpensesPage from './pages/ExpensesPage';
 import StatisticsPage from './pages/StatisticsPage';
 import ActivityLogPage from './pages/ActivityLogPage';
+import ProfilePage from './pages/ProfilePage';
 import './App.css';
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/expenses" element={<ExpensesPage />} />
           <Route path="/statistics" element={<StatisticsPage />} />
           <Route path="/activity-log" element={<ActivityLogPage />} />
+          <Route path="/profile/:type/:id" element={<ProfilePage />} />
           <Route path="*" element={<LoginPage />} />
         </Routes>
       </div>

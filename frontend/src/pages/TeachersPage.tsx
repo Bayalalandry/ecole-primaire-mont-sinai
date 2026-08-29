@@ -433,6 +433,14 @@ export default function TeachersPage() {
                                     <option value="archived">Archiver</option>
                                   </select>
                                 )}
+                                <button
+                                  onClick={() => navigate(`/profile/teacher/${teacher.id}`)}
+                                  className="px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-50 text-purple-600 hover:bg-purple-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"
+                                  title="Voir le dossier"
+                                >
+                                  <User className="w-3 h-3 sm:w-4 sm:h-4" />
+                                  <span className="hidden sm:inline">Dossier</span>
+                                </button>
                               </>
                             ) : null}
                           </div>

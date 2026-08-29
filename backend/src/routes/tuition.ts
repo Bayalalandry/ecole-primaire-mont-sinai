@@ -916,4 +916,95 @@ router.post('/trimesters', authenticateToken, requireFounder, async (req: AuthRe
   }
 });
 
+// ============================================
+// RÉSUMÉ DE PAIEMENT (POUR PROFILE PAGE)
+// ============================================
+
+// Récupérer le résumé des paiements d'un élève
+router.get('/summary/student/:studentId', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { studentId } = req.params;
+    const { schoolYear } = req.query;
+
+    // Récupérer l'élève avec sa classe
+    const { data: student, error: studentError } = await supabase
+      .from('students')
+      .select('*, classes (*)')
+      .eq('id', studentId)
+      .maybeSingle();
+
+    if (studentError) throw studentError;
+    if (!student) {
+      return res.status(404).json({ error: 'Élève non trouvé' });
+    }
+
+    // Récupérer le tarif actuel pour cette classe
+    const currentDate = new Date().toISOString().split('T')[0];
+    let rateQuery = supabase
+      .from('tuition_rates')
+      .select('*')
+      .eq('class_id', student.current_class_id)
+      .lte('effective_date', currentDate)
+      .order('effective_date', { ascending: false })
+      .limit(1);
+
+    if (schoolYear) {
+      try {
+        rateQuery = rateQuery.eq('school_year', schoolYear);
+      } catch (e) {
+        console.log('school_year column does not exist, skipping filter');
+      }
+    }
+
+    const { data: rate, error: rateError } = await rateQuery.maybeSingle();
+
+    let totalExpected = rate?.amount || 0;
+
+    // Si erreur ou pas de tarif, réessayer sans filtre school_year
+    if (rateError || totalExpected === 0) {
+      const { data: rate2 } = await supabase
+        .from('tuition_rates')
+        .select('*')
+        .eq('class_id', student.current_class_id)
+        .lte('effective_date', currentDate)
+        .order('effective_date', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      totalExpected = rate2?.amount || 0;
+    }
+
+    // Récupérer tous les paiements de l'élève
+    let paymentsQuery = supabase
+      .from('tuition_payments')
+      .select('amount')
+      .eq('student_id', studentId)
+      .eq('cancelled', false);
+
+    if (schoolYear) {
+      try {
+        paymentsQuery = paymentsQuery.eq('school_year', schoolYear);
+      } catch (e) {
+        console.log('school_year column does not exist, skipping filter');
+      }
+    }
+
+    const { data: payments, error: paymentsError } = await paymentsQuery;
+
+    if (paymentsError) throw paymentsError;
+
+    const totalPaid = (payments || []).reduce((sum: number, p: any) => sum + Number(p.amount), 0);
+    const totalOutstanding = totalExpected - totalPaid;
+
+    res.json({
+      totalExpected,
+      totalPaid,
+      totalOutstanding,
+    });
+  } catch (error: any) {
+    console.error('Get payment summary error:', error);
+    res.status(500).json({ error: 'Erreur lors de la récupération du résumé' });
+  }
+});
+
 export { router as tuitionRoutes };

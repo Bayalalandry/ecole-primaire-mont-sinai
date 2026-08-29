@@ -386,7 +386,7 @@ router.delete('/:id', authenticateToken, requireFounder, async (req: AuthRequest
 router.get('/search/:query', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { query } = req.params;
-    
+
     const { data, error } = await supabase
       .from('students')
       .select(`
@@ -405,6 +405,32 @@ router.get('/search/:query', authenticateToken, async (req: AuthRequest, res) =>
   } catch (error: any) {
     console.error('Search students error:', error);
     res.status(500).json({ error: 'Erreur lors de la recherche des élèves' });
+  }
+});
+
+// Récupérer l'historique scolaire d'un élève
+router.get('/:id/academic-history', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { id } = req.params;
+
+    const { data, error } = await supabase
+      .from('student_academic_history')
+      .select(`
+        *,
+        classes (
+          id,
+          name
+        )
+      `)
+      .eq('student_id', id)
+      .order('school_year', { ascending: false });
+
+    if (error) throw error;
+
+    res.json({ history: data || [] });
+  } catch (error: any) {
+    console.error('Get academic history error:', error);
+    res.status(500).json({ error: 'Erreur lors de la récupération de l\'historique scolaire' });
   }
 });
 

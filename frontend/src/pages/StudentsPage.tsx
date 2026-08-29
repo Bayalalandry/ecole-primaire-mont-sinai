@@ -4,7 +4,7 @@ import { tokenStorage } from '../services/authService';
 import { studentService } from '../services/studentService';
 import { classService } from '../services/classService';
 import jsPDF from 'jspdf';
-import { Plus, FileText, ArrowLeft, Edit, X, Info, Users, CheckCircle, Archive, Clock, UserPlus } from 'lucide-react';
+import { Plus, FileText, ArrowLeft, Edit, X, Info, Users, CheckCircle, Archive, Clock, UserPlus, User } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
 import { SCHOOL_CONFIG } from '../config/schoolConfig';
 import { sortClasses, getOrderedClassNames } from '../utils/classUtils';
@@ -544,29 +544,39 @@ export default function StudentsPage() {
                                   </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                  <button
-                                    onClick={() => {
-                                      setEditingStudent(student);
-                                      setFormData({
-                                        firstName: student.first_name,
-                                        lastName: student.last_name,
-                                        dateOfBirth: student.date_of_birth,
-                                        gender: student.gender,
-                                        parentName: student.parent_name,
-                                        parentPhone: student.parent_phone,
-                                        parentAddress: student.parent_address,
-                                        classId: student.current_class_id,
-                                        schoolYear: '2024-2025',
-                                        photoUrl: student.photo_url,
-                                        matricule: student.matricule || '',
-                                      });
-                                      setShowModal(true);
-                                    }}
-                                    className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors"
-                                  >
-                                    <Edit className="w-4 h-4" />
-                                    Modifier
-                                  </button>
+                                  <div className="flex items-center gap-2">
+                                    <button
+                                      onClick={() => {
+                                        setEditingStudent(student);
+                                        setFormData({
+                                          firstName: student.first_name,
+                                          lastName: student.last_name,
+                                          dateOfBirth: student.date_of_birth,
+                                          gender: student.gender,
+                                          parentName: student.parent_name,
+                                          parentPhone: student.parent_phone,
+                                          parentAddress: student.parent_address,
+                                          classId: student.current_class_id,
+                                          schoolYear: '2024-2025',
+                                          photoUrl: student.photo_url,
+                                          matricule: student.matricule || '',
+                                        });
+                                        setShowModal(true);
+                                      }}
+                                      className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors"
+                                    >
+                                      <Edit className="w-4 h-4" />
+                                      Modifier
+                                    </button>
+                                    <button
+                                      onClick={() => navigate(`/profile/student/${student.id}`)}
+                                      className="px-3 py-1.5 bg-purple-50 text-purple-600 hover:bg-purple-100 rounded-lg font-medium flex items-center gap-1 transition-colors"
+                                      title="Voir le dossier"
+                                    >
+                                      <User className="w-4 h-4" />
+                                      Dossier
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                             ))}
@@ -691,29 +701,39 @@ export default function StudentsPage() {
                                 <td className="hidden md:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{student.parent_name || 'N/A'}</td>
                                 <td className="hidden md:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{student.parent_phone || 'N/A'}</td>
                                 <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                                  <button
-                                    onClick={() => {
-                                      setEditingStudent(student);
-                                      setFormData({
-                                        firstName: student.first_name,
-                                        lastName: student.last_name,
-                                        dateOfBirth: student.date_of_birth,
-                                        gender: student.gender,
-                                        parentName: student.parent_name,
-                                        parentPhone: student.parent_phone,
-                                        parentAddress: student.parent_address,
-                                        classId: student.current_class_id,
-                                        schoolYear: '2024-2025',
-                                        photoUrl: student.photo_url,
-                                        matricule: student.matricule,
-                                      });
-                                      setShowModal(true);
-                                    }}
-                                    className="px-2 sm:px-3 py-1.5 sm:py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"
-                                  >
-                                    <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
-                                    <span className="hidden sm:inline">Modifier</span>
-                                  </button>
+                                  <div className="flex items-center gap-1 sm:gap-2">
+                                    <button
+                                      onClick={() => {
+                                        setEditingStudent(student);
+                                        setFormData({
+                                          firstName: student.first_name,
+                                          lastName: student.last_name,
+                                          dateOfBirth: student.date_of_birth,
+                                          gender: student.gender,
+                                          parentName: student.parent_name,
+                                          parentPhone: student.parent_phone,
+                                          parentAddress: student.parent_address,
+                                          classId: student.current_class_id,
+                                          schoolYear: '2024-2025',
+                                          photoUrl: student.photo_url,
+                                          matricule: student.matricule,
+                                        });
+                                        setShowModal(true);
+                                      }}
+                                      className="px-2 sm:px-3 py-1.5 sm:py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"
+                                    >
+                                      <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
+                                      <span className="hidden sm:inline">Modifier</span>
+                                    </button>
+                                    <button
+                                      onClick={() => navigate(`/profile/student/${student.id}`)}
+                                      className="px-2 sm:px-3 py-1.5 sm:py-1.5 bg-purple-50 text-purple-600 hover:bg-purple-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"
+                                      title="Voir le dossier"
+                                    >
+                                      <User className="w-3 h-3 sm:w-4 sm:h-4" />
+                                      <span className="hidden sm:inline">Dossier</span>
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                             ))}

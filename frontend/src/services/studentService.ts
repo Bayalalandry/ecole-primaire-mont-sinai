@@ -131,4 +131,36 @@ export const studentService = {
 
     return response.json();
   },
+
+  // Récupérer un élève par ID (alias pour ProfilePage)
+  getStudentById: async (id: string, token: string) => {
+    const response = await fetch(`${API_URL}/students/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erreur lors de la récupération de l\'élève');
+    }
+
+    return response.json();
+  },
+
+  // Récupérer l'historique scolaire d'un élève
+  getAcademicHistory: async (studentId: string, token: string) => {
+    const response = await fetch(`${API_URL}/students/${studentId}/academic-history`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erreur lors de la récupération de l\'historique scolaire');
+    }
+
+    return response.json();
+  },
 };

@@ -323,4 +323,46 @@ export const tuitionService = {
 
     return response.json();
   },
+
+  // ============================================
+  // RÉSUMÉ DE PAIEMENT (POUR PROFILE PAGE)
+  // ============================================
+
+  // Récupérer le résumé des paiements d'un élève
+  getStudentPaymentSummary: async (studentId: string, token: string, schoolYear?: string) => {
+    const params = new URLSearchParams();
+    if (schoolYear) params.append('schoolYear', schoolYear);
+
+    const response = await fetch(`${API_URL}/tuition/summary/student/${studentId}?${params.toString()}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erreur lors de la récupération du résumé');
+    }
+
+    return response.json();
+  },
+
+  // Récupérer l'historique des paiements d'un élève (alias pour ProfilePage)
+  getStudentPayments: async (studentId: string, token: string, schoolYear?: string) => {
+    const params = new URLSearchParams();
+    if (schoolYear) params.append('schoolYear', schoolYear);
+
+    const response = await fetch(`${API_URL}/tuition/payments/student/${studentId}?${params.toString()}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erreur lors de la récupération des paiements');
+    }
+
+    return response.json();
+  },
 };
