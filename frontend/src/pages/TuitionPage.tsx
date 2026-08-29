@@ -603,13 +603,13 @@ export default function TuitionPage() {
       </header>
 
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
           {(user?.role === 'founder' || user?.role === 'director') && (
             <div className="bg-white rounded-xl shadow-card border border-gray-200 mb-4 sm:mb-6">
-              <div className="flex overflow-x-auto border-b border-gray-200">
+              <div className="flex overflow-x-auto overflow-y-auto border-b border-gray-200" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <button
                   onClick={() => setActiveTab('rates')}
-                  className={`px-3 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap ${
+                  className={`px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap cursor-pointer touch-action-manipulation ${
                     activeTab === 'rates'
                       ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -620,7 +620,7 @@ export default function TuitionPage() {
                 </button>
                 <button
                   onClick={() => setActiveTab('payments')}
-                  className={`px-3 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap ${
+                  className={`px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap cursor-pointer touch-action-manipulation ${
                     activeTab === 'payments'
                       ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -631,7 +631,7 @@ export default function TuitionPage() {
                 </button>
                 <button
                   onClick={() => setActiveTab('outstanding')}
-                  className={`px-3 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap ${
+                  className={`px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap cursor-pointer touch-action-manipulation ${
                     activeTab === 'outstanding'
                       ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -642,7 +642,7 @@ export default function TuitionPage() {
                 </button>
                 <button
                   onClick={() => setActiveTab('trimesters')}
-                  className={`px-3 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap ${
+                  className={`px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap cursor-pointer touch-action-manipulation ${
                     activeTab === 'trimesters'
                       ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
