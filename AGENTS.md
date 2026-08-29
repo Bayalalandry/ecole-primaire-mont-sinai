@@ -56,3 +56,22 @@ Exécuter le script `database/schema.sql` dans l'éditeur SQL Supabase pour cré
 - Les montants sont toujours arrondis
 - Le projet se développe étape par étape
 - Chaque étape doit être validée avant de passer à la suivante
+
+## Problèmes connus et incohérences
+
+### Incohérence du schéma de base de données pour le passage de classe
+
+**Problème :** Il existe une incohérence entre le schéma principal (`database/schema.sql`) et le schéma de passage de classe (`database/passage_classe_schema.sql`) :
+
+- `schema.sql` utilise la table `student_academic_history` avec `school_year VARCHAR(20)`
+- `passage_classe_schema.sql` utilise deux tables distinctes :
+  - `student_annual_grades` avec `school_year_id UUID`
+  - `passage_decisions` avec `school_year_id UUID`
+
+**Impact actuel :** Le code backend (`backend/src/routes/passage.ts`) utilise les tables de `passage_classe_schema.sql` mais celles-ci ne sont pas dans le schéma principal. Cela peut causer des erreurs si les tables ne sont pas créées.
+
+**Solution recommandée :** Unifier le schéma en choisissant une approche :
+1. Soit intégrer les tables de `passage_classe_schema.sql` dans `schema.sql`
+2. Soit modifier le code backend pour utiliser uniquement `student_academic_history` du schéma principal
+
+**Note :** J'ai corrigé le code backend pour utiliser `school_year VARCHAR(20)` dans `student_academic_history` pour correspondre au schéma principal.
