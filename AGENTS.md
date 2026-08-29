@@ -75,3 +75,28 @@ Exécuter le script `database/schema.sql` dans l'éditeur SQL Supabase pour cré
 2. Soit modifier le code backend pour utiliser uniquement `student_academic_history` du schéma principal
 
 **Note :** J'ai corrigé le code backend pour utiliser `school_year VARCHAR(20)` dans `student_academic_history` pour correspondre au schéma principal.
+
+## Performance de chargement des pages
+
+### Analyse des statistiques globales
+
+Le endpoint `/api/statistics` effectue plusieurs requêtes à la base de données :
+1. `tuition_payments` - tous les paiements de scolarité
+2. `school_years` - année scolaire actuelle
+3. `students` - élèves actifs
+4. `tuition_rates` - tarifs par classe
+5. `salary_payments` - tous les paiements de salaire
+6. `teacher_salaries` - salaires des enseignants
+7. `expenses` - toutes les dépenses
+8. `students` - tous les élèves
+9. `classes` - classes
+10. `users` - enseignants
+
+**Recommandations d'optimisation :**
+1. Ajouter des index sur les colonnes fréquemment filtrées (payment_date, school_year_id, etc.)
+2. Implémenter la pagination pour les endpoints qui retournent beaucoup de données
+3. Utiliser des vues matérialisées ou du cache pour les statistiques fréquemment consultées
+4. Optimiser les requêtes en utilisant des jointures au lieu de requêtes multiples
+5. Implémenter un cache côté serveur (Redis) pour les statistiques temporaires
+
+**Note :** Pour une petite école primaire, la performance actuelle est probablement acceptable. Ces optimisations sont recommandées pour une scalabilité future.
