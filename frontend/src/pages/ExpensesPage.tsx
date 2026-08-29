@@ -304,30 +304,30 @@ export default function ExpensesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col relative overflow-hidden">
-      <header className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-xl flex-shrink-0 relative overflow-hidden">
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <div className="bg-white rounded-full backdrop-blur-sm border-2 border-white/50 shadow-lg" style={{ padding: 0 }}>
+      <header className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-xl flex-shrink-0 relative overflow-visible">
+
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 relative z-10">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="bg-white rounded-full backdrop-blur-sm border-2 border-white/50 shadow-lg flex-shrink-0" style={{ padding: 0 }}>
                 <SchoolLogo size={56} inCircle={true} className="text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white drop-shadow-lg">Gestion des Dépenses</h1>
-                <p className="text-sm text-blue-100 drop-shadow">Suivi des dépenses et justificatifs</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">Gestion des Dépenses</h1>
+                <p className="text-xs sm:text-sm text-blue-100 drop-shadow">Suivi des dépenses et justificatifs</p>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <button
                 onClick={exportToPDF}
-                className="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center gap-2"
+                className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2"
               >
                 <FileText className="w-4 h-4" />
                 Exporter PDF
               </button>
               <button
                 onClick={() => navigate('/dashboard/founder')}
-                className="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center gap-2"
+                className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Retour
@@ -338,55 +338,55 @@ export default function ExpensesPage() {
       </header>
 
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
           {statistics && (
-            <div className="bg-white rounded-xl shadow-card p-6 mb-6 border border-gray-200">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">Statistiques</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl shadow-card p-4 border-l-6 border-blue-500">
+            <div className="bg-white rounded-xl shadow-card p-4 sm:p-6 mb-4 sm:mb-6 border border-gray-200">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-gray-900">Statistiques</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
+                <div className="bg-white rounded-xl shadow-card p-3 sm:p-4 border-l-4 sm:border-l-6 border-blue-500">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-900 mb-1">Total des dépenses</h3>
-                      <p className="text-3xl font-bold text-blue-600">{formatAmount(statistics.totalAmount)}</p>
+                      <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">Total des dépenses</h3>
+                      <p className="text-2xl sm:text-3xl font-bold text-blue-600">{formatAmount(statistics.totalAmount)}</p>
                     </div>
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
-                      <DollarSign className="w-6 h-6 text-white" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
                   </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-card p-4 border-l-6 border-green-500">
+                <div className="bg-white rounded-xl shadow-card p-3 sm:p-4 border-l-4 sm:border-l-6 border-green-500">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-900 mb-1">Nombre de dépenses</h3>
-                      <p className="text-3xl font-bold text-green-600">{statistics.count}</p>
+                      <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">Nombre de dépenses</h3>
+                      <p className="text-2xl sm:text-3xl font-bold text-green-600">{statistics.count}</p>
                     </div>
-                    <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
-                      <Receipt className="w-6 h-6 text-white" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Receipt className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
                   </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-card p-4 border-l-6 border-purple-500">
+                <div className="bg-white rounded-xl shadow-card p-3 sm:p-4 border-l-4 sm:border-l-6 border-purple-500">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-900 mb-1">Période</h3>
-                      <p className="text-lg font-bold text-purple-600">
+                      <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1">Période</h3>
+                      <p className="text-base sm:text-lg font-bold text-purple-600">
                         {filters.startDate && filters.endDate
                           ? `${formatDate(filters.startDate)} - ${formatDate(filters.endDate)}`
                           : 'Tout'}
                       </p>
                     </div>
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
-                      <Calendar className="w-6 h-6 text-white" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4">
-                <h3 className="font-semibold mb-2 text-gray-900">Par catégorie</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              <div className="mt-3 sm:mt-4">
+                <h3 className="font-semibold mb-2 text-gray-900 text-sm sm:text-base">Par catégorie</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {Object.entries(statistics.totalsByCategory).map(([category, amount]) => (
-                    <div key={category} className="bg-gray-50 p-2 rounded-xl border border-gray-200 text-sm">
+                    <div key={category} className="bg-gray-50 p-2 rounded-xl border border-gray-200 text-xs sm:text-sm">
                       <span className="font-medium text-gray-800">{EXPENSE_CATEGORIES.find(c => c.value === category)?.label || category}:</span>{' '}
                       <span className="font-bold text-gray-900">{formatAmount(Number(amount))}</span>
                     </div>
@@ -396,18 +396,18 @@ export default function ExpensesPage() {
             </div>
           )}
 
-          <div className="bg-white rounded-xl shadow-card p-6 mb-6 border border-gray-200">
-            <div className="flex items-center gap-2 mb-4">
-              <Filter className="w-5 h-5 text-blue-600" />
-              <h2 className="text-xl font-semibold text-gray-900">Filtres</h2>
+          <div className="bg-white rounded-xl shadow-card p-4 sm:p-6 mb-4 sm:mb-6 border border-gray-200">
+            <div className="flex items-center gap-2 mb-3 sm:mb-4">
+              <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Filtres</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1 text-gray-700">Catégorie</label>
                 <select
                   value={filters.category}
                   onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white text-sm"
                 >
                   <option value="">Toutes</option>
                   {EXPENSE_CATEGORIES.map(cat => (
@@ -421,7 +421,7 @@ export default function ExpensesPage() {
                   type="date"
                   value={filters.startDate}
                   onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white text-sm"
                 />
               </div>
               <div>
@@ -430,13 +430,13 @@ export default function ExpensesPage() {
                   type="date"
                   value={filters.endDate}
                   onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white text-sm"
                 />
               </div>
               <div className="flex items-end">
                 <button
                   onClick={handleResetFilters}
-                  className="bg-gray-500 text-white px-4 py-2.5 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow"
+                  className="w-full bg-gray-500 text-white px-4 py-2 sm:py-2.5 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow text-sm"
                 >
                   Réinitialiser
                 </button>
@@ -456,7 +456,7 @@ export default function ExpensesPage() {
               });
               setShowForm(true);
             }}
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2.5 rounded-xl hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-lg"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-lg text-sm"
           >
             <Plus className="w-4 h-4" />
             Ajouter une dépense
@@ -464,10 +464,10 @@ export default function ExpensesPage() {
 
           {showForm && (
             <div className="modal-overlay">
-              <div className="modal-content p-6 max-w-2xl w-full mx-4 border-2 border-blue-200">
-                <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-3">
-                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                    <Plus className="w-5 h-5 text-blue-600" />
+              <div className="modal-content p-4 sm:p-6 max-w-2xl w-full mx-2 sm:mx-4 border-2 border-blue-200">
+                <div className="flex items-center justify-between mb-3 sm:mb-4 border-b border-gray-200 pb-2 sm:pb-3">
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-2">
+                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                     {editingExpense ? 'Modifier la dépense' : 'Ajouter une dépense'}
                   </h2>
                   <button
@@ -477,16 +477,16 @@ export default function ExpensesPage() {
                     }}
                     className="text-gray-400 hover:text-blue-600 transition-colors bg-gray-100 hover:bg-blue-100 rounded-full p-2"
                   >
-                    <X className="w-6 h-6" />
+                    <X className="w-5 h-5 sm:w-6 sm:h-6" />
                   </button>
                 </div>
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1 text-gray-700">Catégorie *</label>
                     <select
                       value={form.category}
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
-                      className="w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow"
+                      className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow text-sm"
                       required
                     >
                       {EXPENSE_CATEGORIES.map(cat => (
@@ -500,7 +500,7 @@ export default function ExpensesPage() {
                       type="number"
                       value={form.amount}
                       onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                      className="w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow"
+                      className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow text-sm"
                       min="0"
                       step="0.01"
                       required
@@ -512,7 +512,7 @@ export default function ExpensesPage() {
                       type="date"
                       value={form.expenseDate}
                       onChange={(e) => setForm({ ...form, expenseDate: e.target.value })}
-                      className="w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow"
+                      className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow text-sm"
                       required
                     />
                   </div>
@@ -522,23 +522,23 @@ export default function ExpensesPage() {
                       type="text"
                       value={form.receiptUrl}
                       onChange={(e) => setForm({ ...form, receiptUrl: e.target.value })}
-                      className="w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow"
+                      className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow text-sm"
                       placeholder="URL du justificatif"
                     />
                   </div>
-                  <div className="md:col-span-2">
+                  <div className="sm:col-span-2">
                     <label className="block text-sm font-medium mb-1 text-gray-700">Description</label>
                     <textarea
                       value={form.description}
                       onChange={(e) => setForm({ ...form, description: e.target.value })}
-                      className="w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow"
+                      className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-input focus:shadow-input-focus transition-shadow text-sm"
                       rows={3}
                     />
                   </div>
-                  <div className="md:col-span-2 flex gap-2">
+                  <div className="sm:col-span-2 flex flex-col-reverse sm:flex-row gap-2">
                     <button
                       type="submit"
-                      className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow flex items-center gap-2"
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow flex items-center justify-center gap-2 text-sm"
                     >
                       <CheckCircle className="w-4 h-4" />
                       {editingExpense ? 'Modifier' : 'Ajouter'}
@@ -549,7 +549,7 @@ export default function ExpensesPage() {
                         setShowForm(false);
                         setEditingExpense(null);
                       }}
-                      className="bg-gray-500 text-white px-4 py-2 rounded-xl hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow flex items-center gap-2"
+                      className="flex-1 bg-gray-500 text-white px-4 py-2 rounded-xl hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow flex items-center justify-center gap-2 text-sm"
                     >
                       <X className="w-4 h-4" />
                       Annuler
@@ -561,21 +561,21 @@ export default function ExpensesPage() {
           )}
 
           <div className="bg-white rounded-xl shadow-card border border-gray-200">
-            <div className="p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">Historique des dépenses</h2>
+            <div className="p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-gray-900">Historique des dépenses</h2>
               {expenses.length === 0 ? (
-                <p className="text-gray-800">Aucune dépense trouvée</p>
+                <p className="text-gray-800 text-sm sm:text-base">Aucune dépense trouvée</p>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Catégorie</th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</th>
-                        <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Montant</th>
-                        <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Justificatif</th>
-                        <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                        <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Catégorie</th>
+                        <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</th>
+                        <th className="px-3 sm:px-6 py-2 sm:py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Montant</th>
+                        <th className="px-3 sm:px-6 py-2 sm:py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Justificatif</th>
+                        <th className="px-3 sm:px-6 py-2 sm:py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -588,45 +588,45 @@ export default function ExpensesPage() {
                           cantine: 'bg-green-100 text-green-800',
                           autres: 'bg-gray-100 text-gray-800',
                         };
-                        
+
                         return (
                           <tr key={expense.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{formatDate(expense.expense_date)}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">
-                              <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${categoryColor[expense.category] || 'bg-gray-100 text-gray-800'}`}>
+                            <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 font-medium">{formatDate(expense.expense_date)}</td>
+                            <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
+                              <span className={`px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${categoryColor[expense.category] || 'bg-gray-100 text-gray-800'}`}>
                                 {EXPENSE_CATEGORIES.find(c => c.value === expense.category)?.label || expense.category}
                               </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{expense.description || '-'}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-gray-900">{formatAmount(parseFloat(expense.amount))}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                            <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{expense.description || '-'}</td>
+                            <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-right font-semibold text-gray-900">{formatAmount(parseFloat(expense.amount))}</td>
+                            <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-center">
                               {expense.receipt_url ? (
                                 <a
                                   href={expense.receipt_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium"
+                                  className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium text-xs sm:text-sm"
                                 >
-                                  <Receipt className="w-4 h-4" />
+                                  <Receipt className="w-3 h-3 sm:w-4 sm:h-4" />
                                   Voir
                                 </a>
                               ) : (
                                 <span className="text-gray-400">-</span>
                               )}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                            <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-center">
                               <button
                                 onClick={() => handleEdit(expense)}
-                                className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors mr-2"
+                                className="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors mr-1 sm:mr-2 text-xs sm:text-sm"
                               >
-                                <Edit className="w-4 h-4" />
+                                <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
                                 Modifier
                               </button>
                               <button
                                 onClick={() => handleDelete(expense.id)}
-                                className="px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-medium flex items-center gap-1 transition-colors"
+                                className="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                                 Supprimer
                               </button>
                             </td>

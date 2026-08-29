@@ -487,22 +487,22 @@ export default function SalaryPage() {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl opacity-20"></div>
       
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-xl flex-shrink-0 relative overflow-hidden">
+      <header className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-xl flex-shrink-0 relative overflow-visible">
         {/* Motif subtil en arrière-plan */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2 blur-3xl"></div>
         </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <div className="bg-white rounded-full backdrop-blur-sm border-2 border-white/50 shadow-lg" style={{ padding: 0 }}>
+
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 relative z-10">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="bg-white rounded-full backdrop-blur-sm border-2 border-white/50 shadow-lg flex-shrink-0" style={{ padding: 0 }}>
                 <SchoolLogo size={56} inCircle={true} className="text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white drop-shadow-lg">Gestion des Salaires</h1>
-                <p className="text-sm text-blue-100 drop-shadow">Définition et paiements des salaires</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">Gestion des Salaires</h1>
+                <p className="text-xs sm:text-sm text-blue-100 drop-shadow">Définition et paiements des salaires</p>
               </div>
             </div>
             <button
@@ -511,7 +511,7 @@ export default function SalaryPage() {
                 else if (user?.role === 'director') navigate('/dashboard/director');
                 else navigate('/dashboard/teacher');
               }}
-              className="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center gap-2"
+              className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
               Retour
@@ -525,10 +525,10 @@ export default function SalaryPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Tabs */}
-        <div className="flex space-x-4 mb-6">
+        <div className="flex flex-wrap gap-2 sm:space-x-4 mb-4 sm:mb-6">
           <button
             onClick={() => setActiveTab('salaries')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-xs sm:text-sm transition-all ${
               activeTab === 'salaries'
                 ? 'bg-blue-600 text-white shadow-card'
                 : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-card-hover'
@@ -538,7 +538,7 @@ export default function SalaryPage() {
           </button>
           <button
             onClick={() => setActiveTab('payments')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-xs sm:text-sm transition-all ${
               activeTab === 'payments'
                 ? 'bg-blue-600 text-white shadow-card'
                 : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-card-hover'
@@ -548,7 +548,7 @@ export default function SalaryPage() {
           </button>
           <button
             onClick={() => setActiveTab('outstanding')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-xs sm:text-sm transition-all ${
               activeTab === 'outstanding'
                 ? 'bg-blue-600 text-white shadow-card'
                 : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-card-hover'
@@ -560,15 +560,15 @@ export default function SalaryPage() {
 
         {/* Salaries Tab */}
         {activeTab === 'salaries' && (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <DollarSign className="w-6 h-6 text-blue-600" />
-                <h2 className="text-2xl font-bold text-gray-900">Salaires par Enseignant</h2>
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Salaires par Enseignant</h2>
               </div>
               <button
                 onClick={() => setShowSalaryForm(!showSalaryForm)}
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card text-sm"
               >
                 {showSalaryForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 {showSalaryForm ? 'Fermer' : 'Définir un salaire'}
@@ -577,26 +577,26 @@ export default function SalaryPage() {
 
             {showSalaryForm && (
               <div className="modal-overlay">
-                <div className="modal-content p-6 border-2 border-blue-200 max-w-2xl w-full mx-4">
-                  <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-3">
-                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <DollarSign className="w-5 h-5 text-blue-600" />
+                <div className="modal-content p-4 sm:p-6 border-2 border-blue-200 max-w-2xl w-full mx-2 sm:mx-4">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4 border-b border-gray-200 pb-2 sm:pb-3">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 flex items-center gap-2">
+                      <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                       Définir un salaire mensuel
                     </h3>
                     <button
                       onClick={() => setShowSalaryForm(false)}
                       className="text-gray-400 hover:text-blue-600 transition-colors bg-gray-100 hover:bg-blue-100 rounded-full p-2"
                     >
-                      <X className="w-6 h-6" />
+                      <X className="w-5 h-5 sm:w-6 sm:h-6" />
                     </button>
                   </div>
-                <form onSubmit={handleCreateSalary} className="space-y-4">
+                <form onSubmit={handleCreateSalary} className="space-y-3 sm:space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Enseignant</label>
                     <select
                       value={salaryForm.teacherId}
                       onChange={(e) => setSalaryForm({ ...salaryForm, teacherId: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                     >
                       <option value="">Sélectionner un enseignant</option>
@@ -613,7 +613,7 @@ export default function SalaryPage() {
                       type="text"
                       value={salaryForm.schoolYear}
                       onChange={(e) => setSalaryForm({ ...salaryForm, schoolYear: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                     />
                   </div>
@@ -623,7 +623,7 @@ export default function SalaryPage() {
                       type="number"
                       value={salaryForm.monthlyAmount}
                       onChange={(e) => setSalaryForm({ ...salaryForm, monthlyAmount: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                       min="0"
                       step="100"
@@ -635,14 +635,14 @@ export default function SalaryPage() {
                       selected={salaryForm.effectiveDate ? new Date(salaryForm.effectiveDate) : null}
                       onChange={(date: Date | null) => setSalaryForm({ ...salaryForm, effectiveDate: date ? date.toISOString().split('T')[0] : '' })}
                       dateFormat="dd/MM/yyyy"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                       placeholderText="DD/MM/YYYY"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card flex items-center justify-center gap-2"
+                    className="w-full py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card flex items-center justify-center gap-2 text-sm"
                   >
                     <CheckCircle className="w-4 h-4" />
                     Enregistrer le salaire
@@ -650,7 +650,7 @@ export default function SalaryPage() {
                   <button
                     type="button"
                     onClick={() => setShowSalaryForm(false)}
-                    className="w-full py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium shadow-card flex items-center justify-center gap-2"
+                    className="w-full py-2 sm:py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium shadow-card flex items-center justify-center gap-2 text-sm"
                   >
                     <X className="w-4 h-4" />
                     Annuler
@@ -661,57 +661,59 @@ export default function SalaryPage() {
             )}
 
             <div className="bg-white rounded-xl shadow-card overflow-hidden border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enseignant</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Année scolaire</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant mensuel</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date d'effet</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {salaries.map((salary) => (
-                    <tr key={salary.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {salary.users?.last_name} {salary.users?.first_name} {salary.users?.role === 'director' ? '(Directeur)' : ''}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {salary.school_years?.year_label}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {parseFloat(salary.monthly_amount).toLocaleString('fr-FR')} XOF
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {formatDate(salary.effective_date)}
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enseignant</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Année scolaire</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant mensuel</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date d'effet</th>
                     </tr>
-                  ))}
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {salaries.map((salary) => (
+                      <tr key={salary.id}>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {salary.users?.last_name} {salary.users?.first_name} {salary.users?.role === 'director' ? '(Directeur)' : ''}
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {salary.school_years?.year_label}
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {parseFloat(salary.monthly_amount).toLocaleString('fr-FR')} XOF
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {formatDate(salary.effective_date)}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         )}
 
         {/* Payments Tab */}
         {activeTab === 'payments' && (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <FileText className="w-6 h-6 text-blue-600" />
-                <h2 className="text-2xl font-bold text-gray-900">Historique des Paiements</h2>
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Historique des Paiements</h2>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                 <button
                   onClick={exportPaymentsToPDF}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium text-sm"
                 >
                   <FileText className="w-4 h-4" />
                   PDF
                 </button>
                 <button
                   onClick={() => setShowPaymentForm(!showPaymentForm)}
-                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card text-sm"
                 >
                   {showPaymentForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                   {showPaymentForm ? 'Fermer' : 'Enregistrer un paiement'}
@@ -721,26 +723,26 @@ export default function SalaryPage() {
 
             {showPaymentForm && (
               <div className="modal-overlay">
-                <div className="modal-content p-6 border-2 border-blue-200 max-w-2xl w-full mx-4">
-                  <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-3">
-                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <Plus className="w-5 h-5 text-blue-600" />
+                <div className="modal-content p-4 sm:p-6 border-2 border-blue-200 max-w-2xl w-full mx-2 sm:mx-4">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4 border-b border-gray-200 pb-2 sm:pb-3">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 flex items-center gap-2">
+                      <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                       Enregistrer un paiement de salaire
                     </h3>
                     <button
                       onClick={() => setShowPaymentForm(false)}
                       className="text-gray-400 hover:text-blue-600 transition-colors bg-gray-100 hover:bg-blue-100 rounded-full p-2"
                     >
-                      <X className="w-6 h-6" />
+                      <X className="w-5 h-5 sm:w-6 sm:h-6" />
                     </button>
                   </div>
-                <form onSubmit={handleCreatePayment} className="space-y-4">
+                <form onSubmit={handleCreatePayment} className="space-y-3 sm:space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Enseignant</label>
                     <select
                       value={paymentForm.teacherId}
                       onChange={(e) => setPaymentForm({ ...paymentForm, teacherId: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                     >
                       <option value="">Sélectionner un enseignant</option>
@@ -757,7 +759,7 @@ export default function SalaryPage() {
                       type="number"
                       value={paymentForm.amount}
                       onChange={(e) => setPaymentForm({ ...paymentForm, amount: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                       min="0"
                       step="100"
@@ -770,7 +772,7 @@ export default function SalaryPage() {
                       onChange={(date: Date | null) => setPaymentForm({ ...paymentForm, paymentMonth: date ? date.toISOString().split('T')[0].substring(0, 7) + '-01' : '' })}
                       dateFormat="MM/yyyy"
                       showMonthYearPicker
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                       placeholderText="MM/YYYY"
                     />
@@ -781,14 +783,14 @@ export default function SalaryPage() {
                       selected={paymentForm.paymentDate ? new Date(paymentForm.paymentDate) : null}
                       onChange={(date: Date | null) => setPaymentForm({ ...paymentForm, paymentDate: date ? date.toISOString().split('T')[0] : '' })}
                       dateFormat="dd/MM/yyyy"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                       placeholderText="DD/MM/YYYY"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card flex items-center justify-center gap-2"
+                    className="w-full py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card flex items-center justify-center gap-2 text-sm"
                   >
                     <CheckCircle className="w-4 h-4" />
                     Enregistrer le paiement
@@ -796,7 +798,7 @@ export default function SalaryPage() {
                   <button
                     type="button"
                     onClick={() => setShowPaymentForm(false)}
-                    className="w-full py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium shadow-card flex items-center justify-center gap-2"
+                    className="w-full py-2 sm:py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all font-medium shadow-card flex items-center justify-center gap-2 text-sm"
                   >
                     <X className="w-4 h-4" />
                     Annuler
@@ -807,49 +809,50 @@ export default function SalaryPage() {
             )}
 
             <div className="bg-white rounded-xl shadow-card overflow-hidden border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enseignant</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mois</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reçu</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {payments.map((payment) => (
-                    <tr key={payment.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {payment.users?.last_name} {payment.users?.first_name} {payment.users?.role === 'director' ? '(Directeur)' : ''}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {formatMonth(payment.payment_month)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {parseFloat(payment.amount).toLocaleString('fr-FR')} XOF
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {formatDate(payment.payment_date)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {payment.receipt_number}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <button
-                          onClick={() => handlePrintReceipt(payment)}
-                          className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors"
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enseignant</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mois</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reçu</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {payments.map((payment) => (
+                      <tr key={payment.id}>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {payment.users?.last_name} {payment.users?.first_name} {payment.users?.role === 'director' ? '(Directeur)' : ''}
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {formatMonth(payment.payment_month)}
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {parseFloat(payment.amount).toLocaleString('fr-FR')} XOF
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {formatDate(payment.payment_date)}
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {payment.receipt_number}
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
+                          <button
+                            onClick={() => handlePrintReceipt(payment)}
+                            className="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"
                         >
-                          <Printer className="w-4 h-4" />
+                          <Printer className="w-3 h-3 sm:w-4 sm:h-4" />
                           Imprimer
                         </button>
                         {user?.role === 'founder' && (
                           <button
                             onClick={() => handleCancelPayment(payment.id)}
-                            className="px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-medium flex items-center gap-1 transition-colors"
+                            className="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"
                           >
-                            <X className="w-4 h-4" />
+                            <X className="w-3 h-3 sm:w-4 sm:h-4" />
                             Annuler
                           </button>
                         )}
@@ -858,58 +861,61 @@ export default function SalaryPage() {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         )}
 
         {/* Outstanding Tab */}
         {activeTab === 'outstanding' && (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <AlertCircle className="w-6 h-6 text-blue-600" />
-                <h2 className="text-2xl font-bold text-gray-900">Impayés de Salaires</h2>
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Impayés de Salaires</h2>
               </div>
-              <div className="flex space-x-4">
+              <div className="flex w-full sm:w-auto">
                 <input
                   type="month"
                   value={filterMonth}
                   onChange={(e) => setFilterMonth(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                   placeholder="Filtrer par mois"
                 />
               </div>
             </div>
 
             <div className="bg-white rounded-xl shadow-card overflow-hidden border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enseignant</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Salaire mensuel</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total versé</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reste à payer</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {outstanding.map((item) => (
-                    <tr key={item.teacherId}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {item.teacherName}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {item.monthlyAmount.toLocaleString('fr-FR')} XOF
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {item.totalPaid.toLocaleString('fr-FR')} XOF
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-red-600">
-                        {item.remaining.toLocaleString('fr-FR')} XOF
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enseignant</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Salaire mensuel</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total versé</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reste à payer</th>
                     </tr>
-                  ))}
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {outstanding.map((item) => (
+                      <tr key={item.teacherId}>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {item.teacherName}
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {item.monthlyAmount.toLocaleString('fr-FR')} XOF
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                          {item.totalPaid.toLocaleString('fr-FR')} XOF
+                        </td>
+                        <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-bold text-red-600">
+                          {item.remaining.toLocaleString('fr-FR')} XOF
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         )}
