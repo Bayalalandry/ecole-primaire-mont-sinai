@@ -606,7 +606,7 @@ export default function TuitionPage() {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
           {(user?.role === 'founder' || user?.role === 'director') && (
             <div className="bg-white rounded-xl shadow-card border border-gray-200 mb-4 sm:mb-6">
-              <div className="flex overflow-x-auto overflow-y-auto border-b border-gray-200" style={{ WebkitOverflowScrolling: 'touch' }}>
+              <div className="flex overflow-x-auto border-b border-gray-200" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <button
                   onClick={() => setActiveTab('rates')}
                   className={`px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap cursor-pointer touch-action-manipulation ${
