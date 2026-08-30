@@ -49,7 +49,7 @@ router.get('/summary/teacher/:teacherId', authenticateToken, async (req: AuthReq
         .maybeSingle();
 
       if (schoolYearData) {
-        paymentsQuery = paymentsQuery.eq('salary_id', schoolYearData.id);
+        paymentsQuery = paymentsQuery.eq('school_year_id', schoolYearData.id);
       }
     }
 
@@ -92,7 +92,7 @@ router.get('/payments/teacher/:teacherId', authenticateToken, async (req: AuthRe
         .maybeSingle();
 
       if (schoolYearData) {
-        query = query.eq('salary_id', schoolYearData.id);
+        query = query.eq('school_year_id', schoolYearData.id);
       }
     }
 
@@ -163,7 +163,7 @@ router.get('/payments', authenticateToken, async (req: AuthRequest, res) => {
         .maybeSingle();
 
       if (schoolYearData) {
-        query = query.eq('salary_id', schoolYearData.id);
+        query = query.eq('school_year_id', schoolYearData.id);
       }
     }
 

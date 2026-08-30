@@ -304,9 +304,9 @@ export default function ExpensesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col relative overflow-hidden">
-      <header className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-xl flex-shrink-0 relative overflow-visible">
+      <header className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-xl flex-shrink-0 relative z-20">
 
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 relative z-10">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 relative z-30">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="bg-white rounded-full backdrop-blur-sm border-2 border-white/50 shadow-lg flex-shrink-0" style={{ padding: 0 }}>
@@ -317,7 +317,7 @@ export default function ExpensesPage() {
                 <p className="text-xs sm:text-sm text-blue-100 drop-shadow">Suivi des dépenses et justificatifs</p>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto relative z-40">
               <button
                 onClick={exportToPDF}
                 className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2"

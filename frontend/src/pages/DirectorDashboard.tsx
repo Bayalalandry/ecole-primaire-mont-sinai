@@ -124,7 +124,7 @@ export default function DirectorDashboard() {
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Total enseignants</h3>
-                <p className="text-4xl font-bold text-purple-600">{loadingStats ? '...' : stats.totalTeachers}</p>
+                <p className="text-3xl sm:text-4xl font-bold text-purple-600">{loadingStats ? '...' : stats.totalTeachers}</p>
               </div>
               <div className="p-3 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full">
                 <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
