@@ -168,9 +168,9 @@ export default function FounderDashboard() {
     setShowSearchResults(false);
     setSearchQuery('');
     if (result.type === 'student') {
-      navigate(`/students?studentId=${result.id}`);
+      navigate(`/profile/student/${result.id}`);
     } else if (result.type === 'teacher') {
-      navigate(`/teachers?teacherId=${result.id}`);
+      navigate(`/profile/teacher/${result.id}`);
     }
   };
 
@@ -447,19 +447,19 @@ export default function FounderDashboard() {
               </div>
 
               {/* Dépenses */}
-              <div className="bg-white rounded-xl shadow-md p-6 border-l-6 border-rose-400">
-                <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-rose-400">
+                <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                   <div className="p-2 bg-gradient-to-br from-rose-300 to-rose-500 rounded-full">
-                    <FileText className="w-5 h-5 text-white" />
+                    <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Dépenses</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">Dépenses</h3>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Total</span>
-                    <span className="font-semibold text-rose-600">{formatAmount(statistics.expenses.total)}</span>
+                    <span className="text-xs sm:text-sm text-gray-600">Total</span>
+                    <span className="font-semibold text-rose-600 text-sm">{formatAmount(statistics.expenses.total)}</span>
                   </div>
-                  <div className="text-sm text-gray-500 mt-2">
+                  <div className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
                     Par catégorie:
                     {Object.entries(statistics.expenses.byCategory).slice(0, 2).map(([cat, amount]) => (
                       <div key={cat} className="flex justify-between">
@@ -472,25 +472,25 @@ export default function FounderDashboard() {
               </div>
 
               {/* Effectifs */}
-              <div className="bg-white rounded-xl shadow-md p-6 border-l-6 border-sky-400">
-                <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-sky-400">
+                <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                   <div className="p-2 bg-gradient-to-br from-sky-300 to-sky-500 rounded-full">
-                    <Users className="w-5 h-5 text-white" />
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Effectifs</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">Effectifs</h3>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Élèves actifs</span>
-                    <span className="font-semibold text-sky-600">{statistics.students.active}</span>
+                    <span className="text-xs sm:text-sm text-gray-600">Élèves actifs</span>
+                    <span className="font-semibold text-sky-600 text-sm">{statistics.students.active}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Redoublants</span>
-                    <span className="font-semibold text-orange-600">{statistics.students.repeating}</span>
+                    <span className="text-xs sm:text-sm text-gray-600">Redoublants</span>
+                    <span className="font-semibold text-orange-600 text-sm">{statistics.students.repeating}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Enseignants</span>
-                    <span className="font-semibold text-sky-600">{statistics.teachers.total}</span>
+                    <span className="text-xs sm:text-sm text-gray-600">Enseignants</span>
+                    <span className="font-semibold text-sky-600 text-sm">{statistics.teachers.total}</span>
                   </div>
                 </div>
               </div>
@@ -547,82 +547,82 @@ export default function FounderDashboard() {
             className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-orange-500 text-left group"
           >
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-4 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full group-hover:scale-110 transition-transform">
-                <Wallet className="w-8 h-8 text-white" />
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
+                <Wallet className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Gérer les salaires</h3>
-                <p className="text-sm text-gray-600">Versements enseignants</p>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les salaires</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Versements enseignants</p>
               </div>
             </div>
           </button>
           <button
             onClick={() => navigate('/passage')}
-            className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-8 border-indigo-500 text-left group"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-indigo-500 text-left group"
           >
-            <div className="flex items-center gap-4">
-              <div className="p-4 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full group-hover:scale-110 transition-transform">
-                <TrendingUp className="w-8 h-8 text-white" />
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
+                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Passage de classe</h3>
-                <p className="text-sm text-gray-600">Moyennes et promotions</p>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Passage de classe</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Moyennes et promotions</p>
               </div>
             </div>
           </button>
           <button
             onClick={() => navigate('/expenses')}
-            className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-8 border-red-500 text-left group"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-red-500 text-left group"
           >
-            <div className="flex items-center gap-4">
-              <div className="p-4 bg-gradient-to-br from-red-400 to-red-600 rounded-full group-hover:scale-110 transition-transform">
-                <FileText className="w-8 h-8 text-white" />
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-red-400 to-red-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
+                <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Gérer les dépenses</h3>
-                <p className="text-sm text-gray-600">Budget et justificatifs</p>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les dépenses</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Budget et justificatifs</p>
               </div>
             </div>
           </button>
           <button
             onClick={() => navigate('/statistics')}
-            className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-8 border-teal-500 text-left group"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-teal-500 text-left group"
           >
-            <div className="flex items-center gap-4">
-              <div className="p-4 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full group-hover:scale-110 transition-transform">
-                <BarChart3 className="w-8 h-8 text-white" />
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
+                <BarChart3 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Statistiques détaillées</h3>
-                <p className="text-sm text-gray-600">Rapports et analyses</p>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Statistiques détaillées</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Rapports et analyses</p>
               </div>
             </div>
           </button>
           <button
             onClick={() => navigate('/activity-log')}
-            className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-8 border-pink-500 text-left group"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-pink-500 text-left group"
           >
-            <div className="flex items-center gap-4">
-              <div className="p-4 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full group-hover:scale-110 transition-transform">
-                <Activity className="w-8 h-8 text-white" />
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
+                <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Journal d'activité</h3>
-                <p className="text-sm text-gray-600">Historique des actions</p>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Journal d'activité</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Historique des actions</p>
               </div>
             </div>
           </button>
           <button
             onClick={handleBackup}
-            className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-8 border-cyan-500 text-left group"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-cyan-500 text-left group"
           >
-            <div className="flex items-center gap-4">
-              <div className="p-4 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-full group-hover:scale-110 transition-transform">
-                <Save className="w-8 h-8 text-white" />
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
+                <Save className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Sauvegarde globale</h3>
-                <p className="text-sm text-gray-600">Export et restauration</p>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Sauvegarde globale</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Export et restauration</p>
               </div>
             </div>
           </button>

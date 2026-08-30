@@ -68,12 +68,12 @@ export default function ProfilePage() {
       if (!token) return;
 
       // Load student basic info
-      const studentData = await studentService.getStudentById(studentId, token);
-      setProfile(studentData);
+      const studentResponse = await studentService.getStudentById(studentId, token);
+      setProfile(studentResponse.student);
 
       // Load academic history
-      const historyData = await studentService.getAcademicHistory(studentId, token);
-      setAcademicHistory(historyData || []);
+      const historyResponse = await studentService.getAcademicHistory(studentId, token);
+      setAcademicHistory(historyResponse.history || []);
 
       // Load payment summary
       const paymentData = await tuitionService.getStudentPaymentSummary(studentId, token);
@@ -81,7 +81,7 @@ export default function ProfilePage() {
 
       // Load payment history
       const paymentsData = await tuitionService.getStudentPayments(studentId, token);
-      setPaymentHistory(paymentsData || []);
+      setPaymentHistory(paymentsData.payments || []);
     } catch (error: any) {
       console.error('Error loading student profile:', error);
       setError('Erreur lors du chargement du dossier');
@@ -94,8 +94,8 @@ export default function ProfilePage() {
       if (!token) return;
 
       // Load teacher basic info
-      const teacherData = await teacherService.getTeacherById(teacherId, token);
-      setProfile(teacherData);
+      const teacherResponse = await teacherService.getTeacherById(teacherId, token);
+      setProfile(teacherResponse.teacher);
 
       // Load salary summary
       const salaryData = await salaryService.getTeacherSalarySummary(teacherId, token);
@@ -103,7 +103,7 @@ export default function ProfilePage() {
 
       // Load salary payment history
       const paymentsData = await salaryService.getTeacherPayments(teacherId, token);
-      setPaymentHistory(paymentsData || []);
+      setPaymentHistory(paymentsData.payments || []);
     } catch (error: any) {
       console.error('Error loading teacher profile:', error);
       setError('Erreur lors du chargement du dossier');
@@ -111,18 +111,22 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    if (!type || !id) {
-      navigate('/dashboard/founder');
-      return;
-    }
+    const loadProfile = async () => {
+      if (!type || !id) {
+        navigate('/dashboard/founder');
+        return;
+      }
 
-    setLoading(true);
-    if (type === 'student') {
-      loadStudentProfile(id);
-    } else if (type === 'teacher') {
-      loadTeacherProfile(id);
-    }
-    setLoading(false);
+      setLoading(true);
+      if (type === 'student') {
+        await loadStudentProfile(id);
+      } else if (type === 'teacher') {
+        await loadTeacherProfile(id);
+      }
+      setLoading(false);
+    };
+
+    loadProfile();
   }, [type, id, navigate]);
 
   if (loading) {
