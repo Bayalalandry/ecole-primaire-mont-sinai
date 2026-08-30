@@ -574,7 +574,7 @@ export default function StudentsPage() {
                                       title="Voir le dossier"
                                     >
                                       <User className="w-4 h-4" />
-                                      Dossier
+                                      <span>Dossier</span>
                                     </button>
                                   </div>
                                 </td>
@@ -731,7 +731,7 @@ export default function StudentsPage() {
                                       title="Voir le dossier"
                                     >
                                       <User className="w-3 h-3 sm:w-4 sm:h-4" />
-                                      <span className="hidden sm:inline">Dossier</span>
+                                      <span>Dossier</span>
                                     </button>
                                   </div>
                                 </td>

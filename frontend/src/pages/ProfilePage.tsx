@@ -16,6 +16,9 @@ interface AcademicHistory {
   final_grade: number;
   status: string;
   created_at: string;
+  classes?: {
+    name: string;
+  };
 }
 
 interface PaymentHistory {
@@ -224,7 +227,7 @@ export default function ProfilePage() {
                   </div>
                   <div>
                     <p className="text-xs sm:text-sm text-gray-500 mb-1">Classe actuelle</p>
-                    <p className="text-sm sm:text-base font-medium text-gray-900">{profile.current_class_name || '-'}</p>
+                    <p className="text-sm sm:text-base font-medium text-gray-900">{profile.classes?.name || '-'}</p>
                   </div>
                 </>
               )}
@@ -232,11 +235,7 @@ export default function ProfilePage() {
                 <>
                   <div>
                     <p className="text-xs sm:text-sm text-gray-500 mb-1">Statut</p>
-                    <p className="text-sm sm:text-base font-medium text-gray-900">{profile.status === 'active' ? 'Actif' : 'Inactif'}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs sm:text-sm text-gray-500 mb-1">Spécialité</p>
-                    <p className="text-sm sm:text-base font-medium text-gray-900">{profile.specialty || '-'}</p>
+                    <p className="text-sm sm:text-base font-medium text-gray-900">{profile.teachers?.status === 'active' ? 'Actif' : profile.teachers?.status === 'pending' ? 'En attente' : profile.teachers?.status === 'on_leave' ? 'En congé' : 'Inactif'}</p>
                   </div>
                 </>
               )}
@@ -266,8 +265,8 @@ export default function ProfilePage() {
                     <tbody className="bg-white divide-y divide-gray-200">
                       {academicHistory.map((history) => (
                         <tr key={history.id} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{history.school_year}</td>
-                          <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{history.class_name}</td>
+                          <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{history.school_year || '-'}</td>
+                          <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{history.classes?.name || '-'}</td>
                           <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{history.final_grade ? history.final_grade.toFixed(2) : '-'}</td>
                           <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
                             <span className={`px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${

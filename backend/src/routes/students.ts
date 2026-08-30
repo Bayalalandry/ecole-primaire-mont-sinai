@@ -417,7 +417,7 @@ router.get('/:id/academic-history', authenticateToken, async (req: AuthRequest, 
       .from('student_academic_history')
       .select(`
         *,
-        classes (
+        classes!inner (
           id,
           name
         )

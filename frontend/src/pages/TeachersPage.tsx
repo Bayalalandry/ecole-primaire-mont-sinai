@@ -439,7 +439,7 @@ export default function TeachersPage() {
                                   title="Voir le dossier"
                                 >
                                   <User className="w-3 h-3 sm:w-4 sm:h-4" />
-                                  <span className="hidden sm:inline">Dossier</span>
+                                  <span>Dossier</span>
                                 </button>
                               </>
                             ) : null}
