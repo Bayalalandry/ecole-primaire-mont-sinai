@@ -187,9 +187,57 @@ router.get('/outstanding', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { schoolYear, paymentMonth } = req.query;
 
-    // Pour l'instant, retourner une liste vide
-    // La logique complète sera implémentée ultérieurement
-    res.json({ outstanding: [] });
+    let schoolYearId = null;
+    if (schoolYear) {
+      const { data: schoolYearData } = await supabase
+        .from('school_years')
+        .select('id')
+        .eq('year_label', schoolYear)
+        .maybeSingle();
+      schoolYearId = schoolYearData?.id;
+    }
+
+    // Récupérer tous les salaires avec les paiements
+    const { data: salaries } = await supabase
+      .from('teacher_salaries')
+      .select(`
+        *,
+        teachers (*, users (*))
+      `)
+      .order('effective_date', { ascending: false });
+
+    const outstanding: any[] = [];
+
+    for (const salary of salaries || []) {
+      // Calculer le total payé pour ce salaire
+      let paymentsQuery = supabase
+        .from('salary_payments')
+        .select('amount')
+        .eq('teacher_id', salary.teacher_id)
+        .eq('cancelled', false);
+
+      if (schoolYearId) {
+        paymentsQuery = paymentsQuery.eq('school_year_id', schoolYearId);
+      }
+
+      const { data: payments } = await paymentsQuery;
+
+      const totalPaid = (payments || []).reduce((sum: number, p: any) => sum + Number(p.amount), 0);
+      const totalOutstanding = Number(salary.monthly_amount) - totalPaid;
+
+      if (totalOutstanding > 0) {
+        outstanding.push({
+          teacherId: salary.teacher_id,
+          teacherName: salary.teachers?.users ? `${salary.teachers.users.last_name} ${salary.teachers.users.first_name}` : 'Inconnu',
+          monthlyAmount: salary.monthly_amount,
+          totalPaid,
+          totalOutstanding,
+          schoolYearId: salary.school_year_id,
+        });
+      }
+    }
+
+    res.json({ outstanding });
   } catch (error: any) {
     console.error('Get salary outstanding error:', error);
     res.status(500).json({ error: 'Erreur lors de la récupération des impayés' });
