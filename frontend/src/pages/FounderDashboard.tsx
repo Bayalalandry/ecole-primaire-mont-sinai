@@ -226,9 +226,9 @@ export default function FounderDashboard() {
                 <p className="text-xs sm:text-sm text-blue-100 drop-shadow mt-0.5 sm:mt-1">Bienvenue, {user?.last_name} {user?.first_name}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto relative z-40">
               {/* Barre de recherche */}
-              <div className="relative flex-1 sm:flex-none">
+              <div className="relative flex-1 sm:flex-none z-40">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
                   <input
@@ -260,7 +260,7 @@ export default function FounderDashboard() {
                 )}
               </div>
               {/* Notification bell */}
-              <div className="relative">
+              <div className="relative z-40">
                 <button
                   onClick={toggleNotifications}
                   className="relative p-2 rounded-lg bg-white/20 hover:bg-white/30 focus:outline-none transition-colors border border-white/30"
@@ -346,7 +346,7 @@ export default function FounderDashboard() {
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 text-white border-2 border-white/40 hover:bg-white/25 hover:border-white/60 rounded-lg transition-colors font-medium shadow-lg backdrop-blur-sm text-sm sm:text-base"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 text-white border-2 border-white/40 hover:bg-white/25 hover:border-white/60 rounded-lg transition-colors font-medium shadow-lg backdrop-blur-sm text-sm sm:text-base relative z-40"
               >
                 <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="hidden sm:inline">Déconnexion</span>
@@ -357,7 +357,7 @@ export default function FounderDashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 relative z-10">
         {/* Statistiques globales */}
         {statistics && (
           <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">

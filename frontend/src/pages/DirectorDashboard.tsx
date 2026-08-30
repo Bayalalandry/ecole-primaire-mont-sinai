@@ -107,7 +107,7 @@ export default function DirectorDashboard() {
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 text-white border-2 border-white/40 hover:bg-white/25 hover:border-white/60 rounded-lg transition-colors font-medium shadow-lg backdrop-blur-sm text-sm sm:text-base"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 text-white border-2 border-white/40 hover:bg-white/25 hover:border-white/60 rounded-lg transition-colors font-medium shadow-lg backdrop-blur-sm text-sm sm:text-base relative z-40"
             >
               <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">Déconnexion</span>
