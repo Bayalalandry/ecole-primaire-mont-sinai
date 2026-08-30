@@ -72,7 +72,7 @@ export default function SalaryPage() {
       const currentSchoolYear = schoolYear || await schoolYearService.getCurrentSchoolYear(token);
 
       // Construire les paramètres pour les impayés
-      const outstandingParams: any = {};
+      const outstandingParams: any = { schoolYear: currentSchoolYear };
       if (filterMonth) {
         // Convertir YYYY-MM en YYYY-MM-01
         outstandingParams.paymentMonth = filterMonth + '-01';
@@ -81,7 +81,7 @@ export default function SalaryPage() {
       const [salariesData, teachersData, paymentsData, outstandingData] = await Promise.all([
         salaryService.getSalaries(token, currentSchoolYear),
         authService.getAllTeachers(token),
-        salaryService.getSalaryPayments(token), // Sans filtre schoolYear pour montrer TOUS les paiements
+        salaryService.getSalaryPayments(token, { schoolYear: currentSchoolYear }),
         salaryService.getSalaryOutstanding(token, outstandingParams),
       ]);
 
@@ -126,7 +126,17 @@ export default function SalaryPage() {
   useEffect(() => {
     const token = tokenStorage.getToken();
     if (token) {
-      loadData(token);
+      schoolYearService.getCurrentSchoolYear(token)
+        .then(currentYear => {
+          setSalaryForm(prev => ({ ...prev, schoolYear: currentYear }));
+          loadData(token, currentYear);
+        })
+        .catch(error => {
+          console.error('Error loading school year:', error);
+          const fallbackYear = new Date().getFullYear().toString() + '-' + (new Date().getFullYear() + 1).toString();
+          setSalaryForm(prev => ({ ...prev, schoolYear: fallbackYear }));
+          loadData(token, fallbackYear);
+        });
     }
   }, [filterMonth]);
 

@@ -20,7 +20,8 @@ export default function SchoolLogo({ size = 32, className = '', inCircle = true 
           objectFit: inCircle ? 'cover' : 'contain',
           display: 'block',
           padding: 0,
-          margin: 0
+          margin: 0,
+          pointerEvents: 'none'
         }}
       />
     </picture>
@@ -38,7 +39,8 @@ export default function SchoolLogo({ size = 32, className = '', inCircle = true 
           overflow: 'hidden',
           padding: 0,
           margin: 0,
-          display: 'block'
+          display: 'block',
+          pointerEvents: 'none'
         }}
       >
         {imgContent}
@@ -49,7 +51,7 @@ export default function SchoolLogo({ size = 32, className = '', inCircle = true 
   return (
     <div
       className={className}
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size, pointerEvents: 'none' }}
     >
       {imgContent}
     </div>
