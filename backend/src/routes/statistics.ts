@@ -35,31 +35,39 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       filterSchoolYearId = syData?.id;
     }
 
-    // 1. Statistiques scolarités
-    const { data: tuitionPayments } = await supabase
-      .from('tuition_payments')
-      .select('amount, payment_date, student_id')
-      .order('payment_date');
+    // Exécuter toutes les requêtes indépendantes en parallèle avec Promise.all
+    const [
+      tuitionPayments,
+      tuitionSchoolYear,
+      activeStudentsForTuition,
+      salaryPayments,
+      teacherSalaries,
+      expenses,
+      allStudents,
+      teachers
+    ] = await Promise.all([
+      // 1. Statistiques scolarités
+      supabase.from('tuition_payments').select('amount, payment_date, student_id').order('payment_date'),
+      // Récupérer l'année scolaire actuelle pour les scolarités
+      supabase.from('school_years').select('id').eq('is_current', true).maybeSingle(),
+      // Calculer le total attendu : pour chaque élève actif, récupérer le tarif de sa classe
+      supabase.from('students').select('id, current_class_id').eq('status', 'active'),
+      // 2. Statistiques salaires
+      supabase.from('salary_payments').select('amount, payment_date'),
+      supabase.from('teacher_salaries').select('monthly_amount'),
+      // 3. Statistiques dépenses
+      supabase.from('expenses').select('category, amount'),
+      // 4. Statistiques élèves
+      supabase.from('students').select('status, current_class_id'),
+      // 5. Statistiques enseignants
+      supabase.from('users').select('id').eq('role', 'teacher'),
+    ]);
 
-    const totalTuitionCollected = tuitionPayments?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
+    const totalTuitionCollected = tuitionPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
+    const statsSchoolYearId = tuitionSchoolYear.data?.id;
+    const tuitionClassIds = [...new Set(activeStudentsForTuition.data?.map(s => s.current_class_id) || [])];
 
-    // Récupérer l'année scolaire actuelle pour les scolarités
-    const { data: tuitionSchoolYear } = await supabase
-      .from('school_years')
-      .select('id')
-      .eq('is_current', true)
-      .maybeSingle();
-
-    const statsSchoolYearId = tuitionSchoolYear?.id;
-
-    // Calculer le total attendu : pour chaque élève actif, récupérer le tarif de sa classe
-    const { data: activeStudentsForTuition } = await supabase
-      .from('students')
-      .select('id, current_class_id')
-      .eq('status', 'active');
-
-    const tuitionClassIds = [...new Set(activeStudentsForTuition?.map(s => s.current_class_id) || [])];
-
+    // Récupérer les tarifs de scolarité (dépend de activeStudentsForTuition et tuitionSchoolYear)
     const rateMap: any = {};
     let totalTuitionExpected = 0;
     if (tuitionClassIds.length > 0 && statsSchoolYearId) {
@@ -73,56 +81,41 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
         rateMap[rate.class_id] = Number(rate.amount);
       });
 
-      totalTuitionExpected = activeStudentsForTuition?.reduce((sum, student) => {
+      totalTuitionExpected = activeStudentsForTuition.data?.reduce((sum, student) => {
         return sum + (rateMap[student.current_class_id] || 0);
       }, 0) || 0;
     }
 
-    // Calculer le nombre d'élèves avec impayés (ceux qui ont un solde impayé > 0)
+    // Calculer le nombre d'élèves avec impayés
     let outstandingStudentsCount = 0;
     if (tuitionClassIds.length > 0 && statsSchoolYearId) {
       const paymentsByStudent: any = {};
-      tuitionPayments?.forEach((p) => {
+      tuitionPayments.data?.forEach((p) => {
         if (!paymentsByStudent[p.student_id]) {
           paymentsByStudent[p.student_id] = 0;
         }
         paymentsByStudent[p.student_id] += Number(p.amount);
       });
 
-      outstandingStudentsCount = activeStudentsForTuition?.filter((student) => {
+      outstandingStudentsCount = activeStudentsForTuition.data?.filter((student) => {
         const expected = rateMap[student.current_class_id] || 0;
         const paid = paymentsByStudent[student.id] || 0;
         return expected - paid > 0;
       }).length || 0;
     }
 
-    // Calculer les impayés : total attendu - total encaissé
     const totalTuitionOutstanding = Math.max(0, totalTuitionExpected - totalTuitionCollected);
 
     // 2. Statistiques salaires
-    const { data: salaryPayments } = await supabase
-      .from('salary_payments')
-      .select('amount, payment_date');
-
-    const totalSalariesPaid = salaryPayments?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
-
-    const { data: teacherSalaries } = await supabase
-      .from('teacher_salaries')
-      .select('monthly_amount');
-
-    const totalSalariesExpected = teacherSalaries?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
-
+    const totalSalariesPaid = salaryPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
+    const totalSalariesExpected = teacherSalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
     const totalSalariesOutstanding = totalSalariesExpected - totalSalariesPaid;
 
     // 3. Statistiques dépenses
-    const { data: expenses } = await supabase
-      .from('expenses')
-      .select('category, amount');
-
-    const totalExpenses = expenses?.reduce((sum, e) => sum + Number(e.amount), 0) || 0;
+    const totalExpenses = expenses.data?.reduce((sum, e) => sum + Number(e.amount), 0) || 0;
 
     const expensesByCategory: any = {};
-    expenses?.forEach((e) => {
+    expenses.data?.forEach((e) => {
       if (!expensesByCategory[e.category]) {
         expensesByCategory[e.category] = 0;
       }
@@ -130,16 +123,12 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
     });
 
     // 4. Statistiques élèves
-    const { data: allStudents } = await supabase
-      .from('students')
-      .select('status, current_class_id');
-
-    const activeStudents = allStudents?.filter(s => s.status === 'active').length || 0;
-    const repeatingStudents = allStudents?.filter(s => s.status === 'repeating').length || 0;
-    const departedStudents = allStudents?.filter(s => s.status === 'departed').length || 0;
+    const activeStudents = allStudents.data?.filter(s => s.status === 'active').length || 0;
+    const repeatingStudents = allStudents.data?.filter(s => s.status === 'repeating').length || 0;
+    const departedStudents = allStudents.data?.filter(s => s.status === 'departed').length || 0;
 
     const studentsByClass: any = {};
-    allStudents?.forEach((s) => {
+    allStudents.data?.forEach((s) => {
       if (!studentsByClass[s.current_class_id]) {
         studentsByClass[s.current_class_id] = { active: 0, repeating: 0, departed: 0 };
       }
@@ -148,7 +137,7 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       if (s.status === 'departed') studentsByClass[s.current_class_id].departed++;
     });
 
-    // Récupérer les noms des classes
+    // Récupérer les noms des classes (dépend de allStudents)
     const studentClassIds = Object.keys(studentsByClass);
     const { data: classes } = await supabase
       .from('classes')
@@ -160,13 +149,7 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       classNameMap[c.id] = c.name;
     });
 
-    // 5. Statistiques enseignants
-    const { data: teachers } = await supabase
-      .from('users')
-      .select('id')
-      .eq('role', 'teacher');
-
-    const activeTeachersCount = teachers?.length || 0;
+    const activeTeachersCount = teachers.data?.length || 0;
 
     // 6. Bilan financier
     const totalRevenue = totalTuitionCollected;
@@ -190,7 +173,7 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
         byCategory: expensesByCategory,
       },
       students: {
-        total: allStudents?.length || 0,
+        total: allStudents.data?.length || 0,
         active: activeStudents,
         repeating: repeatingStudents,
         departed: departedStudents,
