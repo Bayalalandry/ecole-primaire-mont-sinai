@@ -208,14 +208,14 @@ export default function FounderDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-xl relative overflow-visible">
+      <header className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-xl relative z-20">
         {/* Motif subtil en arrière-plan */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-48 h-48 sm:w-64 sm:h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2 blur-3xl"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 relative z-30">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
               <div className="bg-white rounded-full backdrop-blur-sm border-2 border-white/50 shadow-lg flex-shrink-0" style={{ padding: 0 }}>
@@ -240,7 +240,7 @@ export default function FounderDashboard() {
                   />
                 </div>
                 {showSearchResults && searchResults.length > 0 && (
-                  <div className="absolute top-full mt-2 w-full sm:w-64 bg-white rounded-lg shadow-xl border border-gray-200 max-h-96 overflow-y-auto z-[9999]">
+                  <div className="absolute top-full mt-2 w-full sm:w-64 bg-white rounded-lg shadow-xl border border-gray-200 max-h-96 overflow-y-auto z-[99999]">
                     {searchResults.map((result, index) => (
                       <div
                         key={index}
@@ -273,7 +273,7 @@ export default function FounderDashboard() {
                   )}
                 </button>
                 {showNotifications && (
-                  <div className="absolute top-full right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-80 sm:max-h-96 overflow-y-auto z-[9999]">
+                  <div className="absolute top-full right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-80 sm:max-h-96 overflow-y-auto z-[99999]">
                     <div className="p-3 sm:p-4 border-b border-gray-200 flex justify-between items-center bg-gradient-to-r from-blue-50 to-blue-100">
                       <div className="flex items-center gap-2">
                         <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />

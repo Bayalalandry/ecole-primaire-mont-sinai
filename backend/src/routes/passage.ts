@@ -508,7 +508,7 @@ router.post('/validate/:classId', authenticateToken, requireFounder, async (req:
             .from('student_academic_history')
             .insert({
               student_id: studentId,
-              class_id: classId,
+              class_id: classIdStr,
               school_year: schoolYear,
               final_grade: decision.finalGrade,
               status: 'passed',
@@ -529,7 +529,7 @@ router.post('/validate/:classId', authenticateToken, requireFounder, async (req:
             .from('student_academic_history')
             .insert({
               student_id: studentId,
-              class_id: classId,
+              class_id: classIdStr,
               school_year: schoolYear,
               final_grade: decision.finalGrade,
               status: 'transferred',
@@ -547,7 +547,7 @@ router.post('/validate/:classId', authenticateToken, requireFounder, async (req:
           .from('student_academic_history')
           .insert({
             student_id: studentId,
-            class_id: classId,
+            class_id: classIdStr,
             school_year: schoolYear,
             final_grade: decision.finalGrade,
             status: 'repeating',
