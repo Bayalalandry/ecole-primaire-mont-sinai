@@ -9,7 +9,7 @@ const router = Router();
 // ============================================
 
 // Recherche globale (élèves et enseignants)
-router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
+router.get('/', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { query } = req.query;
 
