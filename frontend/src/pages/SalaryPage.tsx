@@ -296,7 +296,7 @@ export default function SalaryPage() {
         <!-- Montant principal -->
         <div style="margin: 0 30px 25px 30px; padding: 25px; background: #ecfdf5; border-radius: 12px; border: 3px solid #059669; text-align: center;">
           <div style="font-size: 14px; color: #064e3b; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Montant Payé</div>
-          <div style="font-size: 38px; font-weight: 900; color: #022c22; line-height: 1; letter-spacing: 1px;">${parseFloat(payment.amount).toLocaleString('fr-FR')} XOF</div>
+          <div style="font-size: 38px; font-weight: 900; color: #022c22; line-height: 1; letter-spacing: 1px;">${payment.amount ? parseFloat(payment.amount).toLocaleString('fr-FR') : '0'} XOF</div>
         </div>
 
         <!-- Pied de page -->
@@ -681,7 +681,7 @@ export default function SalaryPage() {
                           {salary.school_years?.year_label}
                         </td>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                          {parseFloat(salary.monthly_amount).toLocaleString('fr-FR')} XOF
+                          {salary.monthly_amount ? parseFloat(salary.monthly_amount).toLocaleString('fr-FR') : '0'} XOF
                         </td>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                           {formatDate(salary.effective_date)}
@@ -831,7 +831,7 @@ export default function SalaryPage() {
                           {formatMonth(payment.payment_month)}
                         </td>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                          {parseFloat(payment.amount).toLocaleString('fr-FR')} XOF
+                          {payment.amount ? parseFloat(payment.amount).toLocaleString('fr-FR') : '0'} XOF
                         </td>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                           {formatDate(payment.payment_date)}
@@ -903,13 +903,13 @@ export default function SalaryPage() {
                           {item.teacherName}
                         </td>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                          {item.monthlyAmount.toLocaleString('fr-FR')} XOF
+                          {item.monthlyAmount?.toLocaleString('fr-FR') || '0'} XOF
                         </td>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                          {item.totalPaid.toLocaleString('fr-FR')} XOF
+                          {item.totalPaid?.toLocaleString('fr-FR') || '0'} XOF
                         </td>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-bold text-red-600">
-                          {item.remaining.toLocaleString('fr-FR')} XOF
+                          {item.totalOutstanding?.toLocaleString('fr-FR') || '0'} XOF
                         </td>
                       </tr>
                     ))}

@@ -350,7 +350,7 @@ export default function TuitionPage() {
         <!-- Montant principal -->
         <div style="margin: 30px 30px; padding: 25px; background: #ecfdf5; border-radius: 12px; border: 3px solid #059669; text-align: center;">
           <div style="font-size: 14px; color: #064e3b; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Montant Payé</div>
-          <div style="font-size: 38px; font-weight: 900; color: #022c22; line-height: 1; letter-spacing: 1px;">${parseFloat(payment.amount).toLocaleString('fr-FR')} XOF</div>
+          <div style="font-size: 38px; font-weight: 900; color: #022c22; line-height: 1; letter-spacing: 1px;">${payment.amount ? parseFloat(payment.amount).toLocaleString('fr-FR') : '0'} XOF</div>
         </div>
 
         <!-- Pied de page -->
