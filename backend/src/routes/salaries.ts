@@ -118,7 +118,7 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
 
     let query = supabase
       .from('teacher_salaries')
-      .select('*, school_years (*), teachers (*, users (*))')
+      .select('*, school_years (*)')
       .order('effective_date', { ascending: false });
 
     if (schoolYear) {
@@ -137,7 +137,29 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
 
     if (error) throw error;
 
-    res.json({ salaries: data || [] });
+    // Récupérer les informations des enseignants manuellement
+    const teacherIds = (data || []).map((s: any) => s.teacher_id);
+    const { data: teachersData } = await supabase
+      .from('teachers')
+      .select('user_id, status')
+      .in('user_id', teacherIds);
+
+    const { data: usersData } = await supabase
+      .from('users')
+      .select('id, first_name, last_name')
+      .in('id', teacherIds);
+
+    // Combiner les données
+    const salariesWithTeachers = (data || []).map((salary: any) => {
+      const teacher = teachersData?.find((t: any) => t.user_id === salary.teacher_id);
+      const user = usersData?.find((u: any) => u.id === salary.teacher_id);
+      return {
+        ...salary,
+        teachers: teacher ? { ...teacher, users: user } : null,
+      };
+    });
+
+    res.json({ salaries: salariesWithTeachers || [] });
   } catch (error: any) {
     console.error('Get salaries error:', error);
     res.status(500).json({ error: 'Erreur lors de la récupération des salaires' });
@@ -197,14 +219,23 @@ router.get('/outstanding', authenticateToken, async (req: AuthRequest, res) => {
       schoolYearId = schoolYearData?.id;
     }
 
-    // Récupérer tous les salaires avec les paiements
+    // Récupérer tous les salaires
     const { data: salaries } = await supabase
       .from('teacher_salaries')
-      .select(`
-        *,
-        teachers (*, users (*))
-      `)
+      .select('*')
       .order('effective_date', { ascending: false });
+
+    // Récupérer les informations des enseignants et utilisateurs
+    const teacherIds = (salaries || []).map((s: any) => s.teacher_id);
+    const { data: teachersData } = await supabase
+      .from('teachers')
+      .select('user_id, status')
+      .in('user_id', teacherIds);
+
+    const { data: usersData } = await supabase
+      .from('users')
+      .select('id, first_name, last_name')
+      .in('id', teacherIds);
 
     const outstanding: any[] = [];
 
@@ -226,9 +257,10 @@ router.get('/outstanding', authenticateToken, async (req: AuthRequest, res) => {
       const totalOutstanding = Number(salary.monthly_amount) - totalPaid;
 
       if (totalOutstanding > 0) {
+        const user = usersData?.find((u: any) => u.id === salary.teacher_id);
         outstanding.push({
           teacherId: salary.teacher_id,
-          teacherName: salary.teachers?.users ? `${salary.teachers.users.last_name} ${salary.teachers.users.first_name}` : 'Inconnu',
+          teacherName: user ? `${user.last_name} ${user.first_name}` : 'Inconnu',
           monthlyAmount: salary.monthly_amount,
           totalPaid,
           totalOutstanding,
