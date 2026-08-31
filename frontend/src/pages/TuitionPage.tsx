@@ -294,114 +294,130 @@ export default function TuitionPage() {
   };
 
   const handlePrintReceipt = (payment: any) => {
-    const receiptContainer = document.createElement('div');
-    receiptContainer.id = 'print-receipt-container';
-    receiptContainer.innerHTML = `
-      <div style="max-width: 650px; margin: 0 auto; background: white; border: 3px solid #1e3a8a; border-radius: 12px; overflow: hidden; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <!-- Bandeau coloré -->
-        <div style="background: #1e3a8a; padding: 25px 30px; text-align: center;">
-          <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 8px;">
-            <div style="width: 60px; height: 60px; background: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #ffffff; overflow: hidden; padding: 0; margin: 0;">
-              <img src="${logo}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; display: block; padding: 0; margin: 0;" />
-            </div>
-            <div>
-              <h1 style="font-size: 24px; color: #ffffff; margin: 0; font-weight: 900; letter-spacing: 1px; line-height: 1.2;">${SCHOOL_CONFIG.name}</h1>
-              <p style="font-size: 16px; color: #ffffff; margin: 8px 0 0 0; font-weight: 900; letter-spacing: 1px;">REÇU DE PAIEMENT</p>
-            </div>
-          </div>
-        </div>
+    const doc = new jsPDF();
+    const schoolName = SCHOOL_CONFIG.name;
+    const receiptNumber = payment.receipt_number || 'N/A';
+    const studentName = `${payment.students?.last_name || ''} ${payment.students?.first_name || ''}`;
+    const matricule = payment.students?.matricule || 'N/A';
+    const className = payment.students?.classes?.name || 'N/A';
+    const paymentDate = formatDate(payment.payment_date);
+    const trimester = payment.trimester ? `T${payment.trimester}` : 'N/A';
+    const schoolYear = paymentForm.schoolYear;
+    const amount = payment.amount ? parseFloat(payment.amount).toLocaleString('fr-FR') : '0';
+    const recordedBy = `${payment.users?.first_name || ''} ${payment.users?.last_name || ''}`;
+    const currentDate = formatDate(new Date().toISOString());
 
-        <!-- Numéro de reçu -->
-        <div style="text-align: center; margin: 25px 0;">
-          <div style="display: inline-block; background: #fef3c7; padding: 10px 25px; border-radius: 20px; border: 3px dashed #f59e0b;">
-            <span style="font-size: 12px; color: #451a03; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">N° Reçu</span>
-            <div style="font-size: 20px; color: #451a03; font-weight: 900; margin-top: 3px; letter-spacing: 1px;">${payment.receipt_number}</div>
-          </div>
-        </div>
+    // Add logo
+    doc.addImage(logo, 'PNG', 15, 10, 30, 30);
 
-        <!-- Informations -->
-        <div style="padding: 0 30px;">
-          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-bottom: 18px;">
-            <div style="font-weight: 900; color: #000000; font-size: 13px; padding: 10px 12px; background: #e5e7eb; border-radius: 6px; border-left: 4px solid #1e3a8a;">Élève:</div>
-            <div style="color: #000000; font-size: 14px; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; font-weight: 900;">${payment.students?.last_name || ''} ${payment.students?.first_name || ''}</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-bottom: 18px;">
-            <div style="font-weight: 900; color: #000000; font-size: 13px; padding: 10px 12px; background: #e5e7eb; border-radius: 6px; border-left: 4px solid #1e3a8a;">Matricule:</div>
-            <div style="color: #000000; font-size: 14px; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; font-weight: 900;">${payment.students?.matricule || 'N/A'}</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-bottom: 18px;">
-            <div style="font-weight: 900; color: #000000; font-size: 13px; padding: 10px 12px; background: #e5e7eb; border-radius: 6px; border-left: 4px solid #1e3a8a;">Classe:</div>
-            <div style="color: #000000; font-size: 14px; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; font-weight: 900;">${payment.students?.classes?.name || 'N/A'}</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-bottom: 18px;">
-            <div style="font-weight: 900; color: #000000; font-size: 13px; padding: 10px 12px; background: #e5e7eb; border-radius: 6px; border-left: 4px solid #1e3a8a;">Date:</div>
-            <div style="color: #000000; font-size: 14px; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; font-weight: 900;">${formatDate(payment.payment_date)}</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-bottom: 18px;">
-            <div style="font-weight: 900; color: #000000; font-size: 13px; padding: 10px 12px; background: #e5e7eb; border-radius: 6px; border-left: 4px solid #1e3a8a;">Trimestre:</div>
-            <div style="color: #000000; font-size: 14px; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; font-weight: 900;">T${payment.trimester || 'N/A'}</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-bottom: 18px;">
-            <div style="font-weight: 900; color: #000000; font-size: 13px; padding: 10px 12px; background: #e5e7eb; border-radius: 6px; border-left: 4px solid #1e3a8a;">Année:</div>
-            <div style="color: #000000; font-size: 14px; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; font-weight: 900;">${paymentForm.schoolYear}</div>
-          </div>
-        </div>
+    // Header
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 64, 175);
+    doc.text(schoolName, 50, 20);
+    
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 64, 175);
+    doc.text('REÇU DE PAIEMENT', 50, 28);
 
-        <!-- Montant principal -->
-        <div style="margin: 30px 30px; padding: 25px; background: #ecfdf5; border-radius: 12px; border: 3px solid #059669; text-align: center;">
-          <div style="font-size: 14px; color: #064e3b; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Montant Payé</div>
-          <div style="font-size: 38px; font-weight: 900; color: #022c22; line-height: 1; letter-spacing: 1px;">${payment.amount ? parseFloat(payment.amount).toLocaleString('fr-FR') : '0'} XOF</div>
-        </div>
+    // Receipt number
+    doc.setFillColor(254, 243, 199);
+    doc.roundedRect(75, 35, 60, 25, 10, 10, 'F');
+    doc.setDrawColor(245, 158, 11);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(75, 35, 60, 25, 10, 10, 'S');
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(69, 26, 3);
+    doc.text('N° Reçu', 85, 42);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(receiptNumber, 85, 50);
 
-        <!-- Pied de page -->
-        <div style="background: #f9fafb; padding: 20px 30px; border-top: 3px solid #000000; text-align: center;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div style="text-align: left; font-size: 12px; color: #000000;">
-              <div style="font-weight: 900; color: #000000; font-size: 13px;">Enregistré par:</div>
-              <div style="font-weight: 900; color: #000000;">${payment.users?.first_name || ''} ${payment.users?.last_name || ''}</div>
-            </div>
-            <div style="text-align: center; font-size: 12px; color: #000000;">
-              <div style="font-weight: 900; color: #000000; font-size: 13px;">Date d'émission:</div>
-              <div style="font-weight: 900; color: #000000;">${formatDate(new Date().toISOString())}</div>
-            </div>
-          </div>
-          <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #000000; font-size: 11px; color: #000000; font-style: italic; font-weight: 900;">
-            Ce document fait foi de paiement
-          </div>
-        </div>
-      </div>
-    `;
+    // Information fields
+    let y = 70;
+    const fields = [
+      { label: 'Élève:', value: studentName },
+      { label: 'Matricule:', value: matricule },
+      { label: 'Classe:', value: className },
+      { label: 'Date:', value: paymentDate },
+      { label: 'Trimestre:', value: trimester },
+      { label: 'Année:', value: schoolYear },
+    ];
 
-    document.body.appendChild(receiptContainer);
+    fields.forEach((field) => {
+      doc.setFillColor(229, 231, 235);
+      doc.roundedRect(15, y, 35, 12, 2, 2, 'F');
+      doc.setDrawColor(30, 58, 138);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(15, y, 35, 12, 2, 2, 'S');
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(0, 0, 0);
+      doc.text(field.label, 17, y + 8);
 
-    const printStyle = document.createElement('style');
-    printStyle.textContent = `
-      @media print {
-        body > *:not(#print-receipt-container) {
-          display: none !important;
-        }
-        #print-receipt-container {
-          display: block !important;
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-        }
-        @page {
-          size: A4;
-          margin: 10mm;
-        }
-      }
-    `;
-    document.head.appendChild(printStyle);
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(55, y, 120, 12, 2, 2, 'F');
+      doc.setDrawColor(0, 0, 0);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(55, y, 120, 12, 2, 2, 'S');
+      
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(0, 0, 0);
+      doc.text(field.value, 57, y + 8);
+      
+      y += 18;
+    });
 
-    setTimeout(() => {
-      window.print();
-      setTimeout(() => {
-        document.body.removeChild(receiptContainer);
-        document.head.removeChild(printStyle);
-      }, 1000);
-    }, 100);
+    // Amount box
+    doc.setFillColor(236, 253, 245);
+    doc.roundedRect(15, y, 180, 40, 12, 12, 'F');
+    doc.setDrawColor(5, 150, 105);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(15, y, 180, 40, 12, 12, 'S');
+    
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(6, 78, 59);
+    doc.text('Montant Payé', 105, y + 10);
+    
+    doc.setFontSize(28);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(2, 44, 34);
+    doc.text(`${amount} XOF`, 105, y + 30);
+
+    y += 50;
+
+    // Footer
+    doc.setFillColor(249, 250, 251);
+    doc.rect(15, y, 180, 40, 'F');
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.3);
+    doc.rect(15, y, 180, 40, 'S');
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 0, 0);
+    doc.text('Enregistré par:', 20, y + 10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(recordedBy, 20, y + 18);
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Date d\'émission:', 105, y + 10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(currentDate, 105, y + 18);
+
+    y += 30;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'italic');
+    doc.setTextColor(0, 0, 0);
+    doc.text('Ce document fait foi de paiement', 105, y + 5);
+
+    doc.save(`recu_paiement_${receiptNumber}.pdf`);
   };
 
   const exportPaymentsToPDF = () => {
@@ -534,6 +550,197 @@ export default function TuitionPage() {
     });
 
     doc.save('paiements_scolarite.pdf');
+  };
+
+  const exportOutstandingToPDF = () => {
+    const doc = new jsPDF();
+    const schoolName = SCHOOL_CONFIG.name;
+    const generationDate = new Date().toLocaleDateString('fr-FR');
+    const exportedBy = `${user?.last_name} ${user?.first_name}`;
+    let pageCount = 1;
+
+    // Bannière bleue
+    doc.setFillColor(30, 64, 175);
+    doc.rect(0, 0, 210, 35, 'F');
+
+    // En-tête global
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text(schoolName, 14, 15);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Liste des Impayés de Scolarité', 14, 24);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9);
+    doc.text(`Date de génération: ${generationDate}`, 14, 32);
+    doc.text(`Exporté par: ${exportedBy}`, 110, 32);
+    doc.text(`Page ${pageCount}`, 180, 32);
+
+    let y = 45;
+
+    // Filtrer les impayés selon les filtres actuels
+    const filtered = filteredOutstanding;
+
+    // Grouper par classe
+    const outstandingByClass = filtered.reduce((acc: any, o: any) => {
+      const className = o.className || 'Non assigné';
+      if (!acc[className]) {
+        acc[className] = [];
+      }
+      acc[className].push(o);
+      return acc;
+    }, {});
+
+    const classNames = Object.keys(outstandingByClass).sort();
+
+    classNames.forEach((className) => {
+      const classOutstanding = outstandingByClass[className];
+
+      if (classOutstanding.length === 0) return;
+
+      // Nouvelle page si nécessaire pour l'en-tête de classe
+      if (y > 230) {
+        doc.addPage();
+        pageCount++;
+        y = 20;
+        // Bannière bleue
+        doc.setFillColor(30, 64, 175);
+        doc.rect(0, 0, 210, 35, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(18);
+        doc.setFont('helvetica', 'bold');
+        doc.text(schoolName, 14, 15);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Liste des Impayés de Scolarité', 14, 24);
+        doc.setFontSize(9);
+        doc.text(`Date de génération: ${generationDate}`, 14, 32);
+        doc.text(`Exporté par: ${exportedBy}`, 110, 32);
+        doc.text(`Page ${pageCount}`, 180, 32);
+        y = 45;
+      }
+
+      // En-tête de classe
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Classe ${className}`, 14, y);
+      y += 8;
+
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(0, 0, 0);
+      doc.text(`${classOutstanding.length} élève${classOutstanding.length > 1 ? 's' : ''} impayé${classOutstanding.length > 1 ? 's' : ''}`, 14, y);
+      y += 6;
+
+      const totalRemaining = classOutstanding.reduce((sum: number, o: any) => sum + (o.remaining || 0), 0);
+      doc.setTextColor(200, 0, 0);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Total restant: ${formatAmount(totalRemaining)}`, 14, y);
+      y += 8;
+
+      // En-têtes de colonnes avec fond bleu clair
+      doc.setFillColor(224, 231, 255);
+      doc.rect(14, y - 5, 180, 8, 'F');
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Élève', 14, y);
+      doc.text('Matricule', 70, y);
+      doc.text('Total dû', 110, y);
+      doc.text('Payé', 140, y);
+      doc.text('Reste', 170, y);
+      y += 10;
+
+      // Liste des impayés avec lignes alternées
+      doc.setFont('helvetica', 'normal');
+      classOutstanding.forEach((o: any, index: number) => {
+        // Nouvelle page si nécessaire pour les données
+        if (y > 280) {
+          doc.addPage();
+          pageCount++;
+          y = 20;
+          // Bannière bleue
+          doc.setFillColor(30, 64, 175);
+          doc.rect(0, 0, 210, 35, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(18);
+          doc.setFont('helvetica', 'bold');
+          doc.text(schoolName, 14, 15);
+          doc.setFontSize(14);
+          doc.setFont('helvetica', 'normal');
+          doc.text('Liste des Impayés de Scolarité', 14, 24);
+          doc.setFontSize(9);
+          doc.text(`Date de génération: ${generationDate}`, 14, 32);
+          doc.text(`Exporté par: ${exportedBy}`, 110, 32);
+          doc.text(`Page ${pageCount}`, 180, 32);
+          y = 45;
+          // En-têtes de colonnes avec fond bleu clair
+          doc.setFillColor(224, 231, 255);
+          doc.rect(14, y - 5, 180, 8, 'F');
+          doc.setTextColor(0, 0, 0);
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'bold');
+          doc.text('Élève', 14, y);
+          doc.text('Matricule', 70, y);
+          doc.text('Total dû', 110, y);
+          doc.text('Payé', 140, y);
+          doc.text('Reste', 170, y);
+          y += 10;
+          doc.setFont('helvetica', 'normal');
+        }
+
+        // Ligne alternée (zebra)
+        if (index % 2 === 0) {
+          doc.setFillColor(249, 250, 251);
+          doc.rect(14, y - 4, 180, 7, 'F');
+        }
+
+        const studentName = (o.studentName || 'N/A').substring(0, 25);
+        const matricule = (o.matricule || 'N/A').substring(0, 12);
+
+        doc.setFontSize(8);
+        doc.text(studentName, 14, y);
+        doc.setFontSize(9);
+        doc.text(matricule, 70, y);
+        doc.text(formatAmount(o.totalDue || 0), 110, y);
+        doc.text(formatAmount(o.totalPaid || 0), 140, y);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(200, 0, 0);
+        doc.text(formatAmount(o.remaining || 0), 170, y);
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('helvetica', 'normal');
+        y += 10;
+      });
+
+      y += 20; // Espace entre les classes
+
+      // Saut de page explicite si on est trop bas pour le prochain en-tête de classe
+      if (y > 230) {
+        doc.addPage();
+        pageCount++;
+        y = 20;
+        // Bannière bleue
+        doc.setFillColor(30, 64, 175);
+        doc.rect(0, 0, 210, 35, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(18);
+        doc.setFont('helvetica', 'bold');
+        doc.text(schoolName, 14, 15);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Liste des Impayés de Scolarité', 14, 24);
+        doc.setFontSize(9);
+        doc.text(`Date de génération: ${generationDate}`, 14, 32);
+        doc.text(`Exporté par: ${exportedBy}`, 110, 32);
+        doc.text(`Page ${pageCount}`, 180, 32);
+        y = 45;
+      }
+    });
+
+    doc.save('impayes_scolarite.pdf');
   };
 
   const filteredOutstanding = outstanding.filter((o) => {
@@ -977,8 +1184,15 @@ export default function TuitionPage() {
 
           {activeTab === 'outstanding' && (user?.role === 'founder' || user?.role === 'director') && (
             <div className="space-y-4 sm:space-y-6">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Impayés</h2>
+                <button
+                  onClick={exportOutstandingToPDF}
+                  className="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-xl hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 transition-all font-medium shadow-lg flex items-center justify-center gap-2"
+                >
+                  <Printer className="w-4 h-4" />
+                  PDF
+                </button>
               </div>
 
               <div className="bg-white rounded-xl shadow-card p-3 sm:p-4 border border-gray-200">

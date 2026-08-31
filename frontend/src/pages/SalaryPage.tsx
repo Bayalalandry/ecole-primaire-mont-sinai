@@ -259,94 +259,120 @@ export default function SalaryPage() {
       ? `${payment.users.last_name} ${payment.users.first_name} ${payment.users.role === 'director' ? '(Directeur)' : ''}`
       : 'Enseignant inconnu';
 
-    const receiptContent = `
-      <div style="max-width: 700px; margin: 0 auto; background: white; border: 3px solid #1e3a8a; border-radius: 16px; overflow: hidden; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <!-- Bannière bleue -->
-        <div style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); padding: 25px 30px; text-align: center;">
-          <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px;">
-            <div style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255, 255, 255, 0.4); overflow: hidden; padding: 0; margin: 0;">
-              <img src="${logo}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; display: block; padding: 0; margin: 0;" />
-            </div>
-            <div>
-              <h1 style="font-size: 24px; color: white; margin: 0; font-weight: 900; letter-spacing: 1px; line-height: 1.2;">${SCHOOL_CONFIG.name}</h1>
-              <p style="font-size: 14px; color: rgba(255, 255, 255, 0.9); margin: 4px 0 0 0; font-weight: 600;">BULLETIN DE PAIEMENT</p>
-            </div>
-          </div>
-          <div style="background: rgba(255, 255, 255, 0.15); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 8px 20px; display: inline-block;">
-            <span style="font-size: 16px; color: white; font-weight: 900; letter-spacing: 0.5px;">${payment.receipt_number}</span>
-          </div>
-        </div>
+    const doc = new jsPDF();
+    const schoolName = SCHOOL_CONFIG.name;
+    const receiptNumber = payment.receipt_number || 'N/A';
+    const paymentMonth = formatMonth(payment.payment_month);
+    const paymentDate = formatDate(payment.payment_date);
+    const amount = payment.amount ? parseFloat(payment.amount).toLocaleString('fr-FR') : '0';
+    const recordedBy = `${user?.first_name || ''} ${user?.last_name || ''}`;
+    const currentDate = formatDate(new Date().toISOString());
 
-        <!-- Informations détaillées -->
-        <div style="padding: 25px 30px;">
-          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-bottom: 18px;">
-            <div style="font-weight: 900; color: #000000; font-size: 13px; padding: 10px 12px; background: #e5e7eb; border-radius: 6px; border-left: 4px solid #1e3a8a;">Enseignant:</div>
-            <div style="color: #000000; font-size: 14px; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; font-weight: 900;">${teacherName}</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-bottom: 18px;">
-            <div style="font-weight: 900; color: #000000; font-size: 13px; padding: 10px 12px; background: #e5e7eb; border-radius: 6px; border-left: 4px solid #1e3a8a;">Mois:</div>
-            <div style="color: #000000; font-size: 14px; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; font-weight: 900;">${formatMonth(payment.payment_month)}</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px; margin-bottom: 18px;">
-            <div style="font-weight: 900; color: #000000; font-size: 13px; padding: 10px 12px; background: #e5e7eb; border-radius: 6px; border-left: 4px solid #1e3a8a;">Date de paiement:</div>
-            <div style="color: #000000; font-size: 14px; padding: 10px 12px; background: #ffffff; border: 2px solid #000000; border-radius: 6px; font-weight: 900;">${formatDate(payment.payment_date)}</div>
-          </div>
-        </div>
+    // Add logo
+    doc.addImage(logo, 'PNG', 15, 10, 30, 30);
 
-        <!-- Montant principal -->
-        <div style="margin: 0 30px 25px 30px; padding: 25px; background: #ecfdf5; border-radius: 12px; border: 3px solid #059669; text-align: center;">
-          <div style="font-size: 14px; color: #064e3b; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Montant Payé</div>
-          <div style="font-size: 38px; font-weight: 900; color: #022c22; line-height: 1; letter-spacing: 1px;">${payment.amount ? parseFloat(payment.amount).toLocaleString('fr-FR') : '0'} XOF</div>
-        </div>
+    // Header
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 64, 175);
+    doc.text(schoolName, 50, 20);
+    
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 64, 175);
+    doc.text('BULLETIN DE PAIEMENT', 50, 28);
 
-        <!-- Pied de page -->
-        <div style="background: #f9fafb; padding: 20px 30px; border-top: 3px solid #000000; text-align: center;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div style="text-align: left; font-size: 12px; color: #000000;">
-              <div style="font-weight: 900; color: #000000; font-size: 13px;">Enregistré par:</div>
-              <div style="font-weight: 900; color: #000000;">${user?.first_name || ''} ${user?.last_name || ''}</div>
-            </div>
-            <div style="text-align: center; font-size: 12px; color: #000000;">
-              <div style="font-weight: 900; color: #000000; font-size: 13px;">Date d'émission:</div>
-              <div style="font-weight: 900; color: #000000;">${formatDate(new Date().toISOString())}</div>
-            </div>
-          </div>
-          <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #000000; font-size: 11px; color: #000000; font-style: italic; font-weight: 900;">
-            Ce document fait foi de paiement
-          </div>
-        </div>
-      </div>
-    `;
+    // Receipt number
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(75, 35, 60, 20, 8, 8, 'F');
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(75, 35, 60, 20, 8, 8, 'S');
+    
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(255, 255, 255);
+    doc.text(receiptNumber, 105, 48);
 
-    const receiptContainer = document.createElement('div');
-    receiptContainer.id = 'print-receipt-container';
-    receiptContainer.innerHTML = receiptContent;
-    document.body.appendChild(receiptContainer);
+    // Information fields
+    let y = 70;
+    const fields = [
+      { label: 'Enseignant:', value: teacherName },
+      { label: 'Mois:', value: paymentMonth },
+      { label: 'Date de paiement:', value: paymentDate },
+    ];
 
-    const printStyle = document.createElement('style');
-    printStyle.textContent = `
-      @media print {
-        body > *:not(#print-receipt-container) {
-          display: none !important;
-        }
-        #print-receipt-container {
-          display: block !important;
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-        }
-      }
-    `;
-    document.head.appendChild(printStyle);
+    fields.forEach((field) => {
+      doc.setFillColor(229, 231, 235);
+      doc.roundedRect(15, y, 35, 12, 2, 2, 'F');
+      doc.setDrawColor(30, 58, 138);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(15, y, 35, 12, 2, 2, 'S');
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(0, 0, 0);
+      doc.text(field.label, 17, y + 8);
 
-    setTimeout(() => {
-      window.print();
-      setTimeout(() => {
-        document.body.removeChild(receiptContainer);
-        document.head.removeChild(printStyle);
-      }, 1000);
-    }, 100);
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(55, y, 120, 12, 2, 2, 'F');
+      doc.setDrawColor(0, 0, 0);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(55, y, 120, 12, 2, 2, 'S');
+      
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(0, 0, 0);
+      doc.text(field.value, 57, y + 8);
+      
+      y += 18;
+    });
+
+    // Amount box
+    doc.setFillColor(236, 253, 245);
+    doc.roundedRect(15, y, 180, 40, 12, 12, 'F');
+    doc.setDrawColor(5, 150, 105);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(15, y, 180, 40, 12, 12, 'S');
+    
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(6, 78, 59);
+    doc.text('Montant Payé', 105, y + 10);
+    
+    doc.setFontSize(28);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(2, 44, 34);
+    doc.text(`${amount} XOF`, 105, y + 30);
+
+    y += 50;
+
+    // Footer
+    doc.setFillColor(249, 250, 251);
+    doc.rect(15, y, 180, 40, 'F');
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.3);
+    doc.rect(15, y, 180, 40, 'S');
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 0, 0);
+    doc.text('Enregistré par:', 20, y + 10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(recordedBy, 20, y + 18);
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Date d\'émission:', 105, y + 10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(currentDate, 105, y + 18);
+
+    y += 30;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'italic');
+    doc.setTextColor(0, 0, 0);
+    doc.text('Ce document fait foi de paiement', 105, y + 5);
+
+    doc.save(`bulletin_paiement_${receiptNumber}.pdf`);
   };
 
   const exportPaymentsToPDF = () => {
