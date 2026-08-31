@@ -173,7 +173,7 @@ router.get('/payments', authenticateToken, async (req: AuthRequest, res) => {
 
     let query = supabase
       .from('salary_payments')
-      .select('*, teachers (*, users (*))')
+      .select('*')
       .eq('cancelled', false)
       .order('payment_date', { ascending: false });
 
@@ -197,7 +197,29 @@ router.get('/payments', authenticateToken, async (req: AuthRequest, res) => {
 
     if (error) throw error;
 
-    res.json({ payments: data || [] });
+    // Récupérer les informations des enseignants et utilisateurs manuellement
+    const teacherIds = (data || []).map((p: any) => p.teacher_id);
+    const { data: teachersData } = await supabase
+      .from('teachers')
+      .select('user_id, status')
+      .in('user_id', teacherIds);
+
+    const { data: usersData } = await supabase
+      .from('users')
+      .select('id, first_name, last_name')
+      .in('id', teacherIds);
+
+    // Combiner les données
+    const paymentsWithTeachers = (data || []).map((payment: any) => {
+      const teacher = teachersData?.find((t: any) => t.user_id === payment.teacher_id);
+      const user = usersData?.find((u: any) => u.id === payment.teacher_id);
+      return {
+        ...payment,
+        teachers: teacher ? { ...teacher, users: user } : null,
+      };
+    });
+
+    res.json({ payments: paymentsWithTeachers || [] });
   } catch (error: any) {
     console.error('Get salary payments error:', error);
     res.status(500).json({ error: 'Erreur lors de la récupération des paiements' });
