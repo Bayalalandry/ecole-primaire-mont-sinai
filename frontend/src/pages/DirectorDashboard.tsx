@@ -5,6 +5,7 @@ import { directorDashboardService } from '../services/directorDashboardService';
 import { passageService } from '../services/passageService';
 import { schoolYearService } from '../services/schoolYearService';
 import { notificationService } from '../services/notificationService';
+import { searchService } from '../services/searchService';
 import {
   LogOut,
   GraduationCap,
@@ -14,7 +15,8 @@ import {
   Bell,
   Clock,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Search
 } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
 
@@ -29,6 +31,11 @@ export default function DirectorDashboard() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -149,6 +156,35 @@ export default function DirectorDashboard() {
     setShowNotifications(!showNotifications);
   };
 
+  const handleSearch = async (query: string) => {
+    setSearchQuery(query);
+    if (query.length >= 2) {
+      const token = tokenStorage.getToken();
+      if (token) {
+        try {
+          const data = await searchService.globalSearch(query, token);
+          setSearchResults(data.results || []);
+          setShowSearchResults(true);
+        } catch (error) {
+          console.error('Search error:', error);
+        }
+      }
+    } else {
+      setSearchResults([]);
+      setShowSearchResults(false);
+    }
+  };
+
+  const handleResultClick = (result: any) => {
+    setShowSearchResults(false);
+    setSearchQuery('');
+    if (result.type === 'student') {
+      navigate(`/profile/student/${result.id}`);
+    } else if (result.type === 'teacher') {
+      navigate(`/profile/teacher/${result.id}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -165,6 +201,38 @@ export default function DirectorDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto relative z-40">
+              {/* Barre de recherche */}
+              <div className="relative flex-1 sm:flex-none z-40">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                  <input
+                    type="text"
+                    placeholder="Rechercher..."
+                    value={searchQuery}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    className="w-full sm:w-64 pl-10 pr-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 bg-white text-gray-800 placeholder:text-gray-500 shadow-lg text-sm"
+                  />
+                </div>
+                {showSearchResults && searchResults.length > 0 && (
+                  <div className="absolute top-full mt-2 w-full sm:w-64 bg-white rounded-lg shadow-xl border border-gray-200 max-h-96 overflow-y-auto z-[99999]">
+                    {searchResults.map((result, index) => (
+                      <div
+                        key={index}
+                        onClick={() => handleResultClick(result)}
+                        className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                      >
+                        <div className="flex items-center gap-2 font-semibold text-gray-900 text-sm">
+                          {result.type === 'student' ? <GraduationCap className="w-4 h-4 text-blue-600" /> : <Users className="w-4 h-4 text-blue-600" />}
+                          {result.name}
+                        </div>
+                        <div className="text-xs sm:text-sm text-gray-600 ml-6">
+                          {result.type === 'student' ? `Matricule: ${result.matricule || 'N/A'}` : `@${result.username}`}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               {/* Notification bell */}
               <div className="relative z-40">
                 <button
