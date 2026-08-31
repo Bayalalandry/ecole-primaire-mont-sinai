@@ -255,8 +255,8 @@ export default function SalaryPage() {
   };
 
   const handlePrintReceipt = (payment: any) => {
-    const teacherName = payment.users
-      ? `${payment.users.last_name} ${payment.users.first_name} ${payment.users.role === 'director' ? '(Directeur)' : ''}`
+    const teacherName = payment.teachers?.users
+      ? `${payment.teachers.users.last_name} ${payment.teachers.users.first_name} ${payment.teachers.users.role === 'director' ? '(Directeur)' : ''}`
       : 'Enseignant inconnu';
 
     const doc = new jsPDF();
@@ -264,7 +264,7 @@ export default function SalaryPage() {
     const receiptNumber = payment.receipt_number || 'N/A';
     const paymentMonth = formatMonth(payment.payment_month);
     const paymentDate = formatDate(payment.payment_date);
-    const amount = payment.amount ? parseFloat(payment.amount).toLocaleString('fr-FR') : '0';
+    const amount = payment.amount ? formatAmount(parseFloat(payment.amount)) : '0 FCFA';
     const recordedBy = `${user?.first_name || ''} ${user?.last_name || ''}`;
     const currentDate = formatDate(new Date().toISOString());
 
@@ -338,12 +338,12 @@ export default function SalaryPage() {
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(6, 78, 59);
-    doc.text('Montant Payé', 105, y + 10);
+    doc.text('Montant Payé', 105, y + 10, { align: 'center' });
     
     doc.setFontSize(28);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(2, 44, 34);
-    doc.text(`${amount} XOF`, 105, y + 30);
+    doc.text(amount, 105, y + 30, { align: 'center' });
 
     y += 50;
 
@@ -701,7 +701,7 @@ export default function SalaryPage() {
                     {salaries.map((salary) => (
                       <tr key={salary.id}>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                          {salary.users?.last_name} {salary.users?.first_name} {salary.users?.role === 'director' ? '(Directeur)' : ''}
+                          {salary.users?.last_name || 'Enseignant'} {salary.users?.first_name || 'Inconnu'} {salary.users?.role === 'director' ? '(Directeur)' : ''}
                         </td>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                           {salary.school_years?.year_label}
@@ -851,7 +851,7 @@ export default function SalaryPage() {
                     {payments.map((payment) => (
                       <tr key={payment.id}>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                          {payment.users?.last_name} {payment.users?.first_name} {payment.users?.role === 'director' ? '(Directeur)' : ''}
+                          {payment.teachers?.users?.last_name || 'Enseignant'} {payment.teachers?.users?.first_name || 'Inconnu'} {payment.teachers?.users?.role === 'director' ? '(Directeur)' : ''}
                         </td>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                           {formatMonth(payment.payment_month)}

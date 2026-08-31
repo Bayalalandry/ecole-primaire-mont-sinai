@@ -303,7 +303,7 @@ export default function TuitionPage() {
     const paymentDate = formatDate(payment.payment_date);
     const trimester = payment.trimester ? `T${payment.trimester}` : 'N/A';
     const schoolYear = paymentForm.schoolYear;
-    const amount = payment.amount ? parseFloat(payment.amount).toLocaleString('fr-FR') : '0';
+    const amount = formatAmount(payment.amount);
     const recordedBy = `${payment.users?.first_name || ''} ${payment.users?.last_name || ''}`;
     const currentDate = formatDate(new Date().toISOString());
 
@@ -383,12 +383,12 @@ export default function TuitionPage() {
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(6, 78, 59);
-    doc.text('Montant Payé', 105, y + 10);
+    doc.text('Montant Payé', 105, y + 10, { align: 'center' });
     
     doc.setFontSize(28);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(2, 44, 34);
-    doc.text(`${amount} XOF`, 105, y + 30);
+    doc.text(amount, 105, y + 30, { align: 'center' });
 
     y += 50;
 

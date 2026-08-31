@@ -146,16 +146,17 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
 
     const { data: usersData } = await supabase
       .from('users')
-      .select('id, first_name, last_name')
+      .select('id, first_name, last_name, role')
       .in('id', teacherIds);
 
-    // Combiner les données
+    // Combiner les données avec gestion des cas manquants
     const salariesWithTeachers = (data || []).map((salary: any) => {
       const teacher = teachersData?.find((t: any) => t.user_id === salary.teacher_id);
       const user = usersData?.find((u: any) => u.id === salary.teacher_id);
+      
       return {
         ...salary,
-        teachers: teacher ? { ...teacher, users: user } : null,
+        users: user || { id: salary.teacher_id, first_name: 'Enseignant', last_name: 'Inconnu', role: 'teacher' },
       };
     });
 
