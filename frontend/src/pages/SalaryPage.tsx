@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { tokenStorage, authService } from '../services/authService';
+import { tokenStorage } from '../services/authService';
 import { salaryService } from '../services/salaryService';
 import { schoolYearService } from '../services/schoolYearService';
 import DatePicker from 'react-datepicker';
@@ -80,13 +80,13 @@ export default function SalaryPage() {
 
       const [salariesData, teachersData, paymentsData, outstandingData] = await Promise.all([
         salaryService.getSalaries(token, currentSchoolYear),
-        authService.getAllTeachers(token),
+        salaryService.getAllTeachers(token),
         salaryService.getSalaryPayments(token, { schoolYear: currentSchoolYear }),
         salaryService.getSalaryOutstanding(token, outstandingParams),
       ]);
 
       setSalaries(salariesData.salaries || []);
-      setTeachers(teachersData.teachers || []);
+      setTeachers(teachersData || []);
       setPayments(paymentsData.payments || []);
       setOutstanding(outstandingData.outstanding || []);
     } catch (error: any) {
