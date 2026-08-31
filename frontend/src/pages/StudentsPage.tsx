@@ -30,7 +30,7 @@ export default function StudentsPage() {
     parentPhone: '',
     parentAddress: '',
     classId: '',
-    schoolYear: '2024-2025',
+    schoolYear: '2026-2027',
     photoUrl: '',
     matricule: '',
   });
@@ -388,7 +388,7 @@ export default function StudentsPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col relative overflow-hidden">
       {/* Success Message */}
       {successMessage && (
-        <div className="fixed top-4 right-4 z-[99999] bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-xl shadow-xl animate-pulse flex items-center gap-2 relative z-20">
+        <div className="fixed top-4 right-4 z-[999999] bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-xl shadow-xl animate-pulse flex items-center gap-2">
           <CheckCircle className="w-5 h-5" />
           {successMessage}
         </div>
@@ -439,7 +439,7 @@ export default function StudentsPage() {
                     setEditingStudent(null);
                     setShowModal(true);
                   }}
-                  className="w-full sm:w-auto px-4 sm:px-6 py-2.5 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white rounded-xl hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-lg flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-4 sm:px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-all font-medium shadow-lg flex items-center justify-center gap-2"
                 >
                   <Plus className="w-4 h-4" />
                   Ajouter un élève

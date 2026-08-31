@@ -159,10 +159,14 @@ export default function PassagePage() {
     if (!token) return;
 
     try {
+      console.log('Saving passing grades:', passingGrades);
       for (const [classId, grade] of Object.entries(passingGrades)) {
+        console.log(`Updating class ${classId} to grade ${grade}`);
         await passageService.updatePassingGrade(classId, grade, token);
       }
       alert('Seuils mis à jour avec succès');
+      // Recharger les seuils pour confirmer la mise à jour
+      loadPassingGrades(token);
     } catch (error: any) {
       console.error('Error saving passing grades:', error);
       alert(error.message);
