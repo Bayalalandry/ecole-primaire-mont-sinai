@@ -68,7 +68,7 @@ export default function LoginPage() {
             </div>
 
             <div className="flex items-center justify-center mb-3 sm:mb-4 relative z-10">
-              <div className="bg-white rounded-full backdrop-blur-sm border-2 border-white/50 shadow-lg" style={{ padding: 0 }}>
+              <div className="bg-white rounded-full backdrop-blur-sm border-2 border-white/50 shadow-lg" style={{ padding: 0, pointerEvents: 'none' }}>
                 <SchoolLogo size={56} inCircle={false} className="text-white" />
               </div>
             </div>
