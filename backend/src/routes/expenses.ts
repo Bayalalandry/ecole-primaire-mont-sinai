@@ -2,8 +2,17 @@ import { Router } from 'express';
 import { AuthRequest, authenticateToken, requireFounder } from '../middleware/auth';
 import { supabase } from '../services/supabase';
 import { logActivity } from '../services/authService';
+import { createNotification } from '../services/notificationService';
 
 const router = Router();
+
+// Formater un montant en FCFA
+const formatAmount = (amount: number): string => {
+  return amount.toLocaleString('fr-FR', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }) + ' FCFA';
+};
 
 // Utilitaire pour gérer les paramètres de route qui peuvent être des tableaux
 const getParam = (param: string | string[]): string => {
@@ -138,6 +147,20 @@ router.post('/', authenticateToken, requireFounder, async (req: AuthRequest, res
       category,
       amount,
     });
+
+    // Notifier le fondateur de la nouvelle dépense
+    try {
+      await createNotification(
+        req.user!.id,
+        'expense',
+        'Nouvelle dépense enregistrée',
+        `Une nouvelle dépense de ${formatAmount(amount)} a été enregistrée dans la catégorie ${category}.`,
+        'expense',
+        data.id
+      );
+    } catch (notifError) {
+      console.error('Error sending notification:', notifError);
+    }
 
     res.json({ message: 'Dépense ajoutée avec succès', expense: data });
   } catch (error: any) {

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { AuthRequest, authenticateToken, requireFounder } from '../middleware/auth';
 import { supabase } from '../services/supabase';
+import { createNotification } from '../services/notificationService';
 
 const router = Router();
 
@@ -82,6 +83,20 @@ router.get('/export', authenticateToken, requireFounder, async (req: AuthRequest
     // Exporter les notifications
     const { data: notifications } = await supabase.from('notifications').select('*');
     backup.tables.notifications = notifications || [];
+
+    // Notifier le fondateur de la sauvegarde réussie
+    try {
+      await createNotification(
+        req.user!.id,
+        'backup_completed',
+        'Sauvegarde effectuée',
+        `La sauvegarde globale de l'école a été effectuée avec succès le ${new Date().toLocaleDateString('fr-FR')}.`,
+        'backup',
+        backup.export_date
+      );
+    } catch (notifError) {
+      console.error('Error sending notification:', notifError);
+    }
 
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Content-Disposition', `attachment; filename=backup_ecole_${new Date().toISOString().split('T')[0]}.json`);

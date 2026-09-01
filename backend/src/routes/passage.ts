@@ -2,6 +2,7 @@ import express, { Router, Request, Response } from 'express';
 import { supabase } from '../services/supabase';
 import { authenticateToken, AuthRequest, requireFounder, requireTeacherOrDirector, requireTeacher } from '../middleware/auth';
 import { logActivity } from '../services/authService';
+import { createNotification } from '../services/notificationService';
 
 const router: Router = express.Router();
 
@@ -151,7 +152,7 @@ router.post('/grades', authenticateToken, requireTeacherOrDirector, async (req: 
     // Vérifier que l'élève appartient à une classe de l'enseignant
     const { data: student } = await supabase
       .from('students')
-      .select('current_class_id')
+      .select('current_class_id, first_name, last_name')
       .eq('id', studentId)
       .single();
 
@@ -209,6 +210,35 @@ router.post('/grades', authenticateToken, requireTeacherOrDirector, async (req: 
       .single();
 
     if (error) throw error;
+
+    // Notifier le fondateur que les moyennes ont été saisies
+    try {
+      const { data: founder } = await supabase
+        .from('users')
+        .select('id')
+        .eq('role', 'founder')
+        .limit(1)
+        .single();
+
+      if (founder) {
+        const { data: className } = await supabase
+          .from('classes')
+          .select('name')
+          .eq('id', student.current_class_id)
+          .single();
+
+        await createNotification(
+          founder.id,
+          'grade_recorded',
+          'Moyenne saisie',
+          `Une moyenne de ${finalGrade}/20 a été saisie pour ${student.first_name} ${student.last_name} (${className?.name}).`,
+          'student_annual_grade',
+          data.id
+        );
+      }
+    } catch (notifError) {
+      console.error('Error sending notification:', notifError);
+    }
 
     res.json({ message: 'Moyenne enregistrée avec succès', grade: data });
   } catch (error: any) {
@@ -562,6 +592,39 @@ router.post('/validate/:classId', authenticateToken, requireFounder, async (req:
       className: currentClass.name,
       decisionsCount: decisions.length,
     });
+
+    // Notifier le fondateur et l'enseignant de la validation
+    try {
+      // Notifier le fondateur
+      await createNotification(
+        req.user!.id,
+        'passage_validated',
+        'Passage de classe validé',
+        `Le passage de classe pour ${currentClass.name} a été validé pour ${decisions.length} élèves.`,
+        'class',
+        classIdStr
+      );
+
+      // Notifier l'enseignant responsable de la classe
+      const { data: teacherAssignment } = await supabase
+        .from('teacher_class_assignments')
+        .select('teacher_id')
+        .eq('class_id', classIdStr)
+        .maybeSingle();
+
+      if (teacherAssignment) {
+        await createNotification(
+          teacherAssignment.teacher_id,
+          'passage_validated',
+          'Passage de classe validé',
+          `Le passage de classe pour votre classe ${currentClass.name} a été validé par le fondateur.`,
+          'class',
+          classIdStr
+        );
+      }
+    } catch (notifError) {
+      console.error('Error sending notification:', notifError);
+    }
 
     res.json({ message: 'Validation effectuée avec succès', results });
   } catch (error: any) {

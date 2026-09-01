@@ -1,8 +1,17 @@
 import { Router } from 'express';
 import { AuthRequest, authenticateToken, requireFounder } from '../middleware/auth';
 import { supabase } from '../services/supabase';
+import { createNotification } from '../services/notificationService';
 
 const router = Router();
+
+// Formater un montant en FCFA
+const formatAmount = (amount: number): string => {
+  return amount.toLocaleString('fr-FR', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }) + ' FCFA';
+};
 
 // Récupérer le résumé des salaires d'un enseignant
 router.get('/summary/teacher/:teacherId', authenticateToken, async (req: AuthRequest, res) => {
@@ -365,6 +374,26 @@ router.post('/payments', authenticateToken, requireFounder, async (req: AuthRequ
       .single();
 
     if (error) throw error;
+
+    // Notifier l'enseignant du paiement
+    try {
+      const { data: teacher } = await supabase
+        .from('users')
+        .select('first_name, last_name')
+        .eq('id', teacherId)
+        .single();
+
+      await createNotification(
+        teacherId,
+        'salary_payment',
+        'Salaire payé',
+        `Votre salaire de ${formatAmount(amount)} a été payé pour le mois de ${new Date(paymentMonth).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}.`,
+        'salary_payment',
+        data.id
+      );
+    } catch (notifError) {
+      console.error('Error sending notification:', notifError);
+    }
 
     res.json({ payment: data });
   } catch (error: any) {

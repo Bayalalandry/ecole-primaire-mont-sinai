@@ -2,8 +2,17 @@ import { Router } from 'express';
 import { AuthRequest, authenticateToken, requireFounder, requireFounderOrDirector } from '../middleware/auth';
 import { supabase } from '../services/supabase';
 import { logActivity } from '../services/authService';
+import { createNotification } from '../services/notificationService';
 
 const router = Router();
+
+// Formater un montant en FCFA
+const formatAmount = (amount: number): string => {
+  return amount.toLocaleString('fr-FR', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }) + ' FCFA';
+};
 
 // Déterminer le trimestre à partir d'une date
 const getTrimesterFromDate = async (date: Date, schoolYear: string): Promise<number> => {
@@ -337,6 +346,30 @@ router.post('/payments', authenticateToken, requireFounderOrDirector, async (req
       studentId: payment.student_id,
       receiptNumber: payment.receipt_number
     });
+
+    // Notifier le fondateur du nouveau versement
+    try {
+      const { data: founder } = await supabase
+        .from('users')
+        .select('id')
+        .eq('role', 'founder')
+        .limit(1)
+        .single();
+
+      if (founder) {
+        await createNotification(
+          founder.id,
+          'tuition_payment',
+          'Nouveau versement de scolarité',
+          `Un nouveau versement de ${formatAmount(payment.amount)} a été enregistré pour ${payment.students?.first_name} ${payment.students?.last_name}.`,
+          'tuition_payment',
+          payment.id
+        );
+      }
+    } catch (notifError) {
+      console.error('Error sending notification:', notifError);
+    }
+
     res.json({ message: 'Versement enregistré avec succès', payment });
   } catch (error: any) {
     console.error('Create tuition payment error:', error);

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { AuthRequest, authenticateToken, requireFounder, requireFounderOrDirector, requireFounderOrDirectorOrTeacher } from '../middleware/auth';
 import { supabase } from '../services/supabase';
 import crypto from 'crypto';
+import { createNotification } from '../services/notificationService';
 
 const router = Router();
 
@@ -146,6 +147,35 @@ router.post('/', authenticateToken, requireFounderOrDirectorOrTeacher, async (re
     }
 
     console.log('Student created successfully:', data);
+
+    // Notifier l'enseignant responsable de la classe
+    try {
+      const { data: teacherAssignment } = await supabase
+        .from('teacher_class_assignments')
+        .select('teacher_id')
+        .eq('class_id', finalClassId)
+        .maybeSingle();
+
+      if (teacherAssignment) {
+        const { data: className } = await supabase
+          .from('classes')
+          .select('name')
+          .eq('id', finalClassId)
+          .single();
+
+        await createNotification(
+          teacherAssignment.teacher_id,
+          'student_assigned',
+          'Nouvel élève inscrit',
+          `Un nouvel élève ${firstName} ${lastName} a été inscrit dans votre classe ${className?.name}.`,
+          'student',
+          data.id
+        );
+      }
+    } catch (notifError) {
+      console.error('Error sending notification:', notifError);
+    }
+
     res.status(201).json({ student: data });
   } catch (error: any) {
     console.error('Create student error:', error);
