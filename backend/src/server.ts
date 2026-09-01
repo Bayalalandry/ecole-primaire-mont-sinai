@@ -17,6 +17,7 @@ import { searchRoutes } from './routes/search';
 import { activityLogRoutes } from './routes/activityLog';
 import { notificationRoutes } from './routes/notifications';
 import { backupRoutes } from './routes/backup';
+import pushRoutes from './routes/push';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -50,6 +51,7 @@ app.use('/api/search', searchRoutes);
 app.use('/api/activity-log', activityLogRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/backup', backupRoutes);
+app.use('/api/push', pushRoutes);
 
 console.log('Routes loaded');
 

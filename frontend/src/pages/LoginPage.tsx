@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService, tokenStorage } from '../services/authService';
+import { usePushNotifications } from '../hooks/usePushNotifications';
 import { LogIn, UserPlus, Lock, AlertCircle, User, Key } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
 import { SCHOOL_CONFIG } from '../config/schoolConfig';
@@ -14,6 +15,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { isSupported, permission, enablePushNotifications } = usePushNotifications();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +31,11 @@ export default function LoginPage() {
       } else {
         tokenStorage.setToken(result.token);
         tokenStorage.setUser(result.user);
+
+        // Demander la permission de notifications push après connexion réussie
+        if (isSupported && permission === 'default') {
+          enablePushNotifications().catch(console.error);
+        }
 
         switch (result.user.role) {
           case 'founder':
