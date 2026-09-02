@@ -111,16 +111,37 @@ router.get('/teacher/dashboard-stats', authenticateToken, requireTeacherOrDirect
       }
     }
 
-    // Déterminer le trimestre en cours
-    let currentTrimester = '';
-    if (month >= 9 && month <= 11) {
-      currentTrimester = '1er';
-    } else if (month >= 12 || month === 1) {
-      currentTrimester = '2ème';
-    } else if (month >= 2 && month <= 4) {
-      currentTrimester = '3ème';
-    } else {
-      currentTrimester = 'Vacances';
+    // Déterminer le trimestre en cours en utilisant les dates configurées
+    let currentTrimester = 'Vacances';
+    try {
+      const { data: trimesters } = await supabase
+        .from('trimesters')
+        .select('*')
+        .eq('school_year', currentYear.year_label)
+        .order('trimester_number');
+
+      if (trimesters && trimesters.length > 0) {
+        const today = new Date();
+        for (const trimester of trimesters) {
+          const startDate = new Date(trimester.start_date);
+          const endDate = new Date(trimester.end_date);
+
+          if (today >= startDate && today <= endDate) {
+            currentTrimester = `${trimester.trimester_number}er`;
+            break;
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error loading trimesters:', error);
+      // Fallback à l'ancienne logique si erreur
+      if (month >= 9 && month <= 11) {
+        currentTrimester = '1er';
+      } else if (month >= 12 || month === 1) {
+        currentTrimester = '2ème';
+      } else if (month >= 2 && month <= 4) {
+        currentTrimester = '3ème';
+      }
     }
 
     res.json({
@@ -154,19 +175,47 @@ router.get('/director/dashboard-stats', authenticateToken, requireDirector, asyn
 
     const totalStudents = students?.length || 0;
 
-    // Déterminer le trimestre en cours
-    const currentDate = new Date();
-    const month = currentDate.getMonth() + 1; // 1-12
-    let currentTrimester = '';
+    // Déterminer le trimestre en cours en utilisant les dates configurées
+    let currentTrimester = 'Vacances';
+    try {
+      const { data: currentYear } = await supabase
+        .from('school_years')
+        .select('year_label')
+        .eq('is_current', true)
+        .maybeSingle();
 
-    if (month >= 9 && month <= 11) {
-      currentTrimester = '1er';
-    } else if (month >= 12 || month === 1) {
-      currentTrimester = '2ème';
-    } else if (month >= 2 && month <= 4) {
-      currentTrimester = '3ème';
-    } else {
-      currentTrimester = 'Vacances';
+      if (currentYear) {
+        const { data: trimesters } = await supabase
+          .from('trimesters')
+          .select('*')
+          .eq('school_year', currentYear.year_label)
+          .order('trimester_number');
+
+        if (trimesters && trimesters.length > 0) {
+          const today = new Date();
+          for (const trimester of trimesters) {
+            const startDate = new Date(trimester.start_date);
+            const endDate = new Date(trimester.end_date);
+
+            if (today >= startDate && today <= endDate) {
+              currentTrimester = `${trimester.trimester_number}er`;
+              break;
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error loading trimesters:', error);
+      // Fallback à l'ancienne logique si erreur
+      const currentDate = new Date();
+      const month = currentDate.getMonth() + 1; // 1-12
+      if (month >= 9 && month <= 11) {
+        currentTrimester = '1er';
+      } else if (month >= 12 || month === 1) {
+        currentTrimester = '2ème';
+      } else if (month >= 2 && month <= 4) {
+        currentTrimester = '3ème';
+      }
     }
 
     res.json({
