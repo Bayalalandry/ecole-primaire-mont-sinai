@@ -145,6 +145,7 @@ export default function SalaryPage() {
 
   const handleCreateSalary = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation(); // Prevent event bubbling
     const token = tokenStorage.getToken();
     if (!token) return;
 
@@ -178,12 +179,14 @@ export default function SalaryPage() {
         effectiveDate: new Date().toISOString().split('T')[0],
       });
     } catch (error: any) {
+      console.error('Error creating salary:', error);
       alert(error.message);
     }
   };
 
   const handleCreatePayment = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation(); // Prevent event bubbling
     const token = tokenStorage.getToken();
     if (!token) return;
 
@@ -596,8 +599,11 @@ export default function SalaryPage() {
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Salaires par Enseignant</h2>
               </div>
               <button
-                onClick={() => setShowSalaryForm(!showSalaryForm)}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card text-sm relative z-50"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSalaryForm(!showSalaryForm);
+                }}
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card text-sm"
               >
                 {showSalaryForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 {showSalaryForm ? 'Fermer' : 'Définir un salaire'}
@@ -605,8 +611,8 @@ export default function SalaryPage() {
             </div>
 
             {showSalaryForm && (
-              <div className="modal-overlay" style={{ zIndex: 999999 }}>
-                <div className="modal-content p-4 sm:p-6 border-2 border-blue-200 max-w-2xl w-full mx-2 sm:mx-4" style={{ zIndex: 1000000, position: 'relative' }}>
+              <div className="modal-overlay">
+                <div className="modal-content p-4 sm:p-6 border-2 border-blue-200 max-w-2xl w-full mx-2 sm:mx-4">
                   <div className="flex items-center justify-between mb-3 sm:mb-4 border-b border-gray-200 pb-2 sm:pb-3">
                     <h3 className="text-base sm:text-lg font-semibold text-gray-900 flex items-center gap-2">
                       <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
@@ -614,7 +620,7 @@ export default function SalaryPage() {
                     </h3>
                     <button
                       onClick={() => setShowSalaryForm(false)}
-                      className="text-gray-400 hover:text-blue-600 transition-colors bg-gray-100 hover:bg-blue-100 rounded-full p-2 relative z-10"
+                      className="text-gray-400 hover:text-blue-600 transition-colors bg-gray-100 hover:bg-blue-100 rounded-full p-2"
                     >
                       <X className="w-5 h-5 sm:w-6 sm:h-6" />
                     </button>
@@ -744,7 +750,10 @@ export default function SalaryPage() {
                   PDF
                 </button>
                 <button
-                  onClick={() => setShowPaymentForm(!showPaymentForm)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowPaymentForm(!showPaymentForm);
+                  }}
                   className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card text-sm"
                 >
                   {showPaymentForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -754,8 +763,8 @@ export default function SalaryPage() {
             </div>
 
             {showPaymentForm && (
-              <div className="modal-overlay" style={{ zIndex: 999999 }}>
-                <div className="modal-content p-4 sm:p-6 border-2 border-blue-200 max-w-2xl w-full mx-2 sm:mx-4" style={{ zIndex: 1000000, position: 'relative' }}>
+              <div className="modal-overlay">
+                <div className="modal-content p-4 sm:p-6 border-2 border-blue-200 max-w-2xl w-full mx-2 sm:mx-4">
                   <div className="flex items-center justify-between mb-3 sm:mb-4 border-b border-gray-200 pb-2 sm:pb-3">
                     <h3 className="text-base sm:text-lg font-semibold text-gray-900 flex items-center gap-2">
                       <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
