@@ -117,7 +117,7 @@ router.get('/teacher/dashboard-stats', authenticateToken, requireTeacherOrDirect
       const { data: trimesters } = await supabase
         .from('trimesters')
         .select('*')
-        .eq('school_year', currentYear.year_label)
+        .eq('school_year_id', currentYear.id)
         .order('trimester_number');
 
       if (trimesters && trimesters.length > 0) {
@@ -180,7 +180,7 @@ router.get('/director/dashboard-stats', authenticateToken, requireDirector, asyn
     try {
       const { data: currentYear } = await supabase
         .from('school_years')
-        .select('year_label')
+        .select('id, year_label')
         .eq('is_current', true)
         .maybeSingle();
 
@@ -188,7 +188,7 @@ router.get('/director/dashboard-stats', authenticateToken, requireDirector, asyn
         const { data: trimesters } = await supabase
           .from('trimesters')
           .select('*')
-          .eq('school_year', currentYear.year_label)
+          .eq('school_year_id', currentYear.id)
           .order('trimester_number');
 
         if (trimesters && trimesters.length > 0) {
