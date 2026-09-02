@@ -51,11 +51,30 @@ router.get('/my-classes', authenticateToken, requireTeacherOrDirector, async (re
       return res.json({ classes: [] });
     }
 
-    const { data: assignments } = await supabase
+    // Vérifier d'abord s'il y a des assignations avec school_year_id
+    const { data: assignmentsWithYear } = await supabase
       .from('teacher_class_assignments')
       .select('class_id')
       .eq('teacher_id', req.user?.id)
-      .eq('school_year_id', schoolYearId);
+      .not('school_year_id', 'is', null);
+
+    let assignments;
+    if (assignmentsWithYear && assignmentsWithYear.length > 0) {
+      // Si des assignations avec school_year_id existent, filtrer par l'année actuelle
+      const { data } = await supabase
+        .from('teacher_class_assignments')
+        .select('class_id')
+        .eq('teacher_id', req.user?.id)
+        .eq('school_year_id', schoolYearId);
+      assignments = data;
+    } else {
+      // Sinon, retourner toutes les assignations (pour compatibilité avec les anciennes)
+      const { data } = await supabase
+        .from('teacher_class_assignments')
+        .select('class_id')
+        .eq('teacher_id', req.user?.id);
+      assignments = data;
+    }
 
     if (!assignments || assignments.length === 0) {
       return res.json({ classes: [] });
@@ -95,13 +114,28 @@ router.get('/students/:classId', authenticateToken, requireTeacherOrDirector, as
     const schoolYearId = schoolYearData.id;
 
     // Vérifier que l'enseignant est assigné à cette classe
-    const { data: assignment } = await supabase
+    // Filtrer par school_year_id si l'assignation en a un, sinon utiliser seulement class_id
+    let assignmentQuery = supabase
+      .from('teacher_class_assignments')
+      .select('*')
+      .eq('teacher_id', req.user?.id)
+      .eq('class_id', classId);
+
+    // Vérifier d'abord s'il y a des assignations avec school_year_id
+    const { data: assignmentsWithYear } = await supabase
       .from('teacher_class_assignments')
       .select('*')
       .eq('teacher_id', req.user?.id)
       .eq('class_id', classId)
-      .eq('school_year_id', schoolYearId)
+      .not('school_year_id', 'is', null)
       .maybeSingle();
+
+    if (assignmentsWithYear) {
+      // Si l'assignation a un school_year_id, vérifier qu'il correspond à l'année actuelle
+      assignmentQuery = assignmentQuery.eq('school_year_id', schoolYearId);
+    }
+
+    const { data: assignment } = await assignmentQuery.maybeSingle();
 
     if (!assignment) {
       return res.status(403).json({ error: 'Vous n\'êtes pas assigné à cette classe' });
@@ -267,13 +301,28 @@ router.get('/grades/:classId', authenticateToken, requireTeacherOrDirector, asyn
     const schoolYearId = schoolYearData.id;
 
     // Vérifier que l'enseignant est assigné à cette classe
-    const { data: assignment } = await supabase
+    // Filtrer par school_year_id si l'assignation en a un, sinon utiliser seulement class_id
+    let assignmentQuery = supabase
+      .from('teacher_class_assignments')
+      .select('*')
+      .eq('teacher_id', req.user?.id)
+      .eq('class_id', classId);
+
+    // Vérifier d'abord s'il y a des assignations avec school_year_id
+    const { data: assignmentsWithYear } = await supabase
       .from('teacher_class_assignments')
       .select('*')
       .eq('teacher_id', req.user?.id)
       .eq('class_id', classId)
-      .eq('school_year_id', schoolYearId)
+      .not('school_year_id', 'is', null)
       .maybeSingle();
+
+    if (assignmentsWithYear) {
+      // Si l'assignation a un school_year_id, vérifier qu'il correspond à l'année actuelle
+      assignmentQuery = assignmentQuery.eq('school_year_id', schoolYearId);
+    }
+
+    const { data: assignment } = await assignmentQuery.maybeSingle();
 
     if (!assignment) {
       return res.status(403).json({ error: 'Vous n\'êtes pas assigné à cette classe' });

@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { tokenStorage, authService } from '../services/authService';
 import { classService } from '../services/classService';
-import { X, Calendar, User, Shield, Lock, ArrowLeft, Users, Clock, CheckCircle, CalendarPlus } from 'lucide-react';
+import { X, Calendar, User, Shield, Lock, ArrowLeft, Users, Clock, CheckCircle, CalendarPlus, Plus } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
 import { sortClasses } from '../utils/classUtils';
 
@@ -20,6 +20,23 @@ export default function TeachersPage() {
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const [selectedTeacherForReset, setSelectedTeacherForReset] = useState<any>(null);
   const [newPassword, setNewPassword] = useState('');
+  const [showDirectorModal, setShowDirectorModal] = useState(false);
+  const [directorForm, setDirectorForm] = useState({
+    username: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+    permissions: {
+      canManageTeachers: true,
+      canManageStudents: true,
+      canManageTuition: true,
+      canManageSalaries: true,
+      canManageExpenses: true,
+      canViewStatistics: true,
+      canExportData: true,
+    },
+  });
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const teacherRowRefs = useRef<{ [key: string]: HTMLTableRowElement | null }>({});
@@ -185,6 +202,63 @@ export default function TeachersPage() {
     }
   };
 
+  const handleCreateDirector = async () => {
+    const token = tokenStorage.getToken();
+    if (!token) {
+      alert('Token manquant');
+      return;
+    }
+
+    // Validation
+    if (!directorForm.username || !directorForm.password || !directorForm.firstName || !directorForm.lastName) {
+      alert('Veuillez remplir tous les champs');
+      return;
+    }
+
+    if (directorForm.password !== directorForm.confirmPassword) {
+      alert('Les mots de passe ne correspondent pas');
+      return;
+    }
+
+    if (directorForm.password.length < 6) {
+      alert('Le mot de passe doit contenir au moins 6 caractères');
+      return;
+    }
+
+    try {
+      await authService.createDirector(
+        directorForm.username,
+        directorForm.password,
+        directorForm.firstName,
+        directorForm.lastName,
+        directorForm.permissions,
+        token
+      );
+      alert('Compte directeur créé avec succès');
+      setShowDirectorModal(false);
+      setDirectorForm({
+        username: '',
+        password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName: '',
+        permissions: {
+          canManageTeachers: true,
+          canManageStudents: true,
+          canManageTuition: true,
+          canManageSalaries: true,
+          canManageExpenses: true,
+          canViewStatistics: true,
+          canExportData: true,
+        },
+      });
+      loadData(token);
+    } catch (error: any) {
+      console.error('Error creating director:', error);
+      alert(error.message);
+    }
+  };
+
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'active': return 'Actif';
@@ -228,17 +302,29 @@ export default function TeachersPage() {
                 <p className="text-xs sm:text-sm text-blue-100 drop-shadow">Gérer les comptes et statuts des enseignants et directeurs</p>
               </div>
             </div>
-            <button
-              onClick={() => {
-                if (user?.role === 'founder') navigate('/dashboard/founder');
-                else if (user?.role === 'director') navigate('/dashboard/director');
-                else navigate('/dashboard/teacher');
-              }}
-              className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2 relative z-40"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Retour
-            </button>
+            <div className="flex items-center gap-2">
+              {user?.role === 'founder' && (
+                <button
+                  onClick={() => setShowDirectorModal(true)}
+                  className="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2 relative z-40"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span className="hidden sm:inline">Ajouter un directeur</span>
+                  <span className="sm:hidden">Directeur</span>
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  if (user?.role === 'founder') navigate('/dashboard/founder');
+                  else if (user?.role === 'director') navigate('/dashboard/director');
+                  else navigate('/dashboard/teacher');
+                }}
+                className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2 relative z-40"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Retour
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -551,6 +637,123 @@ export default function TeachersPage() {
               >
                 Réinitialiser
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Créer Directeur */}
+      {showDirectorModal && (
+        <div className="modal-overlay">
+          <div className="modal-content p-4 sm:p-6 max-w-md w-full mx-2 sm:mx-4 border-2 border-purple-200">
+            <div className="flex items-center justify-between mb-3 sm:mb-4 border-b border-gray-200 pb-2 sm:pb-3">
+              <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2 text-gray-900">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+                Créer un compte Directeur
+              </h3>
+              <button
+                onClick={() => {
+                  setShowDirectorModal(false);
+                  setDirectorForm({
+                    username: '',
+                    password: '',
+                    confirmPassword: '',
+                    firstName: '',
+                    lastName: '',
+                    permissions: {
+                      canManageTeachers: true,
+                      canManageStudents: true,
+                      canManageTuition: true,
+                      canManageSalaries: true,
+                      canManageExpenses: true,
+                      canViewStatistics: true,
+                      canExportData: true,
+                    },
+                  });
+                }}
+                className="text-gray-400 hover:text-purple-600 transition-colors bg-gray-100 hover:bg-purple-100 rounded-full p-2"
+              >
+                <X className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+            </div>
+            <div className="space-y-3 sm:space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nom d'utilisateur</label>
+                <input
+                  type="text"
+                  value={directorForm.username}
+                  onChange={(e) => setDirectorForm({ ...directorForm, username: e.target.value })}
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                <input
+                  type="password"
+                  value={directorForm.password}
+                  onChange={(e) => setDirectorForm({ ...directorForm, password: e.target.value })}
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
+                <input
+                  type="password"
+                  value={directorForm.confirmPassword}
+                  onChange={(e) => setDirectorForm({ ...directorForm, confirmPassword: e.target.value })}
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                <input
+                  type="text"
+                  value={directorForm.firstName}
+                  onChange={(e) => setDirectorForm({ ...directorForm, firstName: e.target.value })}
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                <input
+                  type="text"
+                  value={directorForm.lastName}
+                  onChange={(e) => setDirectorForm({ ...directorForm, lastName: e.target.value })}
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm"
+                />
+              </div>
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:space-x-3">
+                <button
+                  onClick={() => {
+                    setShowDirectorModal(false);
+                    setDirectorForm({
+                      username: '',
+                      password: '',
+                      confirmPassword: '',
+                      firstName: '',
+                      lastName: '',
+                      permissions: {
+                        canManageTeachers: true,
+                        canManageStudents: true,
+                        canManageTuition: true,
+                        canManageSalaries: true,
+                        canManageExpenses: true,
+                        canViewStatistics: true,
+                        canExportData: true,
+                      },
+                    });
+                  }}
+                  className="w-full sm:w-auto px-4 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all text-sm"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleCreateDirector}
+                  className="w-full sm:w-auto px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow-md text-sm"
+                >
+                  Créer
+                </button>
+              </div>
             </div>
           </div>
         </div>

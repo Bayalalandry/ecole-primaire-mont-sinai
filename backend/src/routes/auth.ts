@@ -616,6 +616,31 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
     const { teacherId, classId, schoolYear } = req.body;
     console.log('Assign teacher request:', { teacherId, classId, schoolYear });
 
+    // Récupérer l'ID de l'année scolaire
+    let schoolYearId = null;
+    if (schoolYear) {
+      const { data: schoolYearData } = await supabase
+        .from('school_years')
+        .select('id')
+        .eq('year_label', schoolYear)
+        .maybeSingle();
+
+      if (schoolYearData) {
+        schoolYearId = schoolYearData.id;
+      }
+    } else {
+      // Si schoolYear n'est pas fourni, utiliser l'année scolaire actuelle
+      const { data: currentYear } = await supabase
+        .from('school_years')
+        .select('id')
+        .eq('is_current', true)
+        .maybeSingle();
+
+      if (currentYear) {
+        schoolYearId = currentYear.id;
+      }
+    }
+
     // Vérifier si l'assignation existe déjà
     const { data: existingAssignment } = await supabase
       .from('teacher_class_assignments')
@@ -629,13 +654,19 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
       return res.json({ message: 'Enseignant déjà assigné à cette classe' });
     }
 
-    // Créer la nouvelle assignation sans school_year pour éviter les conflits
+    // Créer la nouvelle assignation avec school_year_id
+    const assignmentData: any = {
+      teacher_id: teacherId,
+      class_id: classId,
+    };
+
+    if (schoolYearId) {
+      assignmentData.school_year_id = schoolYearId;
+    }
+
     const { error } = await supabase
       .from('teacher_class_assignments')
-      .insert({
-        teacher_id: teacherId,
-        class_id: classId
-      });
+      .insert(assignmentData);
 
     if (error) {
       console.error('Error inserting assignment:', error);
@@ -645,6 +676,7 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
     await logActivity(req.user!.id, 'ASSIGN_TEACHER', 'class', classId, {
       teacherId,
       classId,
+      schoolYearId,
     });
 
     // Notifier l'enseignant

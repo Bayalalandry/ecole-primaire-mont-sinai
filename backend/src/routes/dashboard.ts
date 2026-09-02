@@ -12,7 +12,7 @@ router.get('/teacher/dashboard-stats', authenticateToken, requireTeacherOrDirect
     // Récupérer l'année scolaire actuelle
     const { data: currentYear } = await supabase
       .from('school_years')
-      .select('id')
+      .select('id, year_label')
       .eq('is_current', true)
       .single();
 
@@ -25,11 +25,30 @@ router.get('/teacher/dashboard-stats', authenticateToken, requireTeacherOrDirect
     }
 
     // Récupérer les classes de l'enseignant
-    const { data: assignments } = await supabase
+    // Vérifier d'abord s'il y a des assignations avec school_year_id
+    const { data: assignmentsWithYear } = await supabase
       .from('teacher_class_assignments')
       .select('class_id')
       .eq('teacher_id', teacherId)
-      .eq('school_year_id', currentYear.id);
+      .not('school_year_id', 'is', null);
+
+    let assignments;
+    if (assignmentsWithYear && assignmentsWithYear.length > 0) {
+      // Si des assignations avec school_year_id existent, filtrer par l'année actuelle
+      const { data } = await supabase
+        .from('teacher_class_assignments')
+        .select('class_id')
+        .eq('teacher_id', teacherId)
+        .eq('school_year_id', currentYear.id);
+      assignments = data;
+    } else {
+      // Sinon, retourner toutes les assignations (pour compatibilité avec les anciennes)
+      const { data } = await supabase
+        .from('teacher_class_assignments')
+        .select('class_id')
+        .eq('teacher_id', teacherId);
+      assignments = data;
+    }
 
     if (!assignments || assignments.length === 0) {
       return res.json({
@@ -42,11 +61,25 @@ router.get('/teacher/dashboard-stats', authenticateToken, requireTeacherOrDirect
     const classIds = assignments.map((a: any) => a.class_id);
 
     // Compter le nombre total d'élèves dans ces classes
-    const { data: students } = await supabase
+    // Filtrer par l'année scolaire actuelle si possible
+    let studentsQuery = supabase
       .from('students')
       .select('id')
       .in('current_class_id', classIds)
       .eq('status', 'active');
+
+    // Vérifier si la colonne school_year existe (c'est une chaîne, pas un ID)
+    const { data: testStudents } = await supabase
+      .from('students')
+      .select('school_year')
+      .limit(1);
+
+    if (testStudents && testStudents.length > 0) {
+      // La colonne school_year existe, filtrer par l'année actuelle
+      studentsQuery = studentsQuery.eq('school_year', currentYear.year_label);
+    }
+
+    const { data: students } = await studentsQuery;
 
     const totalStudents = students?.length || 0;
 

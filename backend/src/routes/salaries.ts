@@ -319,13 +319,25 @@ router.post('/', authenticateToken, requireFounder, async (req: AuthRequest, res
     }
 
     // Récupérer l'ID de l'année scolaire
-    const { data: schoolYearData } = await supabase
-      .from('school_years')
-      .select('id')
-      .eq('year_label', schoolYear)
-      .maybeSingle();
+    let schoolYearId = null;
+    if (schoolYear) {
+      const { data: schoolYearData } = await supabase
+        .from('school_years')
+        .select('id')
+        .eq('year_label', schoolYear)
+        .maybeSingle();
 
-    const schoolYearId = schoolYearData?.id || null;
+      schoolYearId = schoolYearData?.id || null;
+    } else {
+      // Si schoolYear n'est pas fourni, utiliser l'année scolaire actuelle
+      const { data: currentYear } = await supabase
+        .from('school_years')
+        .select('id')
+        .eq('is_current', true)
+        .maybeSingle();
+
+      schoolYearId = currentYear?.id || null;
+    }
 
     const { data, error } = await supabase
       .from('teacher_salaries')
@@ -377,12 +389,6 @@ router.post('/payments', authenticateToken, requireFounder, async (req: AuthRequ
 
     // Notifier l'enseignant du paiement
     try {
-      const { data: teacher } = await supabase
-        .from('users')
-        .select('first_name, last_name')
-        .eq('id', teacherId)
-        .single();
-
       await createNotification(
         teacherId,
         'salary_payment',
