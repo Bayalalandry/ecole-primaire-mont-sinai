@@ -252,7 +252,13 @@ export default function TeachersPage() {
           canExportData: true,
         },
       });
-      loadData(token);
+      // Recharger les données séparément pour ne pas cacher le succès
+      try {
+        loadData(token);
+      } catch (loadError) {
+        console.error('Error reloading data after director creation:', loadError);
+        // Ne pas alert l'utilisateur, le compte a été créé avec succès
+      }
     } catch (error: any) {
       console.error('Error creating director:', error);
       alert(error.message);

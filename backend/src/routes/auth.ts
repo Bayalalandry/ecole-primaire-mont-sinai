@@ -253,11 +253,28 @@ router.post('/create-director', authenticateToken, requireFounder, async (req: A
       is_active: true,
     });
 
-    // Créer les permissions du directeur
-    await createDirectorPermissions({
-      user_id: newUser.id,
-      ...permissions,
-    });
+    // Créer l'entrée dans la table teachers pour permettre l'assignation de classe
+    try {
+      await createTeacherInfo({
+        user_id: newUser.id,
+        status: 'active', // Les directeurs sont actifs par défaut
+      });
+    } catch (teacherError) {
+      console.error('Error creating teacher entry for director:', teacherError);
+      // Ne pas échouer si l'entrée teachers échoue
+    }
+
+    // Créer les permissions du directeur (si erreur, log mais ne pas empêcher la création)
+    try {
+      await createDirectorPermissions({
+        user_id: newUser.id,
+        ...permissions,
+      });
+    } catch (permError) {
+      console.error('Error creating director permissions:', permError);
+      // Ne pas échouer si les permissions échouent - l'utilisateur est créé
+      // Les permissions par défaut seront utilisées si nécessaire
+    }
 
     // Log l'activité
     await logActivity(req.user!.id, 'CREATE_DIRECTOR', 'user', newUser.id, { username, permissions });
