@@ -86,7 +86,10 @@ export default function PassagePage() {
 
   const loadPassingGrades = async (token: string) => {
     try {
+      console.log('Loading passing grades...');
       const data = await passageService.getPassingGrades(token);
+      console.log('Passing grades data:', data);
+
       const gradesMap: Record<string, number> = {};
       data.classes.forEach((c: any) => {
         gradesMap[c.id] = c.passing_grade;
@@ -95,6 +98,7 @@ export default function PassagePage() {
       setFounderClasses(sortClasses(data.classes || []));
     } catch (error: any) {
       console.error('Error loading passing grades:', error);
+      alert('Erreur lors du chargement des seuils: ' + error.message);
     }
   };
 
@@ -162,14 +166,15 @@ export default function PassagePage() {
       console.log('Saving passing grades:', passingGrades);
       for (const [classId, grade] of Object.entries(passingGrades)) {
         console.log(`Updating class ${classId} to grade ${grade}`);
-        await passageService.updatePassingGrade(classId, grade, token);
+        const result = await passageService.updatePassingGrade(classId, grade, token);
+        console.log(`Result for class ${classId}:`, result);
       }
       alert('Seuils mis à jour avec succès');
       // Recharger les seuils pour confirmer la mise à jour
       loadPassingGrades(token);
     } catch (error: any) {
       console.error('Error saving passing grades:', error);
-      alert(error.message);
+      alert('Erreur lors de la mise à jour: ' + error.message);
     }
   };
 

@@ -85,12 +85,15 @@ export default function SalaryPage() {
         salaryService.getSalaryOutstanding(token, outstandingParams),
       ]);
 
+      console.log('Loaded data:', { salariesData, teachersData, paymentsData, outstandingData });
+
       setSalaries(salariesData.salaries || []);
       setTeachers(teachersData || []);
       setPayments(paymentsData.payments || []);
       setOutstanding(outstandingData.outstanding || []);
     } catch (error: any) {
       console.error('Error loading data:', error);
+      alert('Erreur lors du chargement des données: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -632,6 +635,9 @@ export default function SalaryPage() {
                         </option>
                       ))}
                     </select>
+                    {teachers.length === 0 && (
+                      <p className="text-xs text-red-500 mt-1">Aucun enseignant disponible</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Année scolaire</label>
@@ -778,6 +784,9 @@ export default function SalaryPage() {
                         </option>
                       ))}
                     </select>
+                    {teachers.length === 0 && (
+                      <p className="text-xs text-red-500 mt-1">Aucun enseignant disponible</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Montant (XOF)</label>
