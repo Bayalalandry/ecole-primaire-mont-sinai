@@ -1,11 +1,11 @@
 import express, { Router, Request, Response } from 'express';
 import { supabase } from '../services/supabase';
-import { authenticateToken, AuthRequest, requireTeacherOrDirector, requireDirector } from '../middleware/auth';
+import { authenticateToken, AuthRequest, requireSecretaryOrDirector, requireDirector } from '../middleware/auth';
 
 const router: Router = express.Router();
 
-// Statistiques du tableau de bord enseignant (ou directeur avec classes assignées)
-router.get('/teacher/dashboard-stats', authenticateToken, requireTeacherOrDirector, async (req: AuthRequest, res: Response) => {
+// Statistiques du tableau de bord secrétaire (ou directeur avec classes assignées)
+router.get('/teacher/dashboard-stats', authenticateToken, requireSecretaryOrDirector, async (req: AuthRequest, res: Response) => {
   try {
     const teacherId = req.user?.id;
 
@@ -24,41 +24,51 @@ router.get('/teacher/dashboard-stats', authenticateToken, requireTeacherOrDirect
       });
     }
 
-    // Récupérer les classes de l'enseignant
-    // Vérifier d'abord s'il y a des assignations avec school_year_id
-    const { data: assignmentsWithYear } = await supabase
-      .from('teacher_class_assignments')
-      .select('class_id')
-      .eq('teacher_id', teacherId)
-      .not('school_year_id', 'is', null);
+    // Pour le secrétaire : récupérer TOUTES les classes (pas de restriction)
+    // Pour le directeur : récupérer ses classes assignées
+    let classIds: string[] = [];
 
-    let assignments;
-    if (assignmentsWithYear && assignmentsWithYear.length > 0) {
-      // Si des assignations avec school_year_id existent, filtrer par l'année actuelle
-      const { data } = await supabase
+    if (req.user?.role === 'secretary') {
+      // Secrétaire voit toutes les classes
+      const { data: allClasses } = await supabase
+        .from('classes')
+        .select('id');
+
+      classIds = allClasses?.map((c: any) => c.id) || [];
+    } else {
+      // Directeur : récupérer ses classes assignées
+      const { data: assignmentsWithYear } = await supabase
         .from('teacher_class_assignments')
         .select('class_id')
         .eq('teacher_id', teacherId)
-        .eq('school_year_id', currentYear.id);
-      assignments = data;
-    } else {
-      // Sinon, retourner toutes les assignations (pour compatibilité avec les anciennes)
-      const { data } = await supabase
-        .from('teacher_class_assignments')
-        .select('class_id')
-        .eq('teacher_id', teacherId);
-      assignments = data;
-    }
+        .not('school_year_id', 'is', null);
 
-    if (!assignments || assignments.length === 0) {
-      return res.json({
-        totalStudents: 0,
-        pendingGrades: 0,
-        overdueTuition: 0,
-      });
-    }
+      let assignments;
+      if (assignmentsWithYear && assignmentsWithYear.length > 0) {
+        const { data } = await supabase
+          .from('teacher_class_assignments')
+          .select('class_id')
+          .eq('teacher_id', teacherId)
+          .eq('school_year_id', currentYear.id);
+        assignments = data;
+      } else {
+        const { data } = await supabase
+          .from('teacher_class_assignments')
+          .select('class_id')
+          .eq('teacher_id', teacherId);
+        assignments = data;
+      }
 
-    const classIds = assignments.map((a: any) => a.class_id);
+      if (!assignments || assignments.length === 0) {
+        return res.json({
+          totalStudents: 0,
+          pendingGrades: 0,
+          overdueTuition: 0,
+        });
+      }
+
+      classIds = assignments.map((a: any) => a.class_id);
+    }
 
     // Compter le nombre total d'élèves dans ces classes
     // Filtrer par l'année scolaire actuelle si possible

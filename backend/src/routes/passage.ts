@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { supabase } from '../services/supabase';
-import { authenticateToken, AuthRequest, requireFounder, requireTeacherOrDirector, requireTeacher } from '../middleware/auth';
+import { authenticateToken, AuthRequest, requireFounder, requireSecretaryOrDirector, requireSecretary } from '../middleware/auth';
 import { logActivity } from '../services/authService';
 import { createNotification } from '../services/notificationService';
 
@@ -15,8 +15,8 @@ const getParam = (param: string | string[]): string => {
 // GESTION DES MOYENNES ANNUELLES (ENSEIGNANT)
 // ============================================
 
-// Récupérer les classes d'un enseignant ou d'un directeur
-router.get('/my-classes', authenticateToken, requireTeacherOrDirector, async (req: AuthRequest, res: Response) => {
+// Récupérer les classes d'un secrétaire ou d'un directeur
+router.get('/my-classes', authenticateToken, requireSecretaryOrDirector, async (req: AuthRequest, res: Response) => {
   try {
     const { schoolYear } = req.query;
 
@@ -24,6 +24,17 @@ router.get('/my-classes', authenticateToken, requireTeacherOrDirector, async (re
       return res.status(401).json({ error: 'Utilisateur non authentifié' });
     }
 
+    // Pour le secrétaire : récupérer TOUTES les classes
+    if (req.user.role === 'secretary') {
+      const { data: classes } = await supabase
+        .from('classes')
+        .select('id, name')
+        .order('name');
+
+      return res.json({ classes: classes || [] });
+    }
+
+    // Pour le directeur : récupérer ses classes assignées
     // Récupérer l'ID de l'année scolaire
     let schoolYearData;
     if (schoolYear) {
@@ -89,17 +100,56 @@ router.get('/my-classes', authenticateToken, requireTeacherOrDirector, async (re
 
     res.json({ classes: classes || [] });
   } catch (error: any) {
-    console.error('Get teacher classes error:', error);
+    console.error('Get secretary/director classes error:', error);
     res.status(500).json({ error: 'Erreur lors de la récupération des classes' });
   }
 });
 
 // Récupérer les élèves d'une classe pour la saisie des moyennes
-router.get('/students/:classId', authenticateToken, requireTeacherOrDirector, async (req: AuthRequest, res: Response) => {
+router.get('/students/:classId', authenticateToken, requireSecretaryOrDirector, async (req: AuthRequest, res: Response) => {
   try {
     const { classId } = req.params;
     const { schoolYear } = req.query;
 
+    // Pour le secrétaire : pas de vérification d'assignation (accès à toutes les classes)
+    if (req.user?.role === 'secretary') {
+      // Récupérer l'ID de l'année scolaire
+      const { data: schoolYearData } = await supabase
+        .from('school_years')
+        .select('id')
+        .eq('year_label', schoolYear)
+        .maybeSingle();
+
+      if (!schoolYearData) {
+        return res.status(404).json({ error: 'Année scolaire non trouvée' });
+      }
+
+      // Récupérer les élèves de cette classe
+      const { data: students } = await supabase
+        .from('students')
+        .select('id, unique_identifier, matricule, first_name, last_name')
+        .eq('current_class_id', classId)
+        .eq('status', 'active');
+
+      // Récupérer les moyennes déjà saisies
+      const { data: grades } = await supabase
+        .from('student_annual_grades')
+        .select('student_id, final_grade')
+        .eq('school_year_id', schoolYearData.id);
+
+      // Combiner les données
+      const studentsWithGrades = students?.map(student => {
+        const grade = grades?.find(g => g.student_id === student.id);
+        return {
+          ...student,
+          annualGrade: grade?.final_grade || null,
+        };
+      }) || [];
+
+      return res.json({ students: studentsWithGrades });
+    }
+
+    // Pour le directeur : vérifier l'assignation
     // Récupérer l'ID de l'année scolaire
     const { data: schoolYearData } = await supabase
       .from('school_years')
@@ -113,8 +163,7 @@ router.get('/students/:classId', authenticateToken, requireTeacherOrDirector, as
 
     const schoolYearId = schoolYearData.id;
 
-    // Vérifier que l'enseignant est assigné à cette classe
-    // Filtrer par school_year_id si l'assignation en a un, sinon utiliser seulement class_id
+    // Vérifier que le directeur est assigné à cette classe
     let assignmentQuery = supabase
       .from('teacher_class_assignments')
       .select('*')
@@ -131,7 +180,6 @@ router.get('/students/:classId', authenticateToken, requireTeacherOrDirector, as
       .maybeSingle();
 
     if (assignmentsWithYear) {
-      // Si l'assignation a un school_year_id, vérifier qu'il correspond à l'année actuelle
       assignmentQuery = assignmentQuery.eq('school_year_id', schoolYearId);
     }
 
@@ -141,7 +189,7 @@ router.get('/students/:classId', authenticateToken, requireTeacherOrDirector, as
       return res.status(403).json({ error: 'Vous n\'êtes pas assigné à cette classe' });
     }
 
-    // Récupérer les élèves de cette classe (tous les élèves actifs, sans filtre d'année scolaire)
+    // Récupérer les élèves de cette classe
     const { data: students } = await supabase
       .from('students')
       .select('id, unique_identifier, matricule, first_name, last_name')
@@ -171,7 +219,7 @@ router.get('/students/:classId', authenticateToken, requireTeacherOrDirector, as
 });
 
 // Enregistrer une moyenne annuelle pour un élève
-router.post('/grades', authenticateToken, requireTeacherOrDirector, async (req: AuthRequest, res: Response) => {
+router.post('/grades', authenticateToken, requireSecretaryOrDirector, async (req: AuthRequest, res: Response) => {
   try {
     const { studentId, schoolYear, finalGrade } = req.body;
 
@@ -217,16 +265,19 @@ router.post('/grades', authenticateToken, requireTeacherOrDirector, async (req: 
       return res.status(403).json({ error: 'Le passage a déjà été validé pour cet élève. Modification impossible.' });
     }
 
-    const { data: assignment } = await supabase
-      .from('teacher_class_assignments')
-      .select('*')
-      .eq('teacher_id', req.user?.id)
-      .eq('class_id', student.current_class_id)
-      .eq('school_year_id', schoolYearData.id)
-      .maybeSingle();
+    // Pour le secrétaire : pas de vérification d'assignation (accès à toutes les classes)
+    if (req.user?.role !== 'secretary') {
+      const { data: assignment } = await supabase
+        .from('teacher_class_assignments')
+        .select('*')
+        .eq('teacher_id', req.user?.id)
+        .eq('class_id', student.current_class_id)
+        .eq('school_year_id', schoolYearData.id)
+        .maybeSingle();
 
-    if (!assignment) {
-      return res.status(403).json({ error: 'Vous n\'êtes pas autorisé à saisir les moyennes de cet élève' });
+      if (!assignment) {
+        return res.status(403).json({ error: 'Vous n\'êtes pas autorisé à saisir les moyennes de cet élève' });
+      }
     }
 
     // Insérer ou mettre à jour la moyenne
@@ -282,7 +333,7 @@ router.post('/grades', authenticateToken, requireTeacherOrDirector, async (req: 
 });
 
 // Récupérer toutes les moyennes d'une classe
-router.get('/grades/:classId', authenticateToken, requireTeacherOrDirector, async (req: AuthRequest, res: Response) => {
+router.get('/grades/:classId', authenticateToken, requireSecretaryOrDirector, async (req: AuthRequest, res: Response) => {
   try {
     const { classId } = req.params;
     const { schoolYear } = req.query;

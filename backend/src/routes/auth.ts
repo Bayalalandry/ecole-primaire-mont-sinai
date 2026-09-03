@@ -67,14 +67,6 @@ router.post('/login', async (req, res) => {
       }
     }
 
-    // Pour les enseignants, vérifier si le compte est validé
-    if (user.role === 'teacher') {
-      const teacherInfo = await getTeacherInfo(user.id);
-      if (teacherInfo && teacherInfo.status === 'pending') {
-        return res.status(403).json({ error: 'Compte en attente de validation par le fondateur' });
-      }
-    }
-
     const token = generateToken(user);
 
     // Log l'activité
@@ -93,73 +85,6 @@ router.post('/login', async (req, res) => {
   } catch (error: any) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Erreur lors de la connexion' });
-  }
-});
-
-// Register (pour les enseignants uniquement)
-router.post('/register', async (req, res) => {
-  try {
-    const { username, password, firstName, lastName, classId } = req.body;
-
-    // Vérifier si l'utilisateur existe déjà
-    const existingUser = await getUserByUsername(username);
-    if (existingUser) {
-      return res.status(400).json({ error: 'Nom d\'utilisateur déjà utilisé' });
-    }
-
-    const passwordHash = await hashPassword(password);
-
-    // Créer l'utilisateur
-    const newUser = await createUser({
-      username,
-      password_hash: passwordHash,
-      role: 'teacher',
-      first_name: firstName,
-      last_name: lastName,
-      is_active: true,
-    });
-
-    // Créer les infos enseignant (statut pending par défaut)
-    await createTeacherInfo({
-      user_id: newUser.id,
-      status: 'pending',
-    });
-
-    // Log l'activité
-    await logActivity(newUser.id, 'REGISTER', 'user', newUser.id, { username, role: 'teacher' });
-
-    // Notifier le fondateur
-    const { data: founder } = await supabase
-      .from('users')
-      .select('id')
-      .eq('role', 'founder')
-      .limit(1)
-      .single();
-
-    if (founder) {
-      await createNotification(
-        founder.id,
-        'teacher_pending',
-        'Nouvel enseignant en attente',
-        `${firstName} ${lastName} (${username}) a créé un compte enseignant et attend votre validation.`,
-        'user',
-        newUser.id
-      );
-    }
-
-    res.status(201).json({
-      message: 'Compte créé avec succès. En attente de validation par le fondateur.',
-      user: {
-        id: newUser.id,
-        username: newUser.username,
-        role: newUser.role,
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
-      },
-    });
-  } catch (error: any) {
-    console.error('Register error:', error);
-    res.status(500).json({ error: 'Erreur lors de la création du compte' });
   }
 });
 
@@ -295,92 +220,66 @@ router.post('/create-director', authenticateToken, requireFounder, async (req: A
   }
 });
 
-// Valider un compte enseignant (réservé au fondateur)
-router.post('/validate-teacher/:userId', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
+// Créer le compte secrétaire (réservé au fondateur)
+router.post('/create-secretary', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
   try {
-    const { userId } = req.params;
-    const userIdStr = getParam(userId);
+    const { username, password, firstName, lastName } = req.body;
 
-    const user = await getUserById(userIdStr);
-    if (!user || user.role !== 'teacher') {
-      return res.status(404).json({ error: 'Enseignant non trouvé' });
+    // Vérifier si un secrétaire existe déjà
+    const { data: existingSecretaries } = await supabase
+      .from('users')
+      .select('id')
+      .eq('role', 'secretary');
+
+    if (existingSecretaries && existingSecretaries.length > 0) {
+      return res.status(400).json({ error: 'Un compte secrétaire existe déjà' });
     }
 
-    await updateTeacherInfo(userIdStr, { status: 'active' });
-
-    // Log l'activité
-    await logActivity(req.user!.id, 'VALIDATE_TEACHER', 'user', userIdStr, { username: user.username });
-
-    // Notifier l'enseignant
-    await createNotification(
-      userIdStr,
-      'teacher_validated',
-      'Compte validé',
-      'Votre compte enseignant a été validé par le fondateur. Vous pouvez maintenant accéder à votre tableau de bord.',
-      'user',
-      userIdStr
-    );
-
-    res.json({ message: 'Compte enseignant validé avec succès' });
-  } catch (error: any) {
-    console.error('Validate teacher error:', error);
-    res.status(500).json({ error: 'Erreur lors de la validation du compte enseignant' });
-  }
-});
-
-// Refuser un compte enseignant (réservé au fondateur)
-router.post('/reject-teacher/:userId', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
-  try {
-    const { userId } = req.params;
-    const userIdStr = getParam(userId);
-
-    const user = await getUserById(userIdStr);
-    if (!user || user.role !== 'teacher') {
-      return res.status(404).json({ error: 'Enseignant non trouvé' });
+    // Vérifier si l'utilisateur existe déjà
+    const existingUser = await getUserByUsername(username);
+    if (existingUser) {
+      return res.status(400).json({ error: 'Nom d\'utilisateur déjà utilisé' });
     }
 
-    await updateTeacherInfo(userIdStr, { status: 'archived' });
-    await updateUser(userIdStr, { is_active: false });
+    const passwordHash = await hashPassword(password);
 
-    // Log l'activité
-    await logActivity(req.user!.id, 'REJECT_TEACHER', 'user', userIdStr, { username: user.username });
-
-    res.json({ message: 'Compte enseignant refusé' });
-  } catch (error: any) {
-    console.error('Reject teacher error:', error);
-    res.status(500).json({ error: 'Erreur lors du refus du compte enseignant' });
-  }
-});
-
-// Mettre en congé un enseignant (réservé au fondateur)
-router.post('/teacher-leave/:userId', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
-  try {
-    const { userId } = req.params;
-    const { leaveStartDate, leaveEndDate } = req.body;
-    const userIdStr = getParam(userId);
-
-    const user = await getUserById(userIdStr);
-    if (!user || user.role !== 'teacher') {
-      return res.status(404).json({ error: 'Enseignant non trouvé' });
-    }
-
-    await updateTeacherInfo(userIdStr, {
-      status: 'on_leave',
-      leave_start_date: leaveStartDate,
-      leave_end_date: leaveEndDate,
+    // Créer l'utilisateur secrétaire
+    const newUser = await createUser({
+      username,
+      password_hash: passwordHash,
+      role: 'secretary',
+      first_name: firstName,
+      last_name: lastName,
+      is_active: true,
     });
 
-    // Log l'activité
-    await logActivity(req.user!.id, 'TEACHER_LEAVE', 'user', userIdStr, { 
-      username: user.username,
-      leaveStartDate,
-      leaveEndDate,
-    });
+    // Créer l'entrée dans la table teachers pour permettre l'assignation de classe
+    try {
+      await createTeacherInfo({
+        user_id: newUser.id,
+        status: 'active', // Les secrétaires sont actifs par défaut
+      });
+    } catch (teacherError) {
+      console.error('Error creating teacher entry for secretary:', teacherError);
+      // Ne pas échouer si l'entrée teachers échoue
+    }
 
-    res.json({ message: 'Congé enregistré avec succès' });
+    // Log l'activité
+    await logActivity(req.user!.id, 'CREATE_SECRETARY', 'user', newUser.id, { username });
+
+    res.status(201).json({
+      message: 'Compte secrétaire créé avec succès',
+      user: {
+        id: newUser.id,
+        username: newUser.username,
+        role: newUser.role,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
+      },
+    });
   } catch (error: any) {
-    console.error('Teacher leave error:', error);
-    res.status(500).json({ error: 'Erreur lors de l\'enregistrement du congé' });
+    console.error('Create secretary error:', error);
+    res.status(500).json({ error: 'Erreur lors de la création du compte secrétaire' });
   }
 });
 
@@ -475,7 +374,7 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res) => {
     } else if (user.role === 'director') {
       const directorPermissions = await getDirectorPermissions(user.id);
       additionalInfo.directorPermissions = directorPermissions;
-    } else if (user.role === 'teacher') {
+    } else if (user.role === 'secretary') {
       const teacherInfo = await getTeacherInfo(user.id);
       additionalInfo.teacherInfo = teacherInfo;
     }
@@ -497,36 +396,7 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res) => {
   }
 });
 
-// Lister les enseignants en attente de validation (réservé au fondateur)
-router.get('/pending-teachers', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
-  try {
-    const { data, error } = await supabase
-      .from('users')
-      .select(`
-        id,
-        username,
-        first_name,
-        last_name,
-        teachers (
-          status,
-          created_at
-        )
-      `)
-      .eq('role', 'teacher')
-      .eq('is_active', true);
-
-    if (error) throw error;
-
-    const pendingTeachers = data?.filter((u: any) => u.teachers?.status === 'pending') || [];
-
-    res.json({ teachers: pendingTeachers });
-  } catch (error: any) {
-    console.error('Get pending teachers error:', error);
-    res.status(500).json({ error: 'Erreur lors de la récupération des enseignants en attente' });
-  }
-});
-
-// Lister tous les enseignants (réservé au fondateur et directeur)
+// Lister tous les enseignants et directeurs (réservé au fondateur et directeur)
 router.get('/teachers', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
   try {
     console.log('GET /auth/teachers - fetching teachers');
@@ -546,7 +416,7 @@ router.get('/teachers', authenticateToken, requireFounderOrDirector, async (req:
           status
         )
       `)
-      .in('role', ['teacher', 'director'])
+      .in('role', ['secretary', 'director'])
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -627,11 +497,11 @@ router.put('/teacher-status/:userId', authenticateToken, requireFounderOrDirecto
   }
 });
 
-// Assigner un enseignant ou un directeur à une classe
+// Assigner un secrétaire ou un directeur à une classe
 router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
   try {
     const { teacherId, classId, schoolYear } = req.body;
-    console.log('Assign teacher request:', { teacherId, classId, schoolYear });
+    console.log('Assign staff request:', { teacherId, classId, schoolYear });
 
     // Récupérer l'ID de l'année scolaire
     let schoolYearId = null;
@@ -668,7 +538,7 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
 
     if (existingAssignment) {
       console.log('Assignment already exists, skipping');
-      return res.json({ message: 'Enseignant déjà assigné à cette classe' });
+      return res.json({ message: 'Personnel déjà assigné à cette classe' });
     }
 
     // Créer la nouvelle assignation avec school_year_id
@@ -707,18 +577,18 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
     );
 
     console.log('Assignment successful');
-    res.json({ message: 'Enseignant assigné avec succès' });
+    res.json({ message: 'Personnel assigné avec succès' });
   } catch (error: any) {
-    console.error('Assign teacher error:', error);
+    console.error('Assign staff error:', error);
     res.status(500).json({ error: 'Erreur lors de l\'assignation' });
   }
 });
 
-// Désassigner un enseignant d'une classe
+// Désassigner un secrétaire d'une classe
 router.post('/unassign-teacher', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
   try {
     const { teacherId, classId } = req.body;
-    console.log('Unassign teacher request:', { teacherId, classId });
+    console.log('Unassign staff request:', { teacherId, classId });
 
     if (!teacherId || !classId) {
       return res.status(400).json({ error: 'Champs requis: teacherId, classId' });
@@ -737,26 +607,26 @@ router.post('/unassign-teacher', authenticateToken, requireFounder, async (req: 
     }
 
     console.log('Unassignment successful');
-    res.json({ message: 'Enseignant désassigné avec succès' });
+    res.json({ message: 'Personnel désassigné avec succès' });
   } catch (error: any) {
-    console.error('Unassign teacher error:', error);
+    console.error('Unassign staff error:', error);
     res.status(500).json({ error: 'Erreur lors de la désassignation' });
   }
 });
 
-// Réassigner les élèves d'un enseignant à un autre
+// Réassigner les élèves d'un secrétaire à un autre
 router.post('/reassign-students', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
   try {
     const { fromTeacherId, toTeacherId } = req.body;
 
-    // Récupérer les classes assignées à l'enseignant de départ
+    // Récupérer les classes assignées au secrétaire de départ
     const { data: teacherAssignments } = await supabase
       .from('teacher_class_assignments')
       .select('class_id')
       .eq('teacher_id', fromTeacherId);
-    
+
     if (!teacherAssignments || teacherAssignments.length === 0) {
-      return res.json({ message: 'Aucune classe assignée à cet enseignant' });
+      return res.json({ message: 'Aucune classe assignée à ce secrétaire' });
     }
     
     const assignedClassIds = teacherAssignments.map((a: any) => a.class_id);

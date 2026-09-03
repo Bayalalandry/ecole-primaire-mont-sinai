@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { AuthRequest, authenticateToken, requireFounder, requireFounderOrDirector, requireFounderOrDirectorOrTeacher } from '../middleware/auth';
+import { AuthRequest, authenticateToken, requireFounder, requireFounderOrDirector, requireFounderOrDirectorOrSecretary } from '../middleware/auth';
 import { supabase } from '../services/supabase';
 import crypto from 'crypto';
 import { createNotification } from '../services/notificationService';
@@ -57,7 +57,7 @@ const generateMatricule = async (schoolYear: string): Promise<string> => {
 };
 
 // Créer un nouvel élève (accessible au fondateur, directeur et enseignant)
-router.post('/', authenticateToken, requireFounderOrDirectorOrTeacher, async (req: AuthRequest, res) => {
+router.post('/', authenticateToken, requireFounderOrDirectorOrSecretary, async (req: AuthRequest, res) => {
   try {
     console.log('=== CREATE STUDENT CALLED ===');
     console.log('User from request:', req.user);
