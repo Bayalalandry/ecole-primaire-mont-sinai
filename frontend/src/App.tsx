@@ -4,7 +4,6 @@ import LoginPage from './pages/LoginPage';
 import './App.css';
 
 // Lazy load all pages except LoginPage (entry point)
-const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const CreateFounderPage = lazy(() => import('./pages/CreateFounderPage'));
 const FounderDashboard = lazy(() => import('./pages/FounderDashboard'));
 const DirectorDashboard = lazy(() => import('./pages/DirectorDashboard'));
@@ -36,7 +35,6 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
             <Route path="/create-founder" element={<CreateFounderPage />} />
             <Route path="/dashboard/founder" element={<FounderDashboard />} />
             <Route path="/dashboard/director" element={<DirectorDashboard />} />

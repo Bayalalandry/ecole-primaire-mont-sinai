@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService, tokenStorage } from '../services/authService';
 import { usePushNotifications } from '../hooks/usePushNotifications';
-import { LogIn, UserPlus, Lock, AlertCircle, User, Key } from 'lucide-react';
+import { LogIn, Lock, AlertCircle, User, Key } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
 import { SCHOOL_CONFIG } from '../config/schoolConfig';
 
@@ -44,7 +44,7 @@ export default function LoginPage() {
           case 'director':
             navigate('/dashboard/director');
             break;
-          case 'teacher':
+          case 'secretary':
             navigate('/dashboard/teacher');
             break;
           default:
@@ -161,15 +161,6 @@ export default function LoginPage() {
 
             {/* Links */}
             <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 space-y-2 sm:space-y-3">
-              <button
-                type="button"
-                onClick={() => navigate('/register')}
-                className="w-full text-center text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors flex items-center justify-center gap-2 py-2 sm:py-2 rounded-lg hover:bg-blue-50"
-              >
-                <UserPlus className="w-4 h-4" />
-                <span className="flex-1">Créer un compte enseignant</span>
-              </button>
-
               <button
                 type="button"
                 onClick={() => navigate('/create-founder')}
