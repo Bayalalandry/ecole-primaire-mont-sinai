@@ -48,16 +48,16 @@ export const requireFounderOrDirector = (req: AuthRequest, res: Response, next: 
   return requireRole(['founder', 'director'])(req, res, next);
 };
 
-export const requireFounderOrDirectorOrTeacher = (req: AuthRequest, res: Response, next: NextFunction) => {
-  return requireRole(['founder', 'director', 'teacher'])(req, res, next);
+export const requireFounderOrDirectorOrSecretary = (req: AuthRequest, res: Response, next: NextFunction) => {
+  return requireRole(['founder', 'director', 'secretary'])(req, res, next);
 };
 
-export const requireTeacher = (req: AuthRequest, res: Response, next: NextFunction) => {
-  return requireRole(['teacher'])(req, res, next);
+export const requireSecretary = (req: AuthRequest, res: Response, next: NextFunction) => {
+  return requireRole(['secretary'])(req, res, next);
 };
 
-export const requireTeacherOrDirector = (req: AuthRequest, res: Response, next: NextFunction) => {
-  return requireRole(['teacher', 'director'])(req, res, next);
+export const requireSecretaryOrDirector = (req: AuthRequest, res: Response, next: NextFunction) => {
+  return requireRole(['secretary', 'director'])(req, res, next);
 };
 
 export const requireDirector = (req: AuthRequest, res: Response, next: NextFunction) => {
