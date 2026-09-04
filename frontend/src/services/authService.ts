@@ -256,6 +256,61 @@ export const authService = {
     return response.json();
   },
 
+  // Lister tous les secrétaires
+  async getAllSecretaries(token: string): Promise<{ secretaries: any[] }> {
+    const response = await fetch(`${API_URL}/auth/secretaries`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erreur lors de la récupération');
+    }
+
+    return response.json();
+  },
+
+  // Créer un compte secrétaire
+  async createSecretary(username: string, password: string, firstName: string, lastName: string, token: string): Promise<any> {
+    const response = await fetch(`${API_URL}/auth/create-secretary`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ username, password, firstName, lastName }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erreur lors de la création du compte secrétaire');
+    }
+
+    return response.json();
+  },
+
+  // Mettre à jour le statut d'un secrétaire
+  async updateSecretaryStatus(secretaryId: string, status: string, token: string): Promise<any> {
+    const response = await fetch(`${API_URL}/auth/secretary-status/${secretaryId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ status }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erreur lors de la mise à jour du statut');
+    }
+
+    return response.json();
+  },
+
   // Mettre à jour le statut d'un enseignant
   async updateTeacherStatus(teacherId: string, status: string, token: string, leaveStartDate?: string, leaveEndDate?: string): Promise<any> {
     const response = await fetch(`${API_URL}/auth/teacher-status/${teacherId}`, {

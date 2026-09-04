@@ -3,6 +3,7 @@ dotenv.config();
 
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
 import { authRoutes } from './routes/auth';
 import { studentRoutes } from './routes/students';
 import { teacherRoutes } from './routes/teachers';
@@ -58,6 +59,11 @@ console.log('Routes loaded');
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
+});
+
+// Servir la page de login simplifiée (pour diagnostic)
+app.get('/simple-login.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/public/simple-login.html'));
 });
 
 const server = app.listen(PORT, () => {

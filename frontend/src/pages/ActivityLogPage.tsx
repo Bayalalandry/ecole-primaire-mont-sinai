@@ -72,7 +72,7 @@ export default function ActivityLogPage() {
   const getEntityTypeLabel = (entityType: string): string => {
     const labels: { [key: string]: string } = {
       'student': 'Élève',
-      'teacher': 'Enseignant',
+      'teacher': 'Secrétaire',
       'class': 'Classe',
       'tuition_rate': 'Tarif scolarité',
       'tuition_payment': 'Versement scolarité',
@@ -172,7 +172,7 @@ export default function ActivityLogPage() {
                 >
                   <option value="">Tous</option>
                   <option value="student">Élève</option>
-                  <option value="teacher">Enseignant</option>
+                  <option value="teacher">Secrétaire</option>
                   <option value="class">Classe</option>
                   <option value="tuition_rate">Tarif scolarité</option>
                   <option value="expense">Dépense</option>

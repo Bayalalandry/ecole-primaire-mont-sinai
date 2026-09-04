@@ -1,107 +1,96 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { tokenStorage } from '../services/authService';
-import { directorDashboardService } from '../services/directorDashboardService';
-import { passageService } from '../services/passageService';
-import { schoolYearService } from '../services/schoolYearService';
 import { notificationService } from '../services/notificationService';
+import { teacherDashboardService } from '../services/teacherDashboardService';
 import { searchService } from '../services/searchService';
 import {
   LogOut,
-  GraduationCap,
-  Users,
-  DollarSign,
-  TrendingUp,
   Bell,
-  Clock,
+  GraduationCap,
+  TrendingUp,
+  DollarSign,
+  Calendar,
   CheckCircle,
   AlertCircle,
-  Search
+  Clock,
+  Search,
+  Users
 } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
 
-export default function DirectorDashboard() {
+export default function SecretaryDashboard() {
   const [user, setUser] = useState<any>(null);
-  const [stats, setStats] = useState({ totalTeachers: 0, totalStudents: 0, currentTrimester: '' });
-  const [loadingStats, setLoadingStats] = useState(true);
-  const [hasAssignedClasses, setHasAssignedClasses] = useState(false);
-  const [loadingClasses, setLoadingClasses] = useState(true);
-  
-  // Notification state
+  const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [stats, setStats] = useState({ totalStudents: 0, pendingGrades: 0, overdueTuition: 0, currentTrimester: '...' });
+  const [loadingStats, setLoadingStats] = useState(true);
   
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = tokenStorage.getToken();
     const currentUser = tokenStorage.getUser();
 
-    if (!token || !currentUser || currentUser.role !== 'director') {
+    if (!token || !currentUser || (currentUser.role !== 'secretary' && currentUser.role !== 'director')) {
       navigate('/login');
       return;
     }
 
     setUser(currentUser);
-    loadDirectorStats(token);
-    checkAssignedClasses(token);
+    loadUnreadCount(token);
+    loadTeacherStats(token);
+
+    // Poll pour les notifications toutes les 30 secondes
+    const interval = setInterval(() => {
+      loadUnreadCount(token);
+    }, 30000);
 
     // Écouter l'événement de mise à jour des stats via localStorage
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'directorStatsUpdate') {
-        loadDirectorStats(token);
+      if (e.key === 'teacherStatsUpdate') {
+        loadTeacherStats(token);
       }
     };
     window.addEventListener('storage', handleStorageChange);
 
     // Vérifier au montage si une mise à jour est nécessaire
-    const lastUpdate = localStorage.getItem('directorStatsUpdate');
+    const lastUpdate = localStorage.getItem('teacherStatsUpdate');
     if (lastUpdate) {
-      loadDirectorStats(token);
-      localStorage.removeItem('directorStatsUpdate');
+      loadTeacherStats(token);
+      localStorage.removeItem('teacherStatsUpdate');
     }
 
+    // Recharger les stats quand la fenêtre reprend le focus
+    const handleFocus = () => {
+      loadTeacherStats(token);
+    };
+    window.addEventListener('focus', handleFocus);
+
     return () => {
+      clearInterval(interval);
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('focus', handleFocus);
     };
   }, [navigate]);
 
-  const loadDirectorStats = async (token: string) => {
+  const loadTeacherStats = async (token: string) => {
     try {
-      const data = await directorDashboardService.getDirectorStats(token);
+      const data = await teacherDashboardService.getTeacherStats(token);
       setStats(data);
     } catch (error) {
-      console.error('Error loading director stats:', error);
+      console.error('Error loading secretary stats:', error);
     } finally {
       setLoadingStats(false);
     }
   };
 
-  const checkAssignedClasses = async (token: string) => {
-    try {
-      const currentYear = await schoolYearService.getCurrentSchoolYear(token);
-      const classesData = await passageService.getMyClasses(currentYear, token);
-      setHasAssignedClasses(classesData.classes && classesData.classes.length > 0);
-    } catch (error) {
-      console.error('Error checking assigned classes:', error);
-      setHasAssignedClasses(false);
-    } finally {
-      setLoadingClasses(false);
-    }
-  };
-
-  const handleLogout = () => {
-    tokenStorage.removeToken();
-    tokenStorage.removeUser();
-    navigate('/login');
-  };
-
-  // Notification functions
   const loadUnreadCount = async (token: string) => {
     try {
       const count = await notificationService.getUnreadCount(token);
@@ -185,6 +174,12 @@ export default function DirectorDashboard() {
     }
   };
 
+  const handleLogout = () => {
+    tokenStorage.removeToken();
+    tokenStorage.removeUser();
+    navigate('/login');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -196,7 +191,7 @@ export default function DirectorDashboard() {
                 <SchoolLogo size={56} inCircle={true} className="text-white" />
               </div>
               <div className="flex-1 sm:flex-none">
-                <h1 className="text-lg sm:text-2xl font-bold text-white drop-shadow-lg leading-tight">Tableau de bord Directeur</h1>
+                <h1 className="text-lg sm:text-2xl font-bold text-white drop-shadow-lg leading-tight">Tableau de bord Secrétaire</h1>
                 <p className="text-xs sm:text-sm text-blue-100 drop-shadow mt-0.5 sm:mt-1">Bienvenue, {user?.last_name} {user?.first_name}</p>
               </div>
             </div>
@@ -333,22 +328,11 @@ export default function DirectorDashboard() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-0">
         {/* Statistiques rapides */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-purple-500">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Total enseignants</h3>
-                <p className="text-3xl sm:text-4xl font-bold text-purple-600">{loadingStats ? '...' : stats.totalTeachers}</p>
-              </div>
-              <div className="p-3 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full">
-                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-blue-500">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Total élèves</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Tous les élèves</h3>
                 <p className="text-3xl sm:text-4xl font-bold text-blue-600">{loadingStats ? '...' : stats.totalStudents}</p>
               </div>
               <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex-shrink-0">
@@ -359,18 +343,40 @@ export default function DirectorDashboard() {
           <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-indigo-500">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Trimestre en cours</h3>
-                <p className="text-3xl sm:text-4xl font-bold text-indigo-600">{loadingStats ? '...' : stats.currentTrimester}</p>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Moyennes à saisir</h3>
+                <p className="text-3xl sm:text-4xl font-bold text-indigo-600">{loadingStats ? '...' : stats.pendingGrades}</p>
               </div>
               <div className="p-2 sm:p-3 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full flex-shrink-0">
                 <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
             </div>
           </div>
+          <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-orange-500">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Scolarités en retard</h3>
+                <p className="text-3xl sm:text-4xl font-bold text-orange-600">{loadingStats ? '...' : stats.overdueTuition}</p>
+              </div>
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex-shrink-0">
+                <DollarSign className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-teal-500">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Trimestre en cours</h3>
+                <p className="text-3xl sm:text-4xl font-bold text-teal-600">{loadingStats ? '...' : stats.currentTrimester}</p>
+              </div>
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex-shrink-0">
+                <Calendar className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Bouton d'accès rapide */}
-        <div className={`mb-6 sm:mb-8 grid gap-3 sm:gap-4 ${hasAssignedClasses ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}`}>
+        {/* Boutons d'accès rapide */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <button
             onClick={() => navigate('/students')}
             className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-blue-500 text-left group"
@@ -380,55 +386,39 @@ export default function DirectorDashboard() {
                 <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les élèves</h3>
-                <p className="text-xs sm:text-sm text-gray-600">Inscriptions et fiches</p>
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Élèves</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Liste et détails</p>
               </div>
             </div>
           </button>
           <button
-            onClick={() => navigate('/secretaries')}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-purple-500 text-left group"
+            onClick={() => navigate('/passage')}
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-green-500 text-left group"
           >
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
-                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-green-400 to-green-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
+                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les secrétaires</h3>
-                <p className="text-xs sm:text-sm text-gray-600">Personnel et absences</p>
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Passage de classe</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Moyennes et décisions</p>
               </div>
             </div>
           </button>
           <button
             onClick={() => navigate('/tuition')}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-green-500 text-left group"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-purple-500 text-left group"
           >
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-3 sm:p-4 bg-gradient-to-br from-green-400 to-green-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
                 <DollarSign className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les scolarités</h3>
-                <p className="text-xs sm:text-sm text-gray-600">Paiements et tarifs</p>
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Scolarités</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Paiements et suivis</p>
               </div>
             </div>
           </button>
-          {!loadingClasses && hasAssignedClasses && (
-            <button
-              onClick={() => navigate('/passage')}
-              className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-indigo-500 text-left group"
-            >
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="p-3 sm:p-4 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
-                  <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Passage de classe</h3>
-                  <p className="text-xs sm:text-sm text-gray-600">Moyennes et promotions</p>
-                </div>
-              </div>
-            </button>
-          )}
         </div>
       </main>
     </div>

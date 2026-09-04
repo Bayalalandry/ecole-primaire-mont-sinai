@@ -259,7 +259,7 @@ export default function StudentsPage() {
       const classTeachers = getClassTeachers(className);
       if (classTeachers.length > 0) {
         doc.setTextColor(0, 0, 0);
-        doc.text(`Enseignant${classTeachers.length > 1 ? 's' : ''}: ${classTeachers.join(', ')}`, 14, y);
+        doc.text(`Secrétaire${classTeachers.length > 1 ? 's' : ''}: ${classTeachers.join(', ')}`, 14, y);
         y += 6;
       }
       y += 6; // Espace après l'en-tête de classe
@@ -507,7 +507,7 @@ export default function StudentsPage() {
                           </div>
                           {user?.role !== 'teacher' && getClassTeachers(className).length > 0 && (
                             <div className="text-sm text-gray-600">
-                              <span className="font-medium">Enseignant{getClassTeachers(className).length > 1 ? 's' : ''}:</span> {getClassTeachers(className).join(', ')}
+                              <span className="font-medium">Secrétaire{getClassTeachers(className).length > 1 ? 's' : ''}:</span> {getClassTeachers(className).join(', ')}
                             </div>
                           )}
                         </div>
@@ -656,7 +656,7 @@ export default function StudentsPage() {
                           </div>
                           {user?.role !== 'teacher' && getClassTeachers(className).length > 0 && (
                             <div className="text-xs sm:text-sm text-gray-600">
-                              <span className="font-medium">Enseignant{getClassTeachers(className).length > 1 ? 's' : ''}:</span> {getClassTeachers(className).join(', ')}
+                              <span className="font-medium">Secrétaire{getClassTeachers(className).length > 1 ? 's' : ''}:</span> {getClassTeachers(className).join(', ')}
                             </div>
                           )}
                         </div>

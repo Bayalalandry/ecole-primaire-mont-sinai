@@ -483,7 +483,7 @@ export default function FounderDashboard() {
                     <span className="font-semibold text-orange-600 text-sm">{statistics.students.repeating}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-xs sm:text-sm text-gray-600">Enseignants</span>
+                    <span className="text-xs sm:text-sm text-gray-600">Secrétaires</span>
                     <span className="font-semibold text-sky-600 text-sm">{statistics.teachers.total}</span>
                   </div>
                 </div>
@@ -509,7 +509,7 @@ export default function FounderDashboard() {
             </div>
           </button>
           <button
-            onClick={() => navigate('/teachers')}
+            onClick={() => navigate('/secretaries')}
             className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-purple-500 text-left group"
           >
             <div className="flex items-center gap-3 sm:gap-4">
@@ -517,7 +517,7 @@ export default function FounderDashboard() {
                 <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les enseignants</h3>
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les secrétaires</h3>
                 <p className="text-xs sm:text-sm text-gray-600">Personnel et absences</p>
               </div>
             </div>

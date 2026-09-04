@@ -7,9 +7,11 @@ import './App.css';
 const CreateFounderPage = lazy(() => import('./pages/CreateFounderPage'));
 const FounderDashboard = lazy(() => import('./pages/FounderDashboard'));
 const DirectorDashboard = lazy(() => import('./pages/DirectorDashboard'));
+const SecretaryDashboard = lazy(() => import('./pages/SecretaryDashboard'));
 const TeacherDashboard = lazy(() => import('./pages/TeacherDashboard'));
 const StudentsPage = lazy(() => import('./pages/StudentsPage'));
 const TeachersPage = lazy(() => import('./pages/TeachersPage'));
+const SecretariesPage = lazy(() => import('./pages/SecretariesPage'));
 const TuitionPage = lazy(() => import('./pages/TuitionPage'));
 const SalaryPage = lazy(() => import('./pages/SalaryPage'));
 const PassagePage = lazy(() => import('./pages/PassagePage'));
@@ -38,9 +40,11 @@ function App() {
             <Route path="/create-founder" element={<CreateFounderPage />} />
             <Route path="/dashboard/founder" element={<FounderDashboard />} />
             <Route path="/dashboard/director" element={<DirectorDashboard />} />
+            <Route path="/dashboard/secretary" element={<SecretaryDashboard />} />
             <Route path="/dashboard/teacher" element={<TeacherDashboard />} />
             <Route path="/students" element={<StudentsPage />} />
             <Route path="/teachers" element={<TeachersPage />} />
+            <Route path="/secretaries" element={<SecretariesPage />} />
             <Route path="/tuition" element={<TuitionPage />} />
             <Route path="/salaries" element={<SalaryPage />} />
             <Route path="/passage" element={<PassagePage />} />

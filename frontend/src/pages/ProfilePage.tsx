@@ -171,7 +171,7 @@ export default function ProfilePage() {
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">
-                  Dossier - {type === 'student' ? 'Élève' : 'Enseignant'}
+                  Dossier - {type === 'student' ? 'Élève' : 'Secrétaire'}
                 </h1>
                 <p className="text-xs sm:text-sm text-blue-100 drop-shadow">
                   {profile.first_name} {profile.last_name}
