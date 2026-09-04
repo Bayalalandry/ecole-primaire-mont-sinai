@@ -674,4 +674,45 @@ router.get('/users', authenticateToken, requireFounder, async (req: AuthRequest,
   }
 });
 
+// Endpoint temporaire pour réinitialiser le mot de passe secrétaire (à supprimer après Phase 4)
+router.post('/reset-secretary-password', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
+  try {
+    const { newPassword } = req.body;
+
+    if (!newPassword) {
+      return res.status(400).json({ error: 'Mot de passe requis' });
+    }
+
+    // Récupérer le secrétaire
+    const { data: secretary } = await supabase
+      .from('users')
+      .select('*')
+      .eq('role', 'secretary')
+      .limit(1)
+      .maybeSingle();
+
+    if (!secretary) {
+      return res.status(404).json({ error: 'Aucun secrétaire trouvé' });
+    }
+
+    // Hasher le nouveau mot de passe
+    const passwordHash = await hashPassword(newPassword);
+
+    // Mettre à jour
+    const { error } = await supabase
+      .from('users')
+      .update({ password_hash: passwordHash })
+      .eq('id', secretary.id);
+
+    if (error) throw error;
+
+    await logActivity(req.user!.id, 'RESET_SECRETARY_PASSWORD', 'user', secretary.id, { username: secretary.username });
+
+    res.json({ message: 'Mot de passe secrétaire réinitialisé avec succès' });
+  } catch (error: any) {
+    console.error('Reset secretary password error:', error);
+    res.status(500).json({ error: 'Erreur lors de la réinitialisation' });
+  }
+});
+
 export { router as authRoutes };
