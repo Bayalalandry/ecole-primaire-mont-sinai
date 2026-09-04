@@ -9,16 +9,19 @@ import { supabase } from './supabase';
 const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY;
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
 
-if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
-  console.error('❌ VAPID keys not configured in environment variables');
-}
+// Clés VAPID configurées ?
+const VAPID_CONFIGURED = !!(VAPID_PUBLIC_KEY && VAPID_PRIVATE_KEY);
 
-// Configurer web-push avec les clés VAPID
-webpush.setVapidDetails(
-  'mailto:contact@ecole-primaire-mont-sinai.com',
-  VAPID_PUBLIC_KEY!,
-  VAPID_PRIVATE_KEY!
-);
+if (!VAPID_CONFIGURED) {
+  console.warn('⚠️  VAPID keys not configured in environment variables - Push notifications disabled');
+} else {
+  // Configurer web-push avec les clés VAPID
+  webpush.setVapidDetails(
+    'mailto:contact@ecole-primaire-mont-sinai.com',
+    VAPID_PUBLIC_KEY,
+    VAPID_PRIVATE_KEY
+  );
+}
 
 export interface PushSubscription {
   id?: string;
@@ -118,6 +121,12 @@ export async function sendPushNotification(
   userId: string,
   payload: PushNotificationPayload
 ): Promise<void> {
+  // Si VAPID n'est pas configuré, ne rien faire
+  if (!VAPID_CONFIGURED) {
+    console.log('⚠️  Push notifications disabled - VAPID keys not configured');
+    return;
+  }
+
   try {
     const subscriptions = await getUserPushSubscriptions(userId);
 
