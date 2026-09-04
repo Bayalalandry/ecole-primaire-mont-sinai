@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService, tokenStorage } from '../services/authService';
-import { usePushNotifications } from '../hooks/usePushNotifications';
-import { LogIn, Lock, AlertCircle, User, Key } from 'lucide-react';
+// Notifications push : désactivées temporairement
+// import { usePushNotifications } from '../hooks/usePushNotifications';
+import { LogIn, Lock, AlertCircle, User, Key, UserPlus } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
 import { SCHOOL_CONFIG } from '../config/schoolConfig';
 
@@ -15,15 +16,21 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { isSupported, permission, enablePushNotifications } = usePushNotifications();
+  // Notifications push : désactivées temporairement
+  // const { isSupported, permission, enablePushNotifications } = usePushNotifications();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    console.log('Login form submitted');
+    console.log('Username:', username);
+    console.log('Password:', password ? '***' : '(empty)');
     setError('');
     setLoading(true);
 
     try {
       const result = await authService.login(username, password, secretAnswer || undefined);
+      console.log('Login result:', result);
 
       if ('requiresSecretAnswer' in result) {
         setRequiresSecretAnswer(true);
@@ -32,10 +39,11 @@ export default function LoginPage() {
         tokenStorage.setToken(result.token);
         tokenStorage.setUser(result.user);
 
-        // Demander la permission de notifications push après connexion réussie
-        if (isSupported && permission === 'default') {
-          enablePushNotifications().catch(console.error);
-        }
+        // Notifications push : désactivées temporairement pour éviter de bloquer le login
+        // TODO: Réactiver une fois l'endpoint push/vapid-public-key implémenté
+        // if (isSupported && permission === 'default') {
+        //   enablePushNotifications().catch(console.error);
+        // }
 
         switch (result.user.role) {
           case 'founder':
@@ -52,6 +60,7 @@ export default function LoginPage() {
         }
       }
     } catch (err: any) {
+      console.error('Login error:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -146,7 +155,11 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white py-3 sm:py-3 px-4 rounded-xl font-semibold text-base sm:text-base hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-2"
+                onClick={(e) => {
+                  console.log('Button clicked!');
+                  e.stopPropagation();
+                }}
+                className="w-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white py-3 sm:py-3 px-4 rounded-xl font-semibold text-base sm:text-base hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-2 relative z-50"
               >
                 {loading ? (
                   'Connexion...'
