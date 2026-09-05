@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { AuthRequest, authenticateToken, requireFounder, requireFounderOrDirector } from '../middleware/auth';
+import { AuthRequest, authenticateToken, requireFounder, requireFounderOrDirector, requireFounderOrDirectorOrSecretary } from '../middleware/auth';
 import {
   hashPassword,
   comparePassword,
@@ -396,8 +396,8 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res) => {
   }
 });
 
-// Lister tous les enseignants et directeurs (réservé au fondateur et directeur)
-router.get('/teachers', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
+// Lister tous les enseignants et directeurs (réservé au fondateur, directeur et secrétaire)
+router.get('/teachers', authenticateToken, requireFounderOrDirectorOrSecretary, async (req: AuthRequest, res) => {
   try {
     console.log('GET /auth/teachers - fetching teachers');
     console.log('User making request:', req.user);

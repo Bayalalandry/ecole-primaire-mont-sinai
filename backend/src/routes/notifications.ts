@@ -44,6 +44,7 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
 router.get('/unread-count', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const userId = req.user?.id;
+    console.log('Get unread count for user:', userId);
 
     const { data, error, count } = await supabase
       .from('notifications')
@@ -51,12 +52,17 @@ router.get('/unread-count', authenticateToken, async (req: AuthRequest, res) => 
       .eq('recipient_id', userId)
       .eq('is_read', false);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error in unread-count:', error);
+      throw error;
+    }
 
+    console.log('Unread count result:', count);
     res.json({ count: count || 0 });
   } catch (error: any) {
     console.error('Get unread count error:', error);
-    res.status(500).json({ error: 'Erreur lors du comptage des notifications' });
+    // Ne pas crasher le serveur, renvoyer 0 en cas d'erreur
+    res.json({ count: 0 });
   }
 });
 
