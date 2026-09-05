@@ -1,6 +1,4 @@
-// Pour le développement local: utiliser localhost
-// Pour la production: définir VITE_API_URL dans les variables d'environnement de Vercel
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_URL } from '../config/apiConfig';
 
 export const api = {
   // Méthode générique pour les requêtes authentifiées

@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+import { API_BASE_URL } from '../config/apiConfig';
 
 export const searchService = {
   // Recherche globale (élèves et enseignants)
@@ -6,7 +6,7 @@ export const searchService = {
     const params = new URLSearchParams();
     if (query) params.append('query', query);
 
-    const response = await fetch(`${API_URL}/search?${params}`, {
+    const response = await fetch(`${API_BASE_URL}/api/search?${params}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },

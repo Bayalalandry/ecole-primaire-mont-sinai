@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_URL } from '../config/apiConfig';
 
 export const schoolYearService = {
   // Récupérer l'année scolaire actuelle depuis la base de données

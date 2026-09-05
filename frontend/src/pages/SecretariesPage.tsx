@@ -186,6 +186,7 @@ export default function SecretariesPage() {
                 onClick={() => {
                   if (user?.role === 'founder') navigate('/dashboard/founder');
                   else if (user?.role === 'director') navigate('/dashboard/director');
+                  else if (user?.role === 'secretary') navigate('/dashboard/secretary');
                 }}
                 className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2 relative z-40"
               >
