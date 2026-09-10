@@ -102,11 +102,15 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
   }
 
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-    });
-    console.log('✅ Service Worker enregistré:', registration);
-    return registration;
+    // Service worker désactivé temporairement pour éviter les problèmes de cache
+    console.log('⚠️  Service Worker désactivé temporairement pour dépannage');
+    return null;
+    
+    // const registration = await navigator.serviceWorker.register('/sw.js', {
+    //   scope: '/',
+    // });
+    // console.log('✅ Service Worker enregistré:', registration);
+    // return registration;
   } catch (error) {
     console.error('❌ Erreur lors de l\'enregistrement du Service Worker:', error);
     return null;

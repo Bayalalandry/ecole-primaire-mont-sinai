@@ -1,42 +1,10 @@
 /**
  * Service Worker pour gérer les notifications Web Push
+ * DÉSACTIVÉ TEMPORAIREMENT POUR DÉPANNAGE
  */
 
-const CACHE_NAME = 'ecole-primaire-v1';
-const urlsToCache = [
-  '/',
-  '/login',
-  '/manifest.json',
-];
-
-// Installation du service worker
-self.addEventListener('install', (event) => {
-  console.log('📦 Service Worker installé');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('📥 Mise en cache des ressources');
-        return cache.addAll(urlsToCache);
-      })
-  );
-});
-
-// Activation du service worker
-self.addEventListener('activate', (event) => {
-  console.log('✅ Service Worker activé');
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('🗑️  Suppression de l\'ancien cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
+// Service worker désactivé temporairement pour éviter les problèmes de cache
+// Réactiver une fois le bug localhost résolu
 
 // Gestion des événements push
 self.addEventListener('push', (event) => {
