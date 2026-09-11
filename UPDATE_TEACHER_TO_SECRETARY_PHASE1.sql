@@ -151,6 +151,11 @@ BEGIN
   END IF;
 END $$;
 
+-- Supprimer ou corriger les valeurs invalides dans entity_type
+-- Si entity_type contient une valeur non reconnue, on peut la définir à NULL ou la supprimer
+DELETE FROM activity_log WHERE entity_type IS NOT NULL 
+  AND entity_type NOT IN ('student', 'secretary', 'class', 'tuition_rate', 'salary', 'expense', 'passage', 'school_year');
+
 -- Enfin recréer la contrainte avec les nouveaux types
 ALTER TABLE activity_log ADD CONSTRAINT activity_log_entity_type_check 
 CHECK (entity_type IN ('student', 'secretary', 'class', 'tuition_rate', 'salary', 'expense', 'passage', 'school_year'));
