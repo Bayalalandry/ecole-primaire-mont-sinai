@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS notifications CASCADE;
 CREATE TABLE notifications (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     recipient_id UUID NOT NULL REFERENCES users(id),
-    type TEXT NOT NULL CHECK (type IN ('teacher_pending', 'teacher_validated', 'class_assigned')),
+    type TEXT NOT NULL CHECK (type IN ('secretary_pending', 'secretary_validated', 'class_assigned', 'info', 'alert')),
     title TEXT NOT NULL,
     message TEXT NOT NULL,
     is_read BOOLEAN DEFAULT FALSE,

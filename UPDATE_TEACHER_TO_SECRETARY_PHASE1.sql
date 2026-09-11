@@ -102,3 +102,21 @@ BEGIN
     ALTER TABLE users RENAME COLUMN can_validate_teachers TO can_validate_secretaries;
   END IF;
 END $$;
+
+-- 11. Mettre à jour la contrainte de type dans notifications
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM pg_constraint 
+    WHERE conname = 'notifications_type_check'
+  ) THEN
+    ALTER TABLE notifications DROP CONSTRAINT notifications_type_check;
+  END IF;
+END $$;
+
+ALTER TABLE notifications ADD CONSTRAINT notifications_type_check 
+CHECK (type IN ('secretary_pending', 'secretary_validated', 'class_assigned', 'info', 'alert'));
+
+-- 12. Convertir les notifications existantes de teacher vers secretary
+UPDATE notifications SET type = 'secretary_pending' WHERE type = 'teacher_pending';
+UPDATE notifications SET type = 'secretary_validated' WHERE type = 'teacher_validated';

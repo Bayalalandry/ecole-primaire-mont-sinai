@@ -17,6 +17,8 @@ Copiez et collez le contenu du fichier `UPDATE_TEACHER_TO_SECRETARY_PHASE1.sql` 
 
 Le script a été mis à jour pour être robuste et ignorer les erreurs si les tables/colonnes n'existent pas déjà. Il utilise des blocs DO $$ pour vérifier l'existence avant de renommer.
 
+**Note importante :** Le script met également à jour la contrainte de type dans la table `notifications` pour remplacer `teacher_pending`/`teacher_validated` par `secretary_pending`/`secretary_validated`, et convertit les notifications existantes.
+
 Cliquez sur "Run" pour exécuter.
 
 ## Étape 4: Exécuter la Phase 2
@@ -59,6 +61,9 @@ SELECT role, COUNT(*) FROM users GROUP BY role;
 -- Vérifier que la contrainte a été mise à jour
 SELECT conname, pg_get_constraintdef(oid) FROM pg_constraint
 WHERE conname = 'users_role_check';
+
+-- Vérifier les types de notifications
+SELECT type, COUNT(*) FROM notifications GROUP BY type;
 ```
 
 ## Étape 6: Déployer le backend
