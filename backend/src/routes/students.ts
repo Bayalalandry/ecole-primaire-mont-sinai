@@ -148,15 +148,15 @@ router.post('/', authenticateToken, requireFounderOrDirectorOrSecretary, async (
 
     console.log('Student created successfully:', data);
 
-    // Notifier l'enseignant responsable de la classe
+    // Notifier le secrétaire responsable de la classe
     try {
-      const { data: teacherAssignment } = await supabase
-        .from('teacher_class_assignments')
-        .select('teacher_id')
+      const { data: secretaryAssignment } = await supabase
+        .from('secretary_class_assignments')
+        .select('secretary_id')
         .eq('class_id', finalClassId)
         .maybeSingle();
 
-      if (teacherAssignment) {
+      if (secretaryAssignment) {
         const { data: className } = await supabase
           .from('classes')
           .select('name')
@@ -164,7 +164,7 @@ router.post('/', authenticateToken, requireFounderOrDirectorOrSecretary, async (
           .single();
 
         await createNotification(
-          teacherAssignment.teacher_id,
+          secretaryAssignment.secretary_id,
           'student_assigned',
           'Nouvel élève inscrit',
           `Un nouvel élève ${firstName} ${lastName} a été inscrit dans votre classe ${className?.name}.`,
@@ -192,31 +192,9 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
       .from('students')
       .select('*');
 
-    // Si l'utilisateur est un enseignant, montrer tous les élèves de ses classes assignées
-    if (req.user?.role === 'teacher') {
-      console.log('=== TEACHER STUDENTS FILTER ===');
-      console.log('Teacher ID:', req.user.id);
-      
-      // Récupérer les classes assignées à cet enseignant
-      const { data: teacherAssignments, error: assignError } = await supabase
-        .from('teacher_class_assignments')
-        .select('class_id')
-        .eq('teacher_id', req.user.id);
-      
-      console.log('Teacher assignments:', teacherAssignments);
-      console.log('Assignments error:', assignError);
-      
-      if (teacherAssignments && teacherAssignments.length > 0) {
-        const assignedClassIds = teacherAssignments.map(a => a.class_id);
-        console.log('Assigned class IDs:', assignedClassIds);
-        query = query.in('current_class_id', assignedClassIds);
-      } else {
-        // Si aucune classe assignée, ne montrer aucun élève
-        console.log('No classes assigned to teacher');
-        query = query.eq('current_class_id', '00000000-0000-0000-0000-000000000000');
-      }
-    }
-
+    // Le secrétaire voit tous les élèves de toutes les classes (pas de restriction)
+    // Les autres rôles (founder, director) voient aussi tous les élèves
+    // Pas de filtre spécifique pour secretary - accès total
     if (classId) {
       query = query.eq('current_class_id', classId);
     }

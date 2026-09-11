@@ -13,8 +13,7 @@ import { sortClasses, getOrderedClassNames } from '../utils/classUtils';
 export default function StudentsPage() {
   const [filteredStudents, setFilteredStudents] = useState<any[]>([]);
   const [classes, setClasses] = useState<any[]>([]);
-  const [teachers, setTeachers] = useState<any[]>([]);
-  const [assignedClasses, setAssignedClasses] = useState<string[]>([]);
+  const [secretaries, setSecretaries] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<any>(null);
@@ -49,10 +48,8 @@ export default function StudentsPage() {
     setUser(currentUser);
     loadStudents(token);
     loadClasses(token);
-    loadTeachers(token);
-    if (currentUser.role === 'teacher') {
-      loadAssignedClasses(token);
-    }
+    loadSecretaries(token);
+    // Secretaries see all classes, no need for assigned classes logic
   }, [navigate]);
 
   const loadStudents = async (token: string) => {
@@ -75,25 +72,25 @@ export default function StudentsPage() {
     }
   };
 
-  const loadTeachers = async (token: string) => {
+  const loadSecretaries = async (token: string) => {
     try {
-      const response = await fetch(`${API_URL}/auth/teachers`, {
+      const response = await fetch(`${API_URL}/auth/secretaries`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (response.ok) {
         const data = await response.json();
-        setTeachers(data.teachers || []);
+        setSecretaries(data.secretaries || []);
       } else {
-        console.error('Failed to load teachers:', response.status);
+        console.error('Failed to load secretaries:', response.status);
       }
     } catch (error: any) {
-      console.error('Error loading teachers:', error);
+      console.error('Error loading secretaries:', error);
     }
   };
 
   const loadAssignedClasses = async (token: string) => {
     try {
-      const response = await fetch(`${API_URL}/teacher/assigned-classes`, {
+      const response = await fetch(`${API_URL}/secretary/assigned-classes`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (response.ok) {
@@ -123,8 +120,8 @@ export default function StudentsPage() {
     const classData = classes.find(c => c.name === className);
     if (!classData) return [];
     
-    const classTeachers = teachers.filter((t: any) => {
-      const assignment = t.teacher_class_assignments?.find((a: any) => a.class_id === classData.id);
+    const classSecretaries = secretaries.filter((t: any) => {
+      const assignment = t.secretary_class_assignments?.find((a: any) => a.class_id === classData.id);
       return assignment;
     });
     
@@ -188,7 +185,7 @@ export default function StudentsPage() {
   const exportToPDF = () => {
     const classesToExport = selectedClassesForExport.length > 0
       ? getOrderedClassNames(selectedClassesForExport)
-      : (user?.role === 'teacher' ? getOrderedClassNames(assignedClasses) : classes.map(c => c.name));
+      : classes.map(c => c.name);
 
     const doc = new jsPDF();
     const schoolName = SCHOOL_CONFIG.name;
@@ -427,14 +424,14 @@ export default function StudentsPage() {
                   if (user?.role === 'founder') navigate('/dashboard/founder');
                   else if (user?.role === 'director') navigate('/dashboard/director');
                   else if (user?.role === 'secretary') navigate('/dashboard/secretary');
-                  else navigate('/dashboard/teacher');
+                  else navigate('/dashboard/secretary');
                 }}
                 className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Retour
               </button>
-              {user?.role !== 'teacher' && (
+              {user?.role !== 'secretary' && (
                 <button
                   onClick={() => {
                     resetForm();
@@ -455,7 +452,7 @@ export default function StudentsPage() {
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:8 py-8">
-          {user?.role === 'teacher' ? (
+          {user?.role === 'secretary' ? (
             <>
               {/* Message explicatif */}
               <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-6 mb-6 shadow-md">
@@ -507,7 +504,7 @@ export default function StudentsPage() {
                               Classe {className} ({(classStudents as any[]).length} élève{(classStudents as any[]).length > 1 ? 's' : ''})
                             </h3>
                           </div>
-                          {user?.role !== 'teacher' && getClassTeachers(className).length > 0 && (
+                          {user?.role !== 'secretary' && getClassTeachers(className).length > 0 && (
                             <div className="text-sm text-gray-600">
                               <span className="font-medium">Secrétaire{getClassTeachers(className).length > 1 ? 's' : ''}:</span> {getClassTeachers(className).join(', ')}
                             </div>
@@ -656,7 +653,7 @@ export default function StudentsPage() {
                               {className} ({(classStudents as any[]).length} élève{(classStudents as any[]).length > 1 ? 's' : ''})
                             </h3>
                           </div>
-                          {user?.role !== 'teacher' && getClassTeachers(className).length > 0 && (
+                          {user?.role !== 'secretary' && getClassTeachers(className).length > 0 && (
                             <div className="text-xs sm:text-sm text-gray-600">
                               <span className="font-medium">Secrétaire{getClassTeachers(className).length > 1 ? 's' : ''}:</span> {getClassTeachers(className).join(', ')}
                             </div>
@@ -961,7 +958,7 @@ export default function StudentsPage() {
                 />
                 <span className='text-gray-700 text-sm sm:text-base'>Toutes les classes</span>
               </label>
-              {(user?.role === 'teacher' ? getOrderedClassNames(assignedClasses) : classes.map(c => c.name)).map((className) => (
+              {(user?.role === 'secretary' ? getOrderedClassNames(assignedClasses) : classes.map(c => c.name)).map((className) => (
                 <label key={className} className='flex items-center space-x-3 cursor-pointer'>
                   <input
                     type='checkbox'

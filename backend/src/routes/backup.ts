@@ -48,9 +48,9 @@ router.get('/export', authenticateToken, requireFounder, async (req: AuthRequest
     const { data: tuitionPayments } = await supabase.from('tuition_payments').select('*');
     backup.tables.tuition_payments = tuitionPayments || [];
 
-    // Exporter les salaires enseignants
-    const { data: teacherSalaries } = await supabase.from('teacher_salaries').select('*');
-    backup.tables.teacher_salaries = teacherSalaries || [];
+    // Exporter les salaires secrétaires
+    const { data: secretarySalaries } = await supabase.from('secretary_salaries').select('*');
+    backup.tables.secretary_salaries = secretarySalaries || [];
 
     // Exporter les paiements de salaires
     const { data: salaryPayments } = await supabase.from('salary_payments').select('*');
@@ -68,9 +68,9 @@ router.get('/export', authenticateToken, requireFounder, async (req: AuthRequest
     const { data: academicHistory } = await supabase.from('student_academic_history').select('*');
     backup.tables.student_academic_history = academicHistory || [];
 
-    // Exporter les assignations enseignant-classe
-    const { data: assignments } = await supabase.from('teacher_class_assignments').select('*');
-    backup.tables.teacher_class_assignments = assignments || [];
+    // Exporter les assignations secrétaire-classe
+    const { data: assignments } = await supabase.from('secretary_class_assignments').select('*');
+    backup.tables.secretary_class_assignments = assignments || [];
 
     // Exporter les notes annuelles
     const { data: grades } = await supabase.from('student_annual_grades').select('*');

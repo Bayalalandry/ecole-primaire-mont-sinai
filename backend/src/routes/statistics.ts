@@ -41,10 +41,10 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       tuitionSchoolYear,
       activeStudentsForTuition,
       salaryPayments,
-      teacherSalaries,
+      secretarySalaries,
       expenses,
       allStudents,
-      teachers
+      secretaries
     ] = await Promise.all([
       // 1. Statistiques scolarités
       supabase.from('tuition_payments').select('amount, payment_date, student_id').order('payment_date'),
@@ -54,13 +54,13 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       supabase.from('students').select('id, current_class_id').eq('status', 'active'),
       // 2. Statistiques salaires
       supabase.from('salary_payments').select('amount, payment_date'),
-      supabase.from('teacher_salaries').select('monthly_amount'),
+      supabase.from('secretary_salaries').select('monthly_amount'),
       // 3. Statistiques dépenses
       supabase.from('expenses').select('category, amount'),
       // 4. Statistiques élèves
       supabase.from('students').select('status, current_class_id'),
-      // 5. Statistiques enseignants
-      supabase.from('users').select('id').eq('role', 'teacher'),
+      // 5. Statistiques secrétaires
+      supabase.from('users').select('id').eq('role', 'secretary'),
     ]);
 
     const totalTuitionCollected = tuitionPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
@@ -149,7 +149,7 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       classNameMap[c.id] = c.name;
     });
 
-    const activeTeachersCount = teachers.data?.length || 0;
+    const activeSecretariesCount = secretaries.data?.length || 0;
 
     // 6. Bilan financier
     const totalRevenue = totalTuitionCollected;
@@ -184,8 +184,8 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
           departed: (counts as any).departed,
         })),
       },
-      teachers: {
-        total: activeTeachersCount,
+      secretaries: {
+        total: activeSecretariesCount,
       },
       financial: {
         totalRevenue,

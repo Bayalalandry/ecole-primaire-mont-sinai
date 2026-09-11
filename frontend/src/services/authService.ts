@@ -9,7 +9,7 @@ export interface User {
   is_active: boolean;
   founderSettings?: any;
   directorPermissions?: any;
-  teacherInfo?: any;
+  secretaryInfo?: any;
 }
 
 export interface AuthResponse {
@@ -96,7 +96,7 @@ export const authService = {
 
   // Valider un enseignant
   async validateTeacher(userId: string, token: string): Promise<any> {
-    const response = await fetch(`${API_URL}/auth/validate-teacher/${userId}`, {
+    const response = await fetch(`${API_URL}/auth/validate-secretary/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export const authService = {
 
   // Refuser un enseignant
   async rejectTeacher(userId: string, token: string): Promise<any> {
-    const response = await fetch(`${API_URL}/auth/reject-teacher/${userId}`, {
+    const response = await fetch(`${API_URL}/auth/reject-secretary/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -131,8 +131,8 @@ export const authService = {
   },
 
   // Mettre en congé un enseignant
-  async teacherLeave(userId: string, leaveStartDate: string, leaveEndDate: string, token: string): Promise<any> {
-    const response = await fetch(`${API_URL}/auth/teacher-leave/${userId}`, {
+  async secretaryLeave(userId: string, leaveStartDate: string, leaveEndDate: string, token: string): Promise<any> {
+    const response = await fetch(`${API_URL}/auth/secretary-leave/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -223,8 +223,8 @@ export const authService = {
   },
 
   // Lister les enseignants en attente
-  async getPendingTeachers(token: string): Promise<{ teachers: any[] }> {
-    const response = await fetch(`${API_URL}/auth/pending-teachers`, {
+  async getPendingSecretaries(token: string): Promise<{ secretaries: any[] }> {
+    const response = await fetch(`${API_URL}/auth/pending-secretaries`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -240,8 +240,8 @@ export const authService = {
   },
 
   // Lister tous les enseignants
-  async getAllTeachers(token: string): Promise<{ teachers: any[] }> {
-    const response = await fetch(`${API_URL}/auth/teachers`, {
+  async getAllSecretaries(token: string): Promise<{ secretaries: any[] }> {
+    const response = await fetch(`${API_URL}/auth/secretaries`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -312,8 +312,8 @@ export const authService = {
   },
 
   // Mettre à jour le statut d'un enseignant
-  async updateTeacherStatus(teacherId: string, status: string, token: string, leaveStartDate?: string, leaveEndDate?: string): Promise<any> {
-    const response = await fetch(`${API_URL}/auth/teacher-status/${teacherId}`, {
+  async updateSecretaryStatus(secretaryId: string, status: string, token: string, leaveStartDate?: string, leaveEndDate?: string): Promise<any> {
+    const response = await fetch(`${API_URL}/auth/secretary-status/${secretaryId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -330,15 +330,15 @@ export const authService = {
     return response.json();
   },
 
-  // Assigner un enseignant à une classe
-  async assignTeacherToClass(teacherId: string, classId: string, token: string): Promise<any> {
-    const response = await fetch(`${API_URL}/auth/assign-teacher`, {
+  // Assigner un secrétaire à une classe
+  async assignSecretaryToClass(secretaryId: string, classId: string, token: string): Promise<any> {
+    const response = await fetch(`${API_URL}/auth/assign-secretary`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ teacherId, classId }),
+      body: JSON.stringify({ secretaryId, classId }),
     });
 
     if (!response.ok) {
@@ -349,15 +349,15 @@ export const authService = {
     return response.json();
   },
 
-  // Désassigner un enseignant d'une classe
-  async unassignTeacherFromClass(teacherId: string, classId: string, token: string): Promise<any> {
-    const response = await fetch(`${API_URL}/auth/unassign-teacher`, {
+  // Désassigner un secrétaire d'une classe
+  async unassignSecretaryFromClass(secretaryId: string, classId: string, token: string): Promise<any> {
+    const response = await fetch(`${API_URL}/auth/unassign-secretary`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ teacherId, classId }),
+      body: JSON.stringify({ secretaryId, classId }),
     });
 
     if (!response.ok) {

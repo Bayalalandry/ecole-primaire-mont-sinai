@@ -1,12 +1,12 @@
 import { API_URL } from '../config/apiConfig';
 
 export const salaryService = {
-  // Récupérer le résumé des salaires d'un enseignant
-  getTeacherSalarySummary: async (teacherId: string, token: string, schoolYear?: string) => {
+  // Récupérer le résumé des salaires d'un secrétaire
+  getSecretarySalarySummary: async (secretaryId: string, token: string, schoolYear?: string) => {
     const params = new URLSearchParams();
     if (schoolYear) params.append('schoolYear', schoolYear);
 
-    const response = await fetch(`${API_URL}/salaries/summary/teacher/${teacherId}?${params.toString()}`, {
+    const response = await fetch(`${API_URL}/salaries/summary/secretary/${secretaryId}?${params.toString()}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -20,12 +20,12 @@ export const salaryService = {
     return response.json();
   },
 
-  // Récupérer l'historique des versements de salaire d'un enseignant
-  getTeacherPayments: async (teacherId: string, token: string, schoolYear?: string) => {
+  // Récupérer l'historique des versements de salaire d'un secrétaire
+  getSecretaryPayments: async (secretaryId: string, token: string, schoolYear?: string) => {
     const params = new URLSearchParams();
     if (schoolYear) params.append('schoolYear', schoolYear);
 
-    const response = await fetch(`${API_URL}/salaries/payments/teacher/${teacherId}?${params.toString()}`, {
+    const response = await fetch(`${API_URL}/salaries/payments/secretary/${secretaryId}?${params.toString()}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -58,9 +58,9 @@ export const salaryService = {
     return response.json();
   },
 
-  // Récupérer tous les enseignants
-  getAllTeachers: async (token: string) => {
-    const response = await fetch(`${API_URL}/auth/teachers`, {
+  // Récupérer tous les secrétaires
+  getAllSecretaries: async (token: string) => {
+    const response = await fetch(`${API_URL}/auth/secretaries`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -68,7 +68,7 @@ export const salaryService = {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error || 'Erreur lors de la récupération des enseignants');
+      throw new Error(error.error || 'Erreur lors de la récupération des secrétaires');
     }
 
     return response.json();

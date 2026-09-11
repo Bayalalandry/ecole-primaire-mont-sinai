@@ -5,9 +5,9 @@ import { authenticateToken, AuthRequest, requireSecretaryOrDirector, requireDire
 const router: Router = express.Router();
 
 // Statistiques du tableau de bord secrétaire (ou directeur avec classes assignées)
-router.get('/teacher/dashboard-stats', authenticateToken, requireSecretaryOrDirector, async (req: AuthRequest, res: Response) => {
+router.get('/secretary/dashboard-stats', authenticateToken, requireSecretaryOrDirector, async (req: AuthRequest, res: Response) => {
   try {
-    const teacherId = req.user?.id;
+    const secretaryId = req.user?.id;
 
     // Récupérer l'année scolaire actuelle
     const { data: currentYear } = await supabase
@@ -38,24 +38,24 @@ router.get('/teacher/dashboard-stats', authenticateToken, requireSecretaryOrDire
     } else {
       // Directeur : récupérer ses classes assignées
       const { data: assignmentsWithYear } = await supabase
-        .from('teacher_class_assignments')
+        .from('secretary_class_assignments')
         .select('class_id')
-        .eq('teacher_id', teacherId)
+        .eq('teacher_id', secretaryId)
         .not('school_year_id', 'is', null);
 
       let assignments;
       if (assignmentsWithYear && assignmentsWithYear.length > 0) {
         const { data } = await supabase
-          .from('teacher_class_assignments')
+          .from('secretary_class_assignments')
           .select('class_id')
-          .eq('teacher_id', teacherId)
+          .eq('teacher_id', secretaryId)
           .eq('school_year_id', currentYear.id);
         assignments = data;
       } else {
         const { data } = await supabase
-          .from('teacher_class_assignments')
+          .from('secretary_class_assignments')
           .select('class_id')
-          .eq('teacher_id', teacherId);
+          .eq('teacher_id', secretaryId);
         assignments = data;
       }
 
@@ -169,13 +169,13 @@ router.get('/teacher/dashboard-stats', authenticateToken, requireSecretaryOrDire
 // Statistiques du tableau de bord directeur
 router.get('/director/dashboard-stats', authenticateToken, requireDirector, async (req: AuthRequest, res: Response) => {
   try {
-    // Compter le nombre total d'enseignants actifs
-    const { data: teachers } = await supabase
+    // Compter le nombre total de secrétaires actifs
+    const { data: secretaries } = await supabase
       .from('users')
       .select('id')
-      .eq('role', 'teacher');
+      .eq('role', 'secretary');
 
-    const totalTeachers = teachers?.length || 0;
+    const totalSecretaries = secretaries?.length || 0;
 
     // Compter le nombre total d'élèves actifs
     const { data: students } = await supabase
@@ -229,7 +229,7 @@ router.get('/director/dashboard-stats', authenticateToken, requireDirector, asyn
     }
 
     res.json({
-      totalTeachers,
+      totalSecretaries,
       totalStudents,
       currentTrimester,
     });

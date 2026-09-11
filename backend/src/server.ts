@@ -5,7 +5,7 @@ import express from 'express';
 import cors from 'cors';
 import { authRoutes } from './routes/auth';
 import { studentRoutes } from './routes/students';
-import { teacherRoutes } from './routes/teachers';
+import { secretaryRoutes } from './routes/teachers';
 import { tuitionRoutes } from './routes/tuition';
 import { salaryRoutes } from './routes/salaries';
 import { expenseRoutes } from './routes/expenses';
@@ -39,7 +39,7 @@ console.log('Loading routes...');
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
-app.use('/api/teachers', teacherRoutes);
+app.use('/api/secretaries', secretaryRoutes);
 app.use('/api/tuition', tuitionRoutes);
 app.use('/api/salaries', salaryRoutes);
 app.use('/api/expenses', expenseRoutes);

@@ -62,28 +62,38 @@ router.get('/my-classes', authenticateToken, requireSecretaryOrDirector, async (
       return res.json({ classes: [] });
     }
 
+    // Le secrétaire voit toutes les classes (pas de restriction)
+    if (req.user?.role === 'secretary') {
+      const { data: allClasses } = await supabase
+        .from('classes')
+        .select('*')
+        .order('name');
+      return res.json({ classes: allClasses || [] });
+    }
+
+    // Pour les autres rôles (director, founder), utiliser la logique d'assignation
     // Vérifier d'abord s'il y a des assignations avec school_year_id
     const { data: assignmentsWithYear } = await supabase
-      .from('teacher_class_assignments')
+      .from('secretary_class_assignments')
       .select('class_id')
-      .eq('teacher_id', req.user?.id)
+      .eq('secretary_id', req.user?.id)
       .not('school_year_id', 'is', null);
 
     let assignments;
     if (assignmentsWithYear && assignmentsWithYear.length > 0) {
       // Si des assignations avec school_year_id existent, filtrer par l'année actuelle
       const { data } = await supabase
-        .from('teacher_class_assignments')
+        .from('secretary_class_assignments')
         .select('class_id')
-        .eq('teacher_id', req.user?.id)
+        .eq('secretary_id', req.user?.id)
         .eq('school_year_id', schoolYearId);
       assignments = data;
     } else {
       // Sinon, retourner toutes les assignations (pour compatibilité avec les anciennes)
       const { data } = await supabase
-        .from('teacher_class_assignments')
+        .from('secretary_class_assignments')
         .select('class_id')
-        .eq('teacher_id', req.user?.id);
+        .eq('secretary_id', req.user?.id);
       assignments = data;
     }
 
@@ -165,16 +175,16 @@ router.get('/students/:classId', authenticateToken, requireSecretaryOrDirector, 
 
     // Vérifier que le directeur est assigné à cette classe
     let assignmentQuery = supabase
-      .from('teacher_class_assignments')
+      .from('secretary_class_assignments')
       .select('*')
-      .eq('teacher_id', req.user?.id)
+      .eq('secretary_id', req.user?.id)
       .eq('class_id', classId);
 
     // Vérifier d'abord s'il y a des assignations avec school_year_id
     const { data: assignmentsWithYear } = await supabase
-      .from('teacher_class_assignments')
+      .from('secretary_class_assignments')
       .select('*')
-      .eq('teacher_id', req.user?.id)
+      .eq('secretary_id', req.user?.id)
       .eq('class_id', classId)
       .not('school_year_id', 'is', null)
       .maybeSingle();
@@ -268,9 +278,9 @@ router.post('/grades', authenticateToken, requireSecretaryOrDirector, async (req
     // Pour le secrétaire : pas de vérification d'assignation (accès à toutes les classes)
     if (req.user?.role !== 'secretary') {
       const { data: assignment } = await supabase
-        .from('teacher_class_assignments')
+        .from('secretary_class_assignments')
         .select('*')
-        .eq('teacher_id', req.user?.id)
+        .eq('secretary_id', req.user?.id)
         .eq('class_id', student.current_class_id)
         .eq('school_year_id', schoolYearData.id)
         .maybeSingle();
@@ -354,16 +364,16 @@ router.get('/grades/:classId', authenticateToken, requireSecretaryOrDirector, as
     // Vérifier que l'enseignant est assigné à cette classe
     // Filtrer par school_year_id si l'assignation en a un, sinon utiliser seulement class_id
     let assignmentQuery = supabase
-      .from('teacher_class_assignments')
+      .from('secretary_class_assignments')
       .select('*')
-      .eq('teacher_id', req.user?.id)
+      .eq('secretary_id', req.user?.id)
       .eq('class_id', classId);
 
     // Vérifier d'abord s'il y a des assignations avec school_year_id
     const { data: assignmentsWithYear } = await supabase
-      .from('teacher_class_assignments')
+      .from('secretary_class_assignments')
       .select('*')
-      .eq('teacher_id', req.user?.id)
+      .eq('secretary_id', req.user?.id)
       .eq('class_id', classId)
       .not('school_year_id', 'is', null)
       .maybeSingle();
@@ -705,16 +715,16 @@ router.post('/validate/:classId', authenticateToken, requireFounder, async (req:
         classIdStr
       );
 
-      // Notifier l'enseignant responsable de la classe
-      const { data: teacherAssignment } = await supabase
-        .from('teacher_class_assignments')
-        .select('teacher_id')
+      // Notifier le secrétaire responsable de la classe
+      const { data: secretaryAssignment } = await supabase
+        .from('secretary_class_assignments')
+        .select('secretary_id')
         .eq('class_id', classIdStr)
         .maybeSingle();
 
-      if (teacherAssignment) {
+      if (secretaryAssignment) {
         await createNotification(
-          teacherAssignment.teacher_id,
+          secretaryAssignment.secretary_id,
           'passage_validated',
           'Passage de classe validé',
           `Le passage de classe pour votre classe ${currentClass.name} a été validé par le fondateur.`,

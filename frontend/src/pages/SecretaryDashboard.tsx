@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { tokenStorage } from '../services/authService';
 import { notificationService } from '../services/notificationService';
-import { teacherDashboardService } from '../services/teacherDashboardService';
+import { secretaryDashboardService } from '../services/secretaryDashboardService';
 import { searchService } from '../services/searchService';
 import {
   LogOut,
@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
 
-export default function SecretaryDashboard() {
+export default function TeacherDashboard() {
   const [user, setUser] = useState<any>(null);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -45,7 +45,7 @@ export default function SecretaryDashboard() {
 
     setUser(currentUser);
     loadUnreadCount(token);
-    loadTeacherStats(token);
+    loadSecretaryStats(token);
 
     // Poll pour les notifications toutes les 30 secondes
     const interval = setInterval(() => {
@@ -54,17 +54,17 @@ export default function SecretaryDashboard() {
 
     // Écouter l'événement de mise à jour des stats via localStorage
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'teacherStatsUpdate') {
-        loadTeacherStats(token);
+      if (e.key === 'secretaryStatsUpdate') {
+        loadSecretaryStats(token);
       }
     };
     window.addEventListener('storage', handleStorageChange);
 
     // Vérifier au montage si une mise à jour est nécessaire
-    const lastUpdate = localStorage.getItem('teacherStatsUpdate');
+    const lastUpdate = localStorage.getItem('secretaryStatsUpdate');
     if (lastUpdate) {
       loadTeacherStats(token);
-      localStorage.removeItem('teacherStatsUpdate');
+      localStorage.removeItem('secretaryStatsUpdate');
     }
 
     // Recharger les stats quand la fenêtre reprend le focus
@@ -80,9 +80,9 @@ export default function SecretaryDashboard() {
     };
   }, [navigate]);
 
-  const loadTeacherStats = async (token: string) => {
+  const loadSecretaryStats = async (token: string) => {
     try {
-      const data = await teacherDashboardService.getTeacherStats(token);
+      const data = await secretaryDashboardService.getSecretaryStats(token);
       setStats(data);
     } catch (error) {
       console.error('Error loading secretary stats:', error);
@@ -169,8 +169,8 @@ export default function SecretaryDashboard() {
     setSearchQuery('');
     if (result.type === 'student') {
       navigate(`/profile/student/${result.id}`);
-    } else if (result.type === 'teacher') {
-      navigate(`/profile/teacher/${result.id}`);
+    } else if (result.type === 'secretary') {
+      navigate(`/profile/secretary/${result.id}`);
     }
   };
 
@@ -191,7 +191,7 @@ export default function SecretaryDashboard() {
                 <SchoolLogo size={56} inCircle={true} className="text-white" />
               </div>
               <div className="flex-1 sm:flex-none">
-                <h1 className="text-lg sm:text-2xl font-bold text-white drop-shadow-lg leading-tight">Tableau de bord Secrétaire</h1>
+                <h1 className="text-lg sm:text-2xl font-bold text-white drop-shadow-lg leading-tight">Tableau de bord Enseignant</h1>
                 <p className="text-xs sm:text-sm text-blue-100 drop-shadow mt-0.5 sm:mt-1">Bienvenue, {user?.last_name} {user?.first_name}</p>
               </div>
             </div>
@@ -332,7 +332,7 @@ export default function SecretaryDashboard() {
           <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-blue-500">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Tous les élèves</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Mes élèves</h3>
                 <p className="text-3xl sm:text-4xl font-bold text-blue-600">{loadingStats ? '...' : stats.totalStudents}</p>
               </div>
               <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex-shrink-0">
@@ -375,8 +375,8 @@ export default function SecretaryDashboard() {
           </div>
         </div>
 
-        {/* Boutons d'accès rapide */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        {/* Bouton d'accès rapide */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <button
             onClick={() => navigate('/students')}
             className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-blue-500 text-left group"
@@ -386,7 +386,7 @@ export default function SecretaryDashboard() {
                 <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Élèves</h3>
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Voir mes élèves</h3>
                 <p className="text-xs sm:text-sm text-gray-600">Liste et détails</p>
               </div>
             </div>
@@ -402,20 +402,6 @@ export default function SecretaryDashboard() {
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Passage de classe</h3>
                 <p className="text-xs sm:text-sm text-gray-600">Moyennes et décisions</p>
-              </div>
-            </div>
-          </button>
-          <button
-            onClick={() => navigate('/tuition')}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-purple-500 text-left group"
-          >
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
-                <DollarSign className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Scolarités</h3>
-                <p className="text-xs sm:text-sm text-gray-600">Paiements et suivis</p>
               </div>
             </div>
           </button>

@@ -1,9 +1,9 @@
 import { API_URL } from '../config/apiConfig';
 
-export const teacherDashboardService = {
-  // Récupérer les statistiques du tableau de bord enseignant
-  async getTeacherStats(token: string) {
-    const response = await fetch(`${API_URL}/dashboard/teacher/dashboard-stats`, {
+export const secretaryDashboardService = {
+  // Récupérer les statistiques du tableau de bord secrétaire
+  async getSecretaryStats(token: string) {
+    const response = await fetch(`${API_URL}/dashboard/secretary/dashboard-stats`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },

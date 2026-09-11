@@ -8,7 +8,7 @@ const router = Router();
 // RECHERCHE GLOBALE (FONDATEUR)
 // ============================================
 
-// Recherche globale (élèves et enseignants)
+// Recherche globale (élèves et secrétaires)
 router.get('/', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { query } = req.query;
@@ -26,11 +26,11 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
       .or(`first_name.ilike.%${searchTerm}%,last_name.ilike.%${searchTerm}%,matricule.ilike.%${searchTerm}%`)
       .limit(10);
 
-    // Rechercher les enseignants
-    const { data: teachers } = await supabase
+    // Rechercher les secrétaires
+    const { data: secretaries } = await supabase
       .from('users')
       .select('id, first_name, last_name, username, role')
-      .eq('role', 'teacher')
+      .eq('role', 'secretary')
       .or(`first_name.ilike.%${searchTerm}%,last_name.ilike.%${searchTerm}%,username.ilike.%${searchTerm}%`)
       .limit(10);
 
@@ -43,8 +43,8 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
         classId: s.current_class_id,
         status: s.status,
       })) || []),
-      ...(teachers?.map((t) => ({
-        type: 'teacher',
+      ...(secretaries?.map((t) => ({
+        type: 'secretary',
         id: t.id,
         name: `${t.first_name} ${t.last_name}`,
         username: t.username,
