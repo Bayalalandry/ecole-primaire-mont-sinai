@@ -498,10 +498,10 @@ router.put('/secretary-status/:userId', authenticateToken, requireFounderOrDirec
 });
 
 // Assigner un secrétaire ou un directeur à une classe
-router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
+router.post('/assign-secretary', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
   try {
-    const { teacherId, classId, schoolYear } = req.body;
-    console.log('Assign staff request:', { teacherId, classId, schoolYear });
+    const { secretaryId, classId, schoolYear } = req.body;
+    console.log('Assign staff request:', { secretaryId, classId, schoolYear });
 
     // Récupérer l'ID de l'année scolaire
     let schoolYearId = null;
@@ -530,9 +530,9 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
 
     // Vérifier si l'assignation existe déjà
     const { data: existingAssignment } = await supabase
-      .from('teacher_class_assignments')
+      .from('secretary_class_assignments')
       .select('*')
-      .eq('teacher_id', teacherId)
+      .eq('secretary_id', secretaryId)
       .eq('class_id', classId)
       .maybeSingle();
 
@@ -543,7 +543,7 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
 
     // Créer la nouvelle assignation avec school_year_id
     const assignmentData: any = {
-      teacher_id: teacherId,
+      secretary_id: secretaryId,
       class_id: classId,
     };
 
@@ -552,7 +552,7 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
     }
 
     const { error } = await supabase
-      .from('teacher_class_assignments')
+      .from('secretary_class_assignments')
       .insert(assignmentData);
 
     if (error) {
@@ -560,15 +560,15 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
       throw error;
     }
 
-    await logActivity(req.user!.id, 'ASSIGN_TEACHER', 'class', classId, {
-      teacherId,
+    await logActivity(req.user!.id, 'ASSIGN_SECRETARY', 'class', classId, {
+      secretaryId,
       classId,
       schoolYearId,
     });
 
-    // Notifier l'enseignant
+    // Notifier le secrétaire
     await createNotification(
-      teacherId,
+      secretaryId,
       'class_assigned',
       'Classe assignée',
       'Une classe vous a été assignée par le fondateur.',
@@ -585,20 +585,20 @@ router.post('/assign-teacher', authenticateToken, requireFounderOrDirector, asyn
 });
 
 // Désassigner un secrétaire d'une classe
-router.post('/unassign-teacher', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
+router.post('/unassign-secretary', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
   try {
-    const { teacherId, classId } = req.body;
-    console.log('Unassign staff request:', { teacherId, classId });
+    const { secretaryId, classId } = req.body;
+    console.log('Unassign staff request:', { secretaryId, classId });
 
-    if (!teacherId || !classId) {
-      return res.status(400).json({ error: 'Champs requis: teacherId, classId' });
+    if (!secretaryId || !classId) {
+      return res.status(400).json({ error: 'Champs requis: secretaryId, classId' });
     }
 
     // Supprimer l'assignation
     const { error } = await supabase
-      .from('teacher_class_assignments')
+      .from('secretary_class_assignments')
       .delete()
-      .eq('teacher_id', teacherId)
+      .eq('secretary_id', secretaryId)
       .eq('class_id', classId);
 
     if (error) {
@@ -617,24 +617,24 @@ router.post('/unassign-teacher', authenticateToken, requireFounder, async (req: 
 // Réassigner les élèves d'un secrétaire à un autre
 router.post('/reassign-students', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
   try {
-    const { fromTeacherId, toTeacherId } = req.body;
+    const { fromSecretaryId, toSecretaryId } = req.body;
 
     // Récupérer les classes assignées au secrétaire de départ
-    const { data: teacherAssignments } = await supabase
-      .from('teacher_class_assignments')
+    const { data: secretaryAssignments } = await supabase
+      .from('secretary_class_assignments')
       .select('class_id')
-      .eq('teacher_id', fromTeacherId);
+      .eq('secretary_id', fromSecretaryId);
 
-    if (!teacherAssignments || teacherAssignments.length === 0) {
+    if (!secretaryAssignments || secretaryAssignments.length === 0) {
       return res.json({ message: 'Aucune classe assignée à ce secrétaire' });
     }
     
-    const assignedClassIds = teacherAssignments.map((a: any) => a.class_id);
+    const assignedClassIds = secretaryAssignments.map((a: any) => a.class_id);
     
     // Réassigner tous les élèves de ces classes
     const { error } = await supabase
       .from('students')
-      .update({ created_by: toTeacherId })
+      .update({ created_by: toSecretaryId })
       .in('current_class_id', assignedClassIds);
 
     if (error) throw error;
@@ -659,7 +659,7 @@ router.get('/users', authenticateToken, requireFounder, async (req: AuthRequest,
         role,
         is_active,
         created_at,
-        teachers (
+        secretaries (
           status
         )
       `)
