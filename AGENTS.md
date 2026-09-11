@@ -112,3 +112,25 @@ Le endpoint `/api/statistics` effectue plusieurs requêtes à la base de donnée
   - Elle est pleinement supportée par Chrome, Edge et Safari (navigateurs les plus populaires)
   - L'absence de support dans Firefox n'affecte pas le fonctionnement de l'application
   - Supprimer cette balise dégraderait l'expérience utilisateur sur les navigateurs qui la supportent
+
+## Migration Teacher → Secretary
+
+Une migration majeure a été effectuée pour remplacer le rôle `teacher` par `secretary`. Les scripts de migration SQL sont disponibles dans le répertoire racine :
+
+- `UPDATE_TEACHER_TO_SECRETARY_PHASE1.sql` - Renomme les tables et contraintes
+- `UPDATE_TEACHER_TO_SECRETARY_PHASE2.sql` - Convertit les données existantes
+- `MIGRATION_INSTRUCTIONS.md` - Instructions détaillées pour l'exécution
+
+**Changements effectués :**
+- Rôle `teacher` → `secretary` dans tous les fichiers
+- Tables renommées : `teachers` → `secretaries`, `teacher_class_assignments` → `secretary_class_assignments`, `teacher_salaries` → `secretary_salaries`
+- Colonnes renommées : `teacher_id` → `secretary_id`
+- Frontend : `TeacherDashboard` → `SecretaryDashboard`, `TeachersPage` supprimée
+- Services renommés : `teacherService` → `secretaryService`, `teacherDashboardService` → `secretaryDashboardService`
+
+**Pour exécuter la migration :**
+1. Voir `MIGRATION_INSTRUCTIONS.md` pour les étapes détaillées
+2. Exécuter Phase 1 dans l'éditeur SQL Supabase
+3. Exécuter Phase 2 dans l'éditeur SQL Supabase
+4. Vérifier les résultats avec les requêtes de vérification
+5. Re-déployer le backend
