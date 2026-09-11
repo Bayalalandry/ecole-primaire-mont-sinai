@@ -77,7 +77,6 @@ export default function StudentsPage() {
 
   const loadTeachers = async (token: string) => {
     try {
-      console.log('Loading teachers with API_URL:', API_URL);
       const response = await fetch(`${API_URL}/auth/teachers`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
