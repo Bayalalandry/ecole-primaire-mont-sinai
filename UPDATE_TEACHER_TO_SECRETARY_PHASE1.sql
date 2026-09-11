@@ -120,3 +120,22 @@ CHECK (type IN ('secretary_pending', 'secretary_validated', 'class_assigned', 'i
 -- 12. Convertir les notifications existantes de teacher vers secretary
 UPDATE notifications SET type = 'secretary_pending' WHERE type = 'teacher_pending';
 UPDATE notifications SET type = 'secretary_validated' WHERE type = 'teacher_validated';
+
+-- 13. Mettre à jour la contrainte de type dans activity_log
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM pg_constraint 
+    WHERE conname = 'activity_log_entity_type_check'
+  ) THEN
+    ALTER TABLE activity_log DROP CONSTRAINT activity_log_entity_type_check;
+  END IF;
+END $$;
+
+ALTER TABLE activity_log ADD CONSTRAINT activity_log_entity_type_check 
+CHECK (entity_type IN ('student', 'secretary', 'class', 'tuition_rate', 'salary', 'expense', 'passage', 'school_year'));
+
+-- 14. Convertir les activités existantes de teacher vers secretary
+UPDATE activity_log SET entity_type = 'secretary' WHERE entity_type = 'teacher';
+UPDATE activity_log SET action = REPLACE(action, 'teacher', 'secretary') WHERE action LIKE '%teacher%';
+UPDATE activity_log SET description = REPLACE(description, 'teacher', 'secretary') WHERE description LIKE '%teacher%';

@@ -42,7 +42,7 @@ CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     username VARCHAR(50) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(20) NOT NULL CHECK (role IN ('founder', 'director', 'teacher')),
+    role VARCHAR(20) NOT NULL CHECK (role IN ('founder', 'director', 'secretary')),
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     is_active BOOLEAN DEFAULT true,
@@ -71,7 +71,7 @@ CREATE TABLE director_permissions (
     can_manage_students BOOLEAN DEFAULT false,
     can_set_tuition BOOLEAN DEFAULT false,
     can_set_salaries BOOLEAN DEFAULT false,
-    can_validate_teachers BOOLEAN DEFAULT false,
+    can_validate_secretaries BOOLEAN DEFAULT false,
     can_disable_accounts BOOLEAN DEFAULT false,
     can_reset_passwords BOOLEAN DEFAULT false,
     can_manage_expenses BOOLEAN DEFAULT false,
@@ -85,9 +85,9 @@ CREATE TABLE director_permissions (
 );
 
 -- ============================================
--- Table des enseignants
+-- Table des secrétaires
 -- ============================================
-CREATE TABLE teachers (
+CREATE TABLE secretaries (
     user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
     status VARCHAR(30) DEFAULT 'pending' CHECK (status IN ('active', 'pending', 'on_leave', 'archived')),
     leave_start_date DATE,
@@ -97,15 +97,15 @@ CREATE TABLE teachers (
 );
 
 -- ============================================
--- Table des affectations enseignant-classe
+-- Table des affectations secrétaire-classe
 -- ============================================
-CREATE TABLE teacher_class_assignments (
+CREATE TABLE secretary_class_assignments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    teacher_id UUID REFERENCES teachers(user_id) ON DELETE CASCADE,
+    secretary_id UUID REFERENCES secretaries(user_id) ON DELETE CASCADE,
     class_id UUID REFERENCES classes(id) ON DELETE CASCADE,
     school_year VARCHAR(20), -- Année scolaire (ex: "2024-2025")
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(teacher_id, class_id, school_year)
+    UNIQUE(secretary_id, class_id, school_year)
 );
 
 -- ============================================
@@ -178,17 +178,17 @@ CREATE TABLE tuition_payments (
 );
 
 -- ============================================
--- Table des salaires des enseignants
+-- Table des salaires des secrétaires
 -- ============================================
-CREATE TABLE teacher_salaries (
+CREATE TABLE secretary_salaries (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    teacher_id UUID REFERENCES teachers(user_id) ON DELETE CASCADE,
+    secretary_id UUID REFERENCES secretaries(user_id) ON DELETE CASCADE,
     school_year_id UUID REFERENCES school_years(id) ON DELETE CASCADE,
     monthly_amount DECIMAL(10,2) NOT NULL, -- Montant mensuel en XOF
     effective_date DATE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(teacher_id, school_year_id, effective_date)
+    UNIQUE(secretary_id, school_year_id, effective_date)
 );
 
 -- ============================================
@@ -196,8 +196,8 @@ CREATE TABLE teacher_salaries (
 -- ============================================
 CREATE TABLE salary_payments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    salary_id UUID REFERENCES teacher_salaries(id) ON DELETE CASCADE,
-    teacher_id UUID REFERENCES teachers(user_id) ON DELETE CASCADE,
+    salary_id UUID REFERENCES secretary_salaries(id) ON DELETE CASCADE,
+    secretary_id UUID REFERENCES secretaries(user_id) ON DELETE CASCADE,
     amount DECIMAL(10,2) NOT NULL,
     payment_month DATE NOT NULL, -- Premier jour du mois
     payment_date DATE NOT NULL,
@@ -283,7 +283,7 @@ CREATE INDEX idx_students_matricule ON students(matricule);
 CREATE INDEX idx_students_unique_identifier ON students(unique_identifier);
 CREATE INDEX idx_payments_student_year ON tuition_payments(student_id, school_year_id);
 CREATE INDEX idx_payments_trimester ON tuition_payments(trimester, school_year_id);
-CREATE INDEX idx_teacher_assignments ON teacher_class_assignments(teacher_id, school_year_id);
+CREATE INDEX idx_secretary_assignments ON secretary_class_assignments(secretary_id, school_year_id);
 CREATE INDEX idx_activity_log_user ON activity_log(user_id);
 CREATE INDEX idx_notifications_user ON notifications(user_id, is_read);
 
@@ -314,7 +314,7 @@ CREATE TRIGGER update_founder_settings_updated_at BEFORE UPDATE ON founder_setti
 CREATE TRIGGER update_director_permissions_updated_at BEFORE UPDATE ON director_permissions
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TRIGGER update_teachers_updated_at BEFORE UPDATE ON teachers
+CREATE TRIGGER update_secretaries_updated_at BEFORE UPDATE ON secretaries
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_students_updated_at BEFORE UPDATE ON students
@@ -323,7 +323,7 @@ CREATE TRIGGER update_students_updated_at BEFORE UPDATE ON students
 CREATE TRIGGER update_tuition_rates_updated_at BEFORE UPDATE ON tuition_rates
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TRIGGER update_teacher_salaries_updated_at BEFORE UPDATE ON teacher_salaries
+CREATE TRIGGER update_secretary_salaries_updated_at BEFORE UPDATE ON secretary_salaries
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_school_settings_updated_at BEFORE UPDATE ON school_settings

@@ -17,7 +17,10 @@ Copiez et collez le contenu du fichier `UPDATE_TEACHER_TO_SECRETARY_PHASE1.sql` 
 
 Le script a été mis à jour pour être robuste et ignorer les erreurs si les tables/colonnes n'existent pas déjà. Il utilise des blocs DO $$ pour vérifier l'existence avant de renommer.
 
-**Note importante :** Le script met également à jour la contrainte de type dans la table `notifications` pour remplacer `teacher_pending`/`teacher_validated` par `secretary_pending`/`secretary_validated`, et convertit les notifications existantes.
+**Note importante :** Le script met également à jour :
+- La contrainte de type dans la table `notifications` (teacher → secretary)
+- La contrainte de type dans la table `activity_log` (teacher → secretary)
+- Convertit toutes les notifications et activités existantes
 
 Cliquez sur "Run" pour exécuter.
 
@@ -64,6 +67,9 @@ WHERE conname = 'users_role_check';
 
 -- Vérifier les types de notifications
 SELECT type, COUNT(*) FROM notifications GROUP BY type;
+
+-- Vérifier les types d'activité
+SELECT entity_type, COUNT(*) FROM activity_log GROUP BY entity_type;
 ```
 
 ## Étape 6: Déployer le backend
