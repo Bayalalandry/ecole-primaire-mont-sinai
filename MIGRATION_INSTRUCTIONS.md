@@ -15,50 +15,7 @@
 
 Copiez et collez le contenu du fichier `UPDATE_TEACHER_TO_SECRETARY_PHASE1.sql` :
 
-```sql
--- ============================================
--- Migration Teacher → Secretary - Phase 1
--- Modifier les contraintes de rôle et renommer les tables
--- ============================================
-
--- 1. Modifier la contrainte de rôle dans la table users
-ALTER TABLE users DROP CONSTRAINT users_role_check;
-ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('founder', 'director', 'secretary'));
-
--- 2. Renommer la table teachers en secretaries
-ALTER TABLE teachers RENAME TO secretaries;
-
--- 3. Renommer la table teacher_class_assignments en secretary_class_assignments
-ALTER TABLE teacher_class_assignments RENAME TO secretary_class_assignments;
-
--- 4. Renommer la table teacher_salaries en secretary_salaries
-ALTER TABLE teacher_salaries RENAME TO secretary_salaries;
-
--- 5. Renommer les colonnes dans secretary_class_assignments
-ALTER TABLE secretary_class_assignments RENAME COLUMN teacher_id TO secretary_id;
-
--- 6. Renommer les colonnes dans secretary_salaries
-ALTER TABLE secretary_salaries RENAME COLUMN teacher_id TO secretary_id;
-
--- 7. Renommer les colonnes dans tuition_payments qui référencent teacher_id
-ALTER TABLE tuition_payments RENAME COLUMN teacher_id TO secretary_id;
-
--- 8. Mettre à jour les index
-DROP INDEX IF EXISTS idx_teacher_assignments;
-CREATE INDEX idx_secretary_assignments ON secretary_class_assignments(secretary_id, school_year_id);
-
--- 9. Mettre à jour les triggers
-DROP TRIGGER IF EXISTS update_teachers_updated_at ON secretaries;
-CREATE TRIGGER update_secretaries_updated_at BEFORE UPDATE ON secretaries
-FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-DROP TRIGGER IF EXISTS update_teacher_salaries_updated_at ON secretary_salaries;
-CREATE TRIGGER update_secretary_salaries_updated_at BEFORE UPDATE ON secretary_salaries
-FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- 10. Mettre à jour les colonnes de permissions dans users
-ALTER TABLE users RENAME COLUMN can_validate_teachers TO can_validate_secretaries;
-```
+Le script a été mis à jour pour être robuste et ignorer les erreurs si les tables/colonnes n'existent pas déjà. Il utilise des blocs DO $$ pour vérifier l'existence avant de renommer.
 
 Cliquez sur "Run" pour exécuter.
 
@@ -98,6 +55,10 @@ AND column_name = 'secretary_id';
 
 -- Vérifier les rôles des utilisateurs
 SELECT role, COUNT(*) FROM users GROUP BY role;
+
+-- Vérifier que la contrainte a été mise à jour
+SELECT conname, pg_get_constraintdef(oid) FROM pg_constraint
+WHERE conname = 'users_role_check';
 ```
 
 ## Étape 6: Déployer le backend
@@ -119,10 +80,14 @@ npm start
 
 ## En cas d'erreur
 
-Si une erreur survient pendant la migration, vérifiez :
+Le script Phase 1 a été mis à jour pour être robuste et ignorer les erreurs si :
+- Les tables n'existent pas déjà (peut-être déjà renommées)
+- Les colonnes n'existent pas (peut-être déjà renommées)
+- Les contraintes n'existent pas
 
-1. Que les tables existent bien avant de les renommer
-2. Que les contraintes existent avant de les supprimer
-3. Que vous avez les droits d'administration sur la base de données
+Si vous obtenez encore une erreur, vérifiez :
+1. Que vous avez les droits d'administration sur la base de données
+2. Exécutez les requêtes de vérification pour voir l'état actuel
+3. Certains éléments peuvent déjà avoir été migrés lors d'une tentative précédente
 
-Pour annuler la migration (rollback), vous pouvez utiliser les commandes inverses, mais il est recommandé de faire une sauvegarde de la base de données avant de commencer.
+Pour annuler la migration (rollback), il est recommandé de faire une sauvegarde de la base de données avant de commencer.
