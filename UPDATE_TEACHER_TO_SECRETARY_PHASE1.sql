@@ -138,7 +138,18 @@ END $$;
 -- Ensuite convertir les données existantes
 UPDATE activity_log SET entity_type = 'secretary' WHERE entity_type = 'teacher';
 UPDATE activity_log SET action = REPLACE(action, 'teacher', 'secretary') WHERE action LIKE '%teacher%';
-UPDATE activity_log SET description = REPLACE(description, 'teacher', 'secretary') WHERE description LIKE '%teacher%';
+
+-- Mettre à jour la description seulement si la colonne existe
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name = 'activity_log' 
+    AND column_name = 'description'
+  ) THEN
+    UPDATE activity_log SET description = REPLACE(description, 'teacher', 'secretary') WHERE description LIKE '%teacher%';
+  END IF;
+END $$;
 
 -- Enfin recréer la contrainte avec les nouveaux types
 ALTER TABLE activity_log ADD CONSTRAINT activity_log_entity_type_check 
