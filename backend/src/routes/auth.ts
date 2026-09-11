@@ -13,9 +13,9 @@ import {
   getDirectorPermissions,
   createDirectorPermissions,
   updateDirectorPermissions,
-  getTeacherInfo,
-  createTeacherInfo,
-  updateTeacherInfo,
+  getSecretaryInfo,
+  createSecretaryInfo,
+  updateSecretaryInfo,
   logActivity,
 } from '../services/authService';
 import { supabase } from '../services/supabase';
@@ -178,15 +178,15 @@ router.post('/create-director', authenticateToken, requireFounder, async (req: A
       is_active: true,
     });
 
-    // Créer l'entrée dans la table teachers pour permettre l'assignation de classe
+    // Créer l'entrée dans la table secretaries pour permettre l'assignation de classe
     try {
-      await createTeacherInfo({
+      await createSecretaryInfo({
         user_id: newUser.id,
         status: 'active', // Les directeurs sont actifs par défaut
       });
-    } catch (teacherError) {
-      console.error('Error creating teacher entry for director:', teacherError);
-      // Ne pas échouer si l'entrée teachers échoue
+    } catch (secretaryError) {
+      console.error('Error creating secretary entry for director:', secretaryError);
+      // Ne pas échouer si l'entrée secretaries échoue
     }
 
     // Créer les permissions du directeur (si erreur, log mais ne pas empêcher la création)
@@ -253,15 +253,15 @@ router.post('/create-secretary', authenticateToken, requireFounder, async (req: 
       is_active: true,
     });
 
-    // Créer l'entrée dans la table teachers pour permettre l'assignation de classe
+    // Créer l'entrée dans la table secretaries pour permettre l'assignation de classe
     try {
-      await createTeacherInfo({
+      await createSecretaryInfo({
         user_id: newUser.id,
         status: 'active', // Les secrétaires sont actifs par défaut
       });
-    } catch (teacherError) {
-      console.error('Error creating teacher entry for secretary:', teacherError);
-      // Ne pas échouer si l'entrée teachers échoue
+    } catch (secretaryError) {
+      console.error('Error creating secretary entry for secretary:', secretaryError);
+      // Ne pas échouer si l'entrée secretaries échoue
     }
 
     // Log l'activité
@@ -375,8 +375,8 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res) => {
       const directorPermissions = await getDirectorPermissions(user.id);
       additionalInfo.directorPermissions = directorPermissions;
     } else if (user.role === 'secretary') {
-      const teacherInfo = await getTeacherInfo(user.id);
-      additionalInfo.teacherInfo = teacherInfo;
+      const secretaryInfo = await getSecretaryInfo(user.id);
+      additionalInfo.secretaryInfo = secretaryInfo;
     }
 
     res.json({
@@ -397,9 +397,9 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res) => {
 });
 
 // Lister tous les enseignants et directeurs (réservé au fondateur, directeur et secrétaire)
-router.get('/teachers', authenticateToken, requireFounderOrDirectorOrSecretary, async (req: AuthRequest, res) => {
+router.get('/secretaries', authenticateToken, requireFounderOrDirectorOrSecretary, async (req: AuthRequest, res) => {
   try {
-    console.log('GET /auth/teachers - fetching teachers');
+    console.log('GET /auth/secretaries - fetching secretaries');
     console.log('User making request:', req.user);
     
     const { data, error } = await supabase
@@ -412,7 +412,7 @@ router.get('/teachers', authenticateToken, requireFounderOrDirectorOrSecretary, 
         role,
         is_active,
         created_at,
-        teachers (
+        secretaries (
           status
         )
       `)
@@ -420,21 +420,21 @@ router.get('/teachers', authenticateToken, requireFounderOrDirectorOrSecretary, 
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching teachers:', error);
+      console.error('Error fetching secretaries:', error);
       throw error;
     }
 
-    console.log(`Found ${data?.length || 0} users (teachers + directors)`);
+    console.log(`Found ${data?.length || 0} users (secretaries + directors)`);
     console.log('Users found:', data?.map((u: any) => ({ id: u.id, username: u.username, role: u.role })));
 
-    // Récupérer les affectations de classe pour chaque enseignant
-    const teacherIds = (data || []).map((u: any) => u.id);
+    // Récupérer les affectations de classe pour chaque secrétaire
+    const secretaryIds = (data || []).map((u: any) => u.id);
     let assignments: any[] = [];
-    if (teacherIds.length > 0) {
+    if (secretaryIds.length > 0) {
       const { data: assignData } = await supabase
-        .from('teacher_class_assignments')
-        .select('teacher_id, class_id')
-        .in('teacher_id', teacherIds);
+        .from('secretary_class_assignments')
+        .select('secretary_id, class_id')
+        .in('secretary_id', secretaryIds);
       assignments = assignData || [];
     }
 
@@ -452,35 +452,35 @@ router.get('/teachers', authenticateToken, requireFounderOrDirectorOrSecretary, 
       }, {});
     }
 
-    // Ajouter les classes assignées à chaque enseignant
-    const teachersWithClasses = (data || []).map((teacher: any) => {
-      const teacherAssignments = assignments.filter((a: any) => a.teacher_id === teacher.id);
-      const assignedClasses = teacherAssignments.map((a: any) => classMap[a.class_id]).filter(Boolean);
-      console.log(`Teacher ${teacher.username}: ${teacherAssignments.length} assignments, classes: ${JSON.stringify(assignedClasses)}`);
+    // Ajouter les classes assignées à chaque secrétaire
+    const secretariesWithClasses = (data || []).map((secretary: any) => {
+      const secretaryAssignments = assignments.filter((a: any) => a.secretary_id === secretary.id);
+      const assignedClasses = secretaryAssignments.map((a: any) => classMap[a.class_id]).filter(Boolean);
+      console.log(`Secretary ${secretary.username}: ${secretaryAssignments.length} assignments, classes: ${JSON.stringify(assignedClasses)}`);
       return {
-        ...teacher,
+        ...secretary,
         assigned_class: assignedClasses.length > 0 ? assignedClasses.join(', ') : null,
         assigned_classes: assignedClasses
       };
     });
 
-    console.log('Sending response with teachers/directors:', teachersWithClasses.length);
-    console.log('Response data:', teachersWithClasses.map((t: any) => ({ id: t.id, username: t.username, role: t.role })));
-    res.json({ teachers: teachersWithClasses });
+    console.log('Sending response with secretaries/directors:', secretariesWithClasses.length);
+    console.log('Response data:', secretariesWithClasses.map((t: any) => ({ id: t.id, username: t.username, role: t.role })));
+    res.json({ secretaries: secretariesWithClasses });
   } catch (error: any) {
-    console.error('Get teachers error:', error);
-    res.status(500).json({ error: 'Erreur lors de la récupération des enseignants' });
+    console.error('Get secretaries error:', error);
+    res.status(500).json({ error: 'Erreur lors de la récupération des secrétaires' });
   }
 });
 
-// Mettre à jour le statut d'un enseignant
-router.put('/teacher-status/:userId', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
+// Mettre à jour le statut d'un secrétaire
+router.put('/secretary-status/:userId', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
   try {
     const { userId } = req.params;
     const { status } = req.body;
 
     const { error } = await supabase
-      .from('teachers')
+      .from('secretaries')
       .update({ 
         status,
         leave_start_date: status === 'on_leave' ? req.body.leaveStartDate : null,
@@ -492,7 +492,7 @@ router.put('/teacher-status/:userId', authenticateToken, requireFounderOrDirecto
 
     res.json({ message: 'Statut mis à jour avec succès' });
   } catch (error: any) {
-    console.error('Update teacher status error:', error);
+    console.error('Update secretary status error:', error);
     res.status(500).json({ error: 'Erreur lors de la mise à jour du statut' });
   }
 });

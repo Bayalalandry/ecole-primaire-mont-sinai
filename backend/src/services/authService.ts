@@ -133,14 +133,14 @@ export const updateDirectorPermissions = async (userId: string, permissions: any
   return data;
 };
 
-export const getTeacherInfo = async (userId: string): Promise<any> => {
-  const { data: teacherData, error: teacherError } = await supabase
-    .from('teachers')
+export const getSecretaryInfo = async (userId: string): Promise<any> => {
+  const { data: secretaryData, error: secretaryError } = await supabase
+    .from('secretaries')
     .select('*')
     .eq('user_id', userId)
     .maybeSingle();
 
-  if (teacherError) throw teacherError;
+  if (secretaryError) throw secretaryError;
 
   // Récupérer l'année scolaire actuelle
   const { data: currentYear } = await supabase
@@ -151,9 +151,9 @@ export const getTeacherInfo = async (userId: string): Promise<any> => {
 
   // Récupérer les classes assignées pour l'année scolaire actuelle
   const { data: assignments, error: assignError } = await supabase
-    .from('teacher_class_assignments')
+    .from('secretary_class_assignments')
     .select('class_id, classes(name)')
-    .eq('teacher_id', userId)
+    .eq('secretary_id', userId)
     .eq('school_year_id', currentYear?.id);
 
   if (assignError) throw assignError;
@@ -161,15 +161,15 @@ export const getTeacherInfo = async (userId: string): Promise<any> => {
   const assignedClasses = assignments?.map((a: any) => a.classes?.name).filter(Boolean) || [];
 
   return {
-    ...teacherData,
+    ...secretaryData,
     assigned_classes: assignedClasses
   };
 };
 
-export const createTeacherInfo = async (teacherData: any): Promise<any> => {
+export const createSecretaryInfo = async (secretaryData: any): Promise<any> => {
   const { data, error } = await supabase
-    .from('teachers')
-    .insert(teacherData)
+    .from('secretaries')
+    .insert(secretaryData)
     .select()
     .maybeSingle();
 
@@ -177,9 +177,9 @@ export const createTeacherInfo = async (teacherData: any): Promise<any> => {
   return data;
 };
 
-export const updateTeacherInfo = async (userId: string, updates: any): Promise<any> => {
+export const updateSecretaryInfo = async (userId: string, updates: any): Promise<any> => {
   const { data, error } = await supabase
-    .from('teachers')
+    .from('secretaries')
     .update(updates)
     .eq('user_id', userId)
     .select()
