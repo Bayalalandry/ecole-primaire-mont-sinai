@@ -104,6 +104,7 @@ BEGIN
 END $$;
 
 -- 11. Mettre à jour la contrainte de type dans notifications
+-- D'abord supprimer l'ancienne contrainte
 DO $$
 BEGIN
   IF EXISTS (
@@ -114,14 +115,16 @@ BEGIN
   END IF;
 END $$;
 
-ALTER TABLE notifications ADD CONSTRAINT notifications_type_check 
-CHECK (type IN ('secretary_pending', 'secretary_validated', 'class_assigned', 'info', 'alert'));
-
--- 12. Convertir les notifications existantes de teacher vers secretary
+-- Ensuite convertir les données existantes
 UPDATE notifications SET type = 'secretary_pending' WHERE type = 'teacher_pending';
 UPDATE notifications SET type = 'secretary_validated' WHERE type = 'teacher_validated';
 
--- 13. Mettre à jour la contrainte de type dans activity_log
+-- Enfin recréer la contrainte avec les nouveaux types
+ALTER TABLE notifications ADD CONSTRAINT notifications_type_check 
+CHECK (type IN ('secretary_pending', 'secretary_validated', 'class_assigned', 'info', 'alert'));
+
+-- 12. Mettre à jour la contrainte de type dans activity_log
+-- D'abord supprimer l'ancienne contrainte
 DO $$
 BEGIN
   IF EXISTS (
@@ -132,10 +135,11 @@ BEGIN
   END IF;
 END $$;
 
-ALTER TABLE activity_log ADD CONSTRAINT activity_log_entity_type_check 
-CHECK (entity_type IN ('student', 'secretary', 'class', 'tuition_rate', 'salary', 'expense', 'passage', 'school_year'));
-
--- 14. Convertir les activités existantes de teacher vers secretary
+-- Ensuite convertir les données existantes
 UPDATE activity_log SET entity_type = 'secretary' WHERE entity_type = 'teacher';
 UPDATE activity_log SET action = REPLACE(action, 'teacher', 'secretary') WHERE action LIKE '%teacher%';
 UPDATE activity_log SET description = REPLACE(description, 'teacher', 'secretary') WHERE description LIKE '%teacher%';
+
+-- Enfin recréer la contrainte avec les nouveaux types
+ALTER TABLE activity_log ADD CONSTRAINT activity_log_entity_type_check 
+CHECK (entity_type IN ('student', 'secretary', 'class', 'tuition_rate', 'salary', 'expense', 'passage', 'school_year'));
