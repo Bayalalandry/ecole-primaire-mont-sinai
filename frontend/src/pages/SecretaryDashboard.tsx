@@ -63,13 +63,13 @@ export default function TeacherDashboard() {
     // Vérifier au montage si une mise à jour est nécessaire
     const lastUpdate = localStorage.getItem('secretaryStatsUpdate');
     if (lastUpdate) {
-      loadTeacherStats(token);
+      loadSecretaryStats(token);
       localStorage.removeItem('secretaryStatsUpdate');
     }
 
     // Recharger les stats quand la fenêtre reprend le focus
     const handleFocus = () => {
-      loadTeacherStats(token);
+      loadSecretaryStats(token);
     };
     window.addEventListener('focus', handleFocus);
 

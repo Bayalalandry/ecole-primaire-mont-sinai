@@ -80,7 +80,7 @@ export default function SalaryPage() {
 
       const [salariesData, teachersData, paymentsData, outstandingData] = await Promise.all([
         salaryService.getSalaries(token, currentSchoolYear),
-        salaryService.getAllTeachers(token),
+        salaryService.getAllSecretaries(token),
         salaryService.getSalaryPayments(token, { schoolYear: currentSchoolYear }),
         salaryService.getSalaryOutstanding(token, outstandingParams),
       ]);

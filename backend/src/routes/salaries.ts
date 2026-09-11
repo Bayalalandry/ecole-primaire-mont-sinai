@@ -47,7 +47,7 @@ router.get('/summary/secretary/:secretaryId', authenticateToken, async (req: Aut
     let paymentsQuery = supabase
       .from('salary_payments')
       .select('amount')
-      .eq('secretary_id', teacherId)
+      .eq('secretary_id', secretaryId)
       .eq('cancelled', false);
 
     if (schoolYear) {
@@ -81,15 +81,15 @@ router.get('/summary/secretary/:secretaryId', authenticateToken, async (req: Aut
 });
 
 // Récupérer l'historique des versements de salaire d'un enseignant
-router.get('/payments/teacher/:teacherId', authenticateToken, async (req: AuthRequest, res) => {
+router.get('/payments/teacher/:secretaryId', authenticateToken, async (req: AuthRequest, res) => {
   try {
-    const { teacherId } = req.params;
+    const { secretaryId } = req.params;
     const { schoolYear } = req.query;
 
     let query = supabase
       .from('salary_payments')
       .select('*')
-      .eq('secretary_id', teacherId)
+      .eq('secretary_id', secretaryId)
       .eq('cancelled', false)
       .order('payment_date', { ascending: false });
 
@@ -147,16 +147,16 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
     if (error) throw error;
 
     // Récupérer les informations des enseignants manuellement
-    const teacherIds = (data || []).map((s: any) => s.secretary_id);
+    const secretaryIds = (data || []).map((s: any) => s.secretary_id);
     const { data: teachersData } = await supabase
       .from('teachers')
       .select('user_id, status')
-      .in('user_id', teacherIds);
+      .in('user_id', secretaryIds);
 
     const { data: usersData } = await supabase
       .from('users')
       .select('id, first_name, last_name, role')
-      .in('id', teacherIds);
+      .in('id', secretaryIds);
 
     // Combiner les données avec gestion des cas manquants
     const salariesWithTeachers = (data || []).map((salary: any) => {
@@ -208,16 +208,16 @@ router.get('/payments', authenticateToken, async (req: AuthRequest, res) => {
     if (error) throw error;
 
     // Récupérer les informations des enseignants et utilisateurs manuellement
-    const teacherIds = (data || []).map((p: any) => p.secretary_id);
+    const secretaryIds = (data || []).map((p: any) => p.secretary_id);
     const { data: teachersData } = await supabase
       .from('teachers')
       .select('user_id, status')
-      .in('user_id', teacherIds);
+      .in('user_id', secretaryIds);
 
     const { data: usersData } = await supabase
       .from('users')
       .select('id, first_name, last_name, role')
-      .in('id', teacherIds);
+      .in('id', secretaryIds);
 
     // Combiner les données avec gestion des cas manquants
     const paymentsWithTeachers = (data || []).map((payment: any) => {
@@ -259,16 +259,16 @@ router.get('/outstanding', authenticateToken, async (req: AuthRequest, res) => {
       .order('effective_date', { ascending: false });
 
     // Récupérer les informations des enseignants et utilisateurs
-    const teacherIds = (salaries || []).map((s: any) => s.secretary_id);
+    const secretaryIds = (salaries || []).map((s: any) => s.secretary_id);
     const { data: teachersData } = await supabase
       .from('teachers')
       .select('user_id, status')
-      .in('user_id', teacherIds);
+      .in('user_id', secretaryIds);
 
     const { data: usersData } = await supabase
       .from('users')
       .select('id, first_name, last_name')
-      .in('id', teacherIds);
+      .in('id', secretaryIds);
 
     const outstanding: any[] = [];
 
@@ -292,7 +292,7 @@ router.get('/outstanding', authenticateToken, async (req: AuthRequest, res) => {
       if (totalOutstanding > 0) {
         const user = usersData?.find((u: any) => u.id === salary.secretary_id);
         outstanding.push({
-          teacherId: salary.secretary_id,
+          secretaryId: salary.secretary_id,
           teacherName: user ? `${user.last_name} ${user.first_name}` : 'Inconnu',
           monthlyAmount: salary.monthly_amount,
           totalPaid,
@@ -312,10 +312,10 @@ router.get('/outstanding', authenticateToken, async (req: AuthRequest, res) => {
 // Créer un salaire
 router.post('/', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
   try {
-    const { teacherId, schoolYear, monthlyAmount, effectiveDate } = req.body;
+    const { secretaryId, schoolYear, monthlyAmount, effectiveDate } = req.body;
 
-    if (!teacherId || !monthlyAmount || !effectiveDate) {
-      return res.status(400).json({ error: 'Champs requis: teacherId, monthlyAmount, effectiveDate' });
+    if (!secretaryId || !monthlyAmount || !effectiveDate) {
+      return res.status(400).json({ error: 'Champs requis: secretaryId, monthlyAmount, effectiveDate' });
     }
 
     // Récupérer l'ID de l'année scolaire
@@ -342,7 +342,7 @@ router.post('/', authenticateToken, requireFounder, async (req: AuthRequest, res
     const { data, error } = await supabase
       .from('secretary_salaries')
       .insert({
-        secretary_id: teacherId,
+        secretary_id: secretaryId,
         school_year_id: schoolYearId,
         monthly_amount: monthlyAmount,
         effective_date: effectiveDate,
@@ -362,10 +362,10 @@ router.post('/', authenticateToken, requireFounder, async (req: AuthRequest, res
 // Créer un paiement de salaire
 router.post('/payments', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
   try {
-    const { teacherId, salaryId, amount, paymentMonth, paymentDate } = req.body;
+    const { secretaryId, salaryId, amount, paymentMonth, paymentDate } = req.body;
 
-    if (!teacherId || !amount || !paymentMonth || !paymentDate) {
-      return res.status(400).json({ error: 'Champs requis: teacherId, amount, paymentMonth, paymentDate' });
+    if (!secretaryId || !amount || !paymentMonth || !paymentDate) {
+      return res.status(400).json({ error: 'Champs requis: secretaryId, amount, paymentMonth, paymentDate' });
     }
 
     // Générer un numéro de reçu unique
@@ -375,7 +375,7 @@ router.post('/payments', authenticateToken, requireFounder, async (req: AuthRequ
       .from('salary_payments')
       .insert({
         salary_id: salaryId,
-        secretary_id: teacherId,
+        secretary_id: secretaryId,
         amount,
         payment_month: paymentMonth,
         payment_date: paymentDate,
@@ -390,7 +390,7 @@ router.post('/payments', authenticateToken, requireFounder, async (req: AuthRequ
     // Notifier l'enseignant du paiement
     try {
       await createNotification(
-        teacherId,
+        secretaryId,
         'salary_payment',
         'Salaire payé',
         `Votre salaire de ${formatAmount(amount)} a été payé pour le mois de ${new Date(paymentMonth).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}.`,

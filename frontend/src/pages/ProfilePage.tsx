@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { tokenStorage } from '../services/authService';
 import { studentService } from '../services/studentService';
-import { teacherService } from '../services/teacherService';
+import { secretaryService } from '../services/secretaryService';
 import { tuitionService } from '../services/tuitionService';
 import { salaryService } from '../services/salaryService';
 import { ArrowLeft, User, DollarSign, GraduationCap, FileText, AlertCircle } from 'lucide-react';
@@ -30,7 +30,7 @@ interface PaymentHistory {
 }
 
 export default function ProfilePage() {
-  const { type, id } = useParams<{ type: 'student' | 'teacher'; id: string }>();
+  const { type, id } = useParams<{ type: 'student' | 'secretary'; id: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -91,24 +91,24 @@ export default function ProfilePage() {
     }
   };
 
-  const loadTeacherProfile = async (teacherId: string) => {
+  const loadTeacherProfile = async (secretaryId: string) => {
     try {
       const token = tokenStorage.getToken();
       if (!token) return;
 
-      // Load teacher basic info
-      const teacherResponse = await teacherService.getTeacherById(teacherId, token);
-      setProfile(teacherResponse.teacher);
+      // Load secretary basic info
+      const secretaryResponse = await secretaryService.getSecretaryById(secretaryId, token);
+      setProfile(secretaryResponse.secretary);
 
       // Load salary summary
-      const salaryData = await salaryService.getTeacherSalarySummary(teacherId, token);
+      const salaryData = await salaryService.getSecretarySalarySummary(secretaryId, token);
       setSalarySummary(salaryData);
 
       // Load salary payment history
-      const paymentsData = await salaryService.getTeacherPayments(teacherId, token);
+      const paymentsData = await salaryService.getSecretaryPayments(secretaryId, token);
       setPaymentHistory(paymentsData.payments || []);
     } catch (error: any) {
-      console.error('Error loading teacher profile:', error);
+      console.error('Error loading secretary profile:', error);
       setError('Erreur lors du chargement du dossier');
     }
   };
@@ -123,7 +123,7 @@ export default function ProfilePage() {
       setLoading(true);
       if (type === 'student') {
         await loadStudentProfile(id);
-      } else if (type === 'teacher') {
+      } else if (type === 'secretary') {
         await loadTeacherProfile(id);
       }
       setLoading(false);
@@ -231,11 +231,11 @@ export default function ProfilePage() {
                   </div>
                 </>
               )}
-              {type === 'teacher' && (
+              {type === 'secretary' && (
                 <>
                   <div>
                     <p className="text-xs sm:text-sm text-gray-500 mb-1">Statut</p>
-                    <p className="text-sm sm:text-base font-medium text-gray-900">{profile.teachers?.status === 'active' ? 'Actif' : profile.teachers?.status === 'pending' ? 'En attente' : profile.teachers?.status === 'on_leave' ? 'En congé' : 'Inactif'}</p>
+                    <p className="text-sm sm:text-base font-medium text-gray-900">{profile.secretarys?.status === 'active' ? 'Actif' : profile.secretarys?.status === 'pending' ? 'En attente' : profile.secretarys?.status === 'on_leave' ? 'En congé' : 'Inactif'}</p>
                   </div>
                 </>
               )}
@@ -347,7 +347,7 @@ export default function ProfilePage() {
           )}
 
           {/* Salary Summary (Teachers only) */}
-          {type === 'teacher' && salarySummary && (
+          {type === 'secretary' && salarySummary && (
             <div className="bg-white rounded-xl shadow-card p-4 sm:p-6 mb-4 sm:mb-6 border border-gray-200">
               <div className="flex items-center gap-2 mb-4 sm:mb-6">
                 <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />

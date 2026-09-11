@@ -108,7 +108,7 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
 
     // 2. Statistiques salaires
     const totalSalariesPaid = salaryPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
-    const totalSalariesExpected = teacherSalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
+    const totalSalariesExpected = secretarySalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
     const totalSalariesOutstanding = totalSalariesExpected - totalSalariesPaid;
 
     // 3. Statistiques dépenses

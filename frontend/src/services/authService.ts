@@ -239,23 +239,6 @@ export const authService = {
     return response.json();
   },
 
-  // Lister tous les enseignants
-  async getAllSecretaries(token: string): Promise<{ secretaries: any[] }> {
-    const response = await fetch(`${API_URL}/auth/secretaries`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Erreur lors de la récupération');
-    }
-
-    return response.json();
-  },
-
   // Lister tous les secrétaires
   async getAllSecretaries(token: string): Promise<{ secretaries: any[] }> {
     const response = await fetch(`${API_URL}/auth/secretaries`, {
@@ -293,25 +276,6 @@ export const authService = {
   },
 
   // Mettre à jour le statut d'un secrétaire
-  async updateSecretaryStatus(secretaryId: string, status: string, token: string): Promise<any> {
-    const response = await fetch(`${API_URL}/auth/secretary-status/${secretaryId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({ status }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Erreur lors de la mise à jour du statut');
-    }
-
-    return response.json();
-  },
-
-  // Mettre à jour le statut d'un enseignant
   async updateSecretaryStatus(secretaryId: string, status: string, token: string, leaveStartDate?: string, leaveEndDate?: string): Promise<any> {
     const response = await fetch(`${API_URL}/auth/secretary-status/${secretaryId}`, {
       method: 'PUT',
@@ -368,15 +332,15 @@ export const authService = {
     return response.json();
   },
 
-  // Réassigner les élèves d'un enseignant à un autre
-  async reassignStudents(fromTeacherId: string, toTeacherId: string, token: string): Promise<any> {
+  // Réassigner les élèves d'un secrétaire à un autre
+  async reassignStudents(fromSecretaryId: string, toSecretaryId: string, token: string): Promise<any> {
     const response = await fetch(`${API_URL}/auth/reassign-students`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ fromTeacherId, toTeacherId }),
+      body: JSON.stringify({ fromSecretaryId, toSecretaryId }),
     });
 
     if (!response.ok) {

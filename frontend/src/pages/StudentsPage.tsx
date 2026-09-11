@@ -88,22 +88,6 @@ export default function StudentsPage() {
     }
   };
 
-  const loadAssignedClasses = async (token: string) => {
-    try {
-      const response = await fetch(`${API_URL}/secretary/assigned-classes`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setAssignedClasses(data.classes || []);
-      } else {
-        console.error('Failed to load assigned classes:', response.status);
-      }
-    } catch (error: any) {
-      console.error('Error loading assigned classes:', error);
-    }
-  };
-
   // Traduire le statut en français
   const translateStatus = (status: string): string => {
     switch (status) {
@@ -120,7 +104,7 @@ export default function StudentsPage() {
     const classData = classes.find(c => c.name === className);
     if (!classData) return [];
     
-    const classSecretaries = secretaries.filter((t: any) => {
+    const classTeachers = secretaries.filter((t: any) => {
       const assignment = t.secretary_class_assignments?.find((a: any) => a.class_id === classData.id);
       return assignment;
     });
@@ -958,7 +942,7 @@ export default function StudentsPage() {
                 />
                 <span className='text-gray-700 text-sm sm:text-base'>Toutes les classes</span>
               </label>
-              {(user?.role === 'secretary' ? getOrderedClassNames(assignedClasses) : classes.map(c => c.name)).map((className) => (
+              {classes.map(c => c.name).map((className) => (
                 <label key={className} className='flex items-center space-x-3 cursor-pointer'>
                   <input
                     type='checkbox'
