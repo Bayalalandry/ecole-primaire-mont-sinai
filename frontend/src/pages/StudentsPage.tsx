@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { tokenStorage } from '../services/authService';
 import { studentService } from '../services/studentService';
 import { classService } from '../services/classService';
+import { API_URL } from '../config/apiConfig';
 import jsPDF from 'jspdf';
 import { Plus, FileText, ArrowLeft, Edit, X, Info, Users, CheckCircle, Archive, Clock, UserPlus, User } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
@@ -76,7 +77,8 @@ export default function StudentsPage() {
 
   const loadTeachers = async (token: string) => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/teachers', {
+      console.log('Loading teachers with API_URL:', API_URL);
+      const response = await fetch(`${API_URL}/auth/teachers`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (response.ok) {
@@ -92,7 +94,7 @@ export default function StudentsPage() {
 
   const loadAssignedClasses = async (token: string) => {
     try {
-      const response = await fetch('http://localhost:5000/api/teacher/assigned-classes', {
+      const response = await fetch(`${API_URL}/teacher/assigned-classes`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (response.ok) {
