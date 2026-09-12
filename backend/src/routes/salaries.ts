@@ -120,8 +120,8 @@ router.get('/payments/teacher/:secretaryId', authenticateToken, async (req: Auth
 // Routes pour SalaryPage (gestion des salaires)
 // ============================================
 
-// Récupérer tous les salaires
-router.get('/', authenticateToken, async (req: AuthRequest, res) => {
+// Récupérer tous les salaires (uniquement fondateur)
+router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
   try {
     const { schoolYear } = req.query;
 
@@ -176,8 +176,8 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
   }
 });
 
-// Récupérer tous les paiements de salaire
-router.get('/payments', authenticateToken, async (req: AuthRequest, res) => {
+// Récupérer tous les paiements de salaire (uniquement fondateur)
+router.get('/payments', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
   try {
     const { schoolYear, paymentMonth } = req.query;
 
@@ -237,8 +237,8 @@ router.get('/payments', authenticateToken, async (req: AuthRequest, res) => {
   }
 });
 
-// Récupérer les impayés de salaire
-router.get('/outstanding', authenticateToken, async (req: AuthRequest, res) => {
+// Récupérer les impayés de salaire (uniquement fondateur)
+router.get('/outstanding', authenticateToken, requireFounder, async (req: AuthRequest, res) => {
   try {
     const { schoolYear, paymentMonth } = req.query;
 

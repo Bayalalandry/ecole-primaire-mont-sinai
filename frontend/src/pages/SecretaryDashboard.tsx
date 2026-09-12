@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import SchoolLogo from '../components/SchoolLogo';
 
-export default function TeacherDashboard() {
+export default function SecretaryDashboard() {
   const [user, setUser] = useState<any>(null);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -191,7 +191,7 @@ export default function TeacherDashboard() {
                 <SchoolLogo size={56} inCircle={true} className="text-white" />
               </div>
               <div className="flex-1 sm:flex-none">
-                <h1 className="text-lg sm:text-2xl font-bold text-white drop-shadow-lg leading-tight">Tableau de bord Enseignant</h1>
+                <h1 className="text-lg sm:text-2xl font-bold text-white drop-shadow-lg leading-tight">Tableau de bord Secrétaire</h1>
                 <p className="text-xs sm:text-sm text-blue-100 drop-shadow mt-0.5 sm:mt-1">Bienvenue, {user?.last_name} {user?.first_name}</p>
               </div>
             </div>
