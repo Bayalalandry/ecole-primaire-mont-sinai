@@ -76,9 +76,22 @@ BEGIN
   END IF;
 END $$;
 
+-- 7b. Ajouter la colonne secretary_id à salary_payments si elle n'existe pas
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name = 'salary_payments' 
+    AND column_name = 'secretary_id'
+  ) THEN
+    ALTER TABLE salary_payments ADD COLUMN secretary_id UUID REFERENCES secretaries(user_id) ON DELETE CASCADE;
+  END IF;
+END $$;
+
 -- 8. Mettre à jour les index
 DROP INDEX IF EXISTS idx_teacher_assignments;
 CREATE INDEX IF NOT EXISTS idx_secretary_assignments ON secretary_class_assignments(secretary_id, school_year_id);
+CREATE INDEX IF NOT EXISTS idx_salary_payments_secretary_id ON salary_payments(secretary_id);
 
 -- 9. Mettre à jour les triggers
 DROP TRIGGER IF EXISTS update_teachers_updated_at ON secretaries;
