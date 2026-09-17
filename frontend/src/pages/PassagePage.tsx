@@ -54,7 +54,7 @@ export default function PassagePage() {
         
         // Charger les données selon le rôle
         if (currentUser.role === 'secretary' || currentUser.role === 'director') {
-          loadTeacherClasses(token);
+          loadSecretaryClasses(token);
         } else if (currentUser.role === 'founder') {
           loadPassingGrades(token);
         }
@@ -66,7 +66,7 @@ export default function PassagePage() {
         setSchoolYear(fallbackYear);
         
         if (currentUser.role === 'secretary' || currentUser.role === 'director') {
-          loadTeacherClasses(token);
+          loadSecretaryClasses(token);
         } else if (currentUser.role === 'founder') {
           loadPassingGrades(token);
         }
@@ -75,7 +75,7 @@ export default function PassagePage() {
     setLoading(false);
   }, [navigate]);
 
-  const loadTeacherClasses = async (token: string) => {
+  const loadSecretaryClasses = async (token: string) => {
     try {
       const classesData = await passageService.getMyClasses(schoolYear, token);
       setTeacherClasses(sortClasses(classesData.classes || []));
@@ -276,7 +276,7 @@ export default function PassagePage() {
     if ((user?.role === 'secretary' || user?.role === 'director') && schoolYear) {
       const token = tokenStorage.getToken();
       if (token) {
-        loadTeacherClasses(token);
+        loadSecretaryClasses(token);
       }
     }
   }, [schoolYear, user]);
