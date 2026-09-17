@@ -1,11 +1,11 @@
 import { API_URL } from '../config/apiConfig';
 
 // ============================================
-// GESTION DES MOYENNES ANNUELLES (ENSEIGNANT)
+// GESTION DES MOYENNES ANNUELLES (SECRÉTAIRE)
 // ============================================
 
 export const passageService = {
-  // Récupérer les classes d'un enseignant
+  // Récupérer les classes d'un secrétaire
   async getMyClasses(schoolYear: string, token: string) {
     const response = await fetch(`${API_URL}/passage/my-classes?schoolYear=${schoolYear}`, {
       headers: {

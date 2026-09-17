@@ -14,7 +14,7 @@ export default function PassagePage() {
   const [activeTab, setActiveTab] = useState<'grades' | 'thresholds' | 'validation'>('grades');
 
   // État pour la saisie des moyennes
-  const [teacherClasses, setTeacherClasses] = useState<any[]>([]); // Classes assignées à l'enseignant
+  const [secretaryClasses, setSecretaryClasses] = useState<any[]>([]); // Classes assignées au secrétaire (ou toutes les classes)
   const [founderClasses, setFounderClasses] = useState<any[]>([]); // Toutes les classes pour le fondateur
   const [selectedClass, setSelectedClass] = useState('');
   const [schoolYear, setSchoolYear] = useState('');
@@ -41,7 +41,7 @@ export default function PassagePage() {
     setUser(currentUser);
 
     // Définir l'onglet par défaut selon le rôle
-    if (currentUser.role === 'teacher' || currentUser.role === 'director') {
+    if (currentUser.role === 'secretary' || currentUser.role === 'director') {
       setActiveTab('grades');
     } else if (currentUser.role === 'founder') {
       setActiveTab('thresholds');
@@ -53,7 +53,7 @@ export default function PassagePage() {
         setSchoolYear(currentYear);
         
         // Charger les données selon le rôle
-        if (currentUser.role === 'teacher' || currentUser.role === 'director') {
+        if (currentUser.role === 'secretary' || currentUser.role === 'director') {
           loadTeacherClasses(token);
         } else if (currentUser.role === 'founder') {
           loadPassingGrades(token);
@@ -65,7 +65,7 @@ export default function PassagePage() {
         const fallbackYear = new Date().getFullYear().toString() + '-' + (new Date().getFullYear() + 1).toString();
         setSchoolYear(fallbackYear);
         
-        if (currentUser.role === 'teacher' || currentUser.role === 'director') {
+        if (currentUser.role === 'secretary' || currentUser.role === 'director') {
           loadTeacherClasses(token);
         } else if (currentUser.role === 'founder') {
           loadPassingGrades(token);
@@ -144,7 +144,7 @@ export default function PassagePage() {
       alert('Moyennes enregistrées avec succès');
       
       // Marquer que les stats doivent être rafraîchies
-      localStorage.setItem('teacherStatsUpdate', Date.now().toString());
+      localStorage.setItem('secretaryStatsUpdate', Date.now().toString());
     } catch (error: any) {
       console.error('Error saving grades:', error);
       alert(error.message);
@@ -271,9 +271,9 @@ export default function PassagePage() {
     }
   }, [activeTab, user, schoolYear]);
 
-  // Recharger les classes de l'enseignant quand schoolYear change
+  // Recharger les classes du secrétaire quand schoolYear change
   useEffect(() => {
-    if ((user?.role === 'teacher' || user?.role === 'director') && schoolYear) {
+    if ((user?.role === 'secretary' || user?.role === 'director') && schoolYear) {
       const token = tokenStorage.getToken();
       if (token) {
         loadTeacherClasses(token);
@@ -310,7 +310,6 @@ export default function PassagePage() {
                 if (user?.role === 'founder') navigate('/dashboard/founder');
                 else if (user?.role === 'director') navigate('/dashboard/director');
                 else if (user?.role === 'secretary') navigate('/dashboard/secretary');
-                else navigate('/dashboard/teacher');
               }}
               className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2 relative z-40"
             >
@@ -326,7 +325,7 @@ export default function PassagePage() {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
 
         {/* Onglets */}
-        {(user?.role === 'founder' || user?.role === 'teacher' || user?.role === 'director') && (
+        {(user?.role === 'founder' || user?.role === 'secretary' || user?.role === 'director') && (
           <div className="bg-white rounded-xl shadow-card border border-gray-200 mb-4 sm:mb-6">
             <div className="flex border-b border-gray-200 overflow-x-auto">
               {user?.role === 'founder' && (
@@ -355,7 +354,7 @@ export default function PassagePage() {
                   </button>
                 </>
               )}
-              {(user?.role === 'teacher' || user?.role === 'director') && (
+              {(user?.role === 'secretary' || user?.role === 'director') && (
                 <button
                   onClick={() => setActiveTab('grades')}
                   className={`px-4 sm:px-6 py-3 sm:py-4 font-medium transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-300 whitespace-nowrap ${
@@ -372,7 +371,7 @@ export default function PassagePage() {
           </div>
         )}
 
-        {/* Onglet Saisie des moyennes (enseignant ou directeur) */}
+        {/* Onglet Saisie des moyennes (secrétaire ou directeur) */}
         {activeTab === 'grades' && (user?.role === 'teacher' || user?.role === 'director') && (
           <div className="bg-white rounded-xl shadow-card p-4 sm:p-6 border border-gray-200">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
@@ -388,7 +387,7 @@ export default function PassagePage() {
                 className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white text-sm"
               >
                 <option value="">Sélectionner une classe</option>
-                {teacherClasses.map((c) => (
+                {secretaryClasses.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
                   </option>
