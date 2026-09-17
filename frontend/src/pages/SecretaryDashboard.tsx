@@ -332,7 +332,7 @@ export default function SecretaryDashboard() {
           <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-blue-500">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Mes élèves</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Les élèves</h3>
                 <p className="text-3xl sm:text-4xl font-bold text-blue-600">{loadingStats ? '...' : stats.totalStudents}</p>
               </div>
               <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex-shrink-0">
@@ -386,7 +386,7 @@ export default function SecretaryDashboard() {
                 <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Voir mes élèves</h3>
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Voir les élèves</h3>
                 <p className="text-xs sm:text-sm text-gray-600">Liste et détails</p>
               </div>
             </div>

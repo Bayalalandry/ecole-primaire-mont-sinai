@@ -132,14 +132,22 @@ router.get('/secretary/dashboard-stats', authenticateToken, requireSecretaryOrDi
 
       if (trimesters && trimesters.length > 0) {
         const today = new Date();
+        let foundTrimester = false;
+        
         for (const trimester of trimesters) {
           const startDate = new Date(trimester.start_date);
           const endDate = new Date(trimester.end_date);
 
           if (today >= startDate && today <= endDate) {
             currentTrimester = `${trimester.trimester_number}er`;
+            foundTrimester = true;
             break;
           }
+        }
+        
+        // Si aucun trimestre trouvé, on est en vacances
+        if (!foundTrimester) {
+          currentTrimester = 'Vacances';
         }
       }
     } catch (error) {
@@ -151,6 +159,8 @@ router.get('/secretary/dashboard-stats', authenticateToken, requireSecretaryOrDi
         currentTrimester = '2ème';
       } else if (month >= 2 && month <= 4) {
         currentTrimester = '3ème';
+      } else {
+        currentTrimester = 'Vacances';
       }
     }
 
