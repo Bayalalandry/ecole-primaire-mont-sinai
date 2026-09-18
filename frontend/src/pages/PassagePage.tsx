@@ -14,7 +14,7 @@ export default function PassagePage() {
   const [activeTab, setActiveTab] = useState<'grades' | 'thresholds' | 'validation'>('grades');
 
   // État pour la saisie des moyennes
-  const [secretaryClasses, setSecretaryClasses] = useState<any[]>([]); // Classes assignées au secrétaire (ou toutes les classes)
+  const [teacherClasses, setTeacherClasses] = useState<any[]>([]); // Classes assignées au secrétaire (ou toutes les classes)
   const [founderClasses, setFounderClasses] = useState<any[]>([]); // Toutes les classes pour le fondateur
   const [selectedClass, setSelectedClass] = useState('');
   const [schoolYear, setSchoolYear] = useState('');
@@ -387,7 +387,7 @@ export default function PassagePage() {
                 className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white text-sm"
               >
                 <option value="">Sélectionner une classe</option>
-                {secretaryClasses.map((c) => (
+                {teacherClasses.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
                   </option>
