@@ -449,8 +449,8 @@ export default function StudentsPage() {
                       Inscription d'élèves
                     </h3>
                     <p className="text-blue-800 mb-4">
-                      En tant qu'enseignant, vous pouvez inscrire de nouveaux élèves dans n'importe quelle classe.
-                      Vous voyez tous les élèves de vos classes assignées.
+                      En tant que secrétaire, vous pouvez inscrire de nouveaux élèves dans n'importe quelle classe.
+                      Vous voyez tous les élèves de l'école.
                     </p>
                     <button
                       onClick={() => {

@@ -372,7 +372,7 @@ export default function PassagePage() {
         )}
 
         {/* Onglet Saisie des moyennes (secrétaire ou directeur) */}
-        {activeTab === 'grades' && (user?.role === 'teacher' || user?.role === 'director') && (
+        {activeTab === 'grades' && (user?.role === 'secretary' || user?.role === 'director') && (
           <div className="bg-white rounded-xl shadow-card p-4 sm:p-6 border border-gray-200">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
               <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />

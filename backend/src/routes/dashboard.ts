@@ -71,23 +71,12 @@ router.get('/secretary/dashboard-stats', authenticateToken, requireSecretaryOrDi
     }
 
     // Compter le nombre total d'élèves dans ces classes
-    // Filtrer par l'année scolaire actuelle si possible
+    // Pour le secrétaire, on compte TOUS les élèves actifs (pas de filtre school_year pour simplifier)
     let studentsQuery = supabase
       .from('students')
       .select('id')
       .in('current_class_id', classIds)
       .eq('status', 'active');
-
-    // Vérifier si la colonne school_year existe (c'est une chaîne, pas un ID)
-    const { data: testStudents } = await supabase
-      .from('students')
-      .select('school_year')
-      .limit(1);
-
-    if (testStudents && testStudents.length > 0) {
-      // La colonne school_year existe, filtrer par l'année actuelle
-      studentsQuery = studentsQuery.eq('school_year', currentYear.year_label);
-    }
 
     const { data: students } = await studentsQuery;
 
@@ -152,16 +141,8 @@ router.get('/secretary/dashboard-stats', authenticateToken, requireSecretaryOrDi
       }
     } catch (error) {
       console.error('Error loading trimesters:', error);
-      // Fallback à l'ancienne logique si erreur
-      if (month >= 9 && month <= 11) {
-        currentTrimester = '1er';
-      } else if (month >= 12 || month === 1) {
-        currentTrimester = '2ème';
-      } else if (month >= 2 && month <= 4) {
-        currentTrimester = '3ème';
-      } else {
-        currentTrimester = 'Vacances';
-      }
+      // En cas d'erreur, on considère qu'on est en vacances
+      currentTrimester = 'Vacances';
     }
 
     res.json({
