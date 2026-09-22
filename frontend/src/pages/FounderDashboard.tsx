@@ -205,6 +205,25 @@ export default function FounderDashboard() {
     return <div className="p-8">Chargement...</div>;
   }
 
+  if (!statistics) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Impossible de charger les statistiques</p>
+          <button
+            onClick={() => {
+              const token = tokenStorage.getToken();
+              if (token) loadStatistics(token);
+            }}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Réessayer
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
