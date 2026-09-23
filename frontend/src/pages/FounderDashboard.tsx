@@ -131,9 +131,10 @@ export default function FounderDashboard() {
   const loadStatistics = async (token: string) => {
     try {
       const data = await statisticsService.getGlobalStatistics({}, token);
-      setStatistics(data);
+      setStatistics(data || null);
     } catch (error: any) {
       console.error('Error loading statistics:', error);
+      setStatistics(null);
     } finally {
       setLoading(false);
     }
@@ -388,26 +389,26 @@ export default function FounderDashboard() {
                     <p className="text-xs sm:text-sm text-gray-600">Recettes (Scolarités)</p>
                     <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                   </div>
-                  <p className="text-xl sm:text-2xl font-bold text-green-700">{formatAmount(statistics.financial.totalRevenue)}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-green-700">{formatAmount(statistics?.financial?.totalRevenue || 0)}</p>
                 </div>
                 <div className="bg-gradient-to-br from-red-50 to-red-100 p-3 sm:p-4 rounded-xl border border-red-200">
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs sm:text-sm text-gray-600">Dépenses (Salaires + Autres)</p>
                     <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 rotate-180" />
                   </div>
-                  <p className="text-xl sm:text-2xl font-bold text-red-700">{formatAmount(statistics.financial.totalExpenses)}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-red-700">{formatAmount(statistics?.financial?.totalExpenses || 0)}</p>
                 </div>
-                <div className={`bg-gradient-to-br ${statistics.financial.balance >= 0 ? 'from-blue-50 to-blue-100 border-blue-200' : 'from-orange-50 to-orange-100 border-orange-200'} p-3 sm:p-4 rounded-xl border`}>
+                <div className={`bg-gradient-to-br ${statistics?.financial?.balance >= 0 ? 'from-blue-50 to-blue-100 border-blue-200' : 'from-orange-50 to-orange-100 border-orange-200'} p-3 sm:p-4 rounded-xl border`}>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs sm:text-sm text-gray-600">Bilan</p>
-                    {statistics.financial.balance >= 0 ? (
+                    {statistics?.financial?.balance >= 0 ? (
                       <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                     ) : (
                       <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 rotate-180" />
                     )}
                   </div>
-                  <p className={`text-xl sm:text-2xl font-bold ${statistics.financial.balance >= 0 ? 'text-blue-700' : 'text-orange-700'}`}>
-                    {formatAmount(statistics.financial.balance)}
+                  <p className={`text-xl sm:text-2xl font-bold ${statistics?.financial?.balance >= 0 ? 'text-blue-700' : 'text-orange-700'}`}>
+                    {formatAmount(statistics?.financial?.balance || 0)}
                   </p>
                 </div>
               </div>
@@ -426,15 +427,15 @@ export default function FounderDashboard() {
                 <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex justify-between">
                     <span className="text-xs sm:text-sm text-gray-600">Encaissé</span>
-                    <span className="font-semibold text-emerald-600 text-sm">{formatAmount(statistics.tuition.totalCollected)}</span>
+                    <span className="font-semibold text-emerald-600 text-sm">{formatAmount(statistics?.tuition?.totalCollected || 0)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-xs sm:text-sm text-gray-600">Impayés</span>
-                    <span className="font-semibold text-red-600 text-sm">{formatAmount(statistics.tuition.totalOutstanding)}</span>
+                    <span className="font-semibold text-red-600 text-sm">{formatAmount(statistics?.tuition?.totalOutstanding || 0)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-xs sm:text-sm text-gray-600">Élèves impayés</span>
-                    <span className="font-semibold text-orange-600 text-sm">{statistics.tuition.outstandingStudentsCount}</span>
+                    <span className="font-semibold text-orange-600 text-sm">{statistics?.tuition?.outstandingStudentsCount || 0}</span>
                   </div>
                 </div>
               </div>
@@ -450,11 +451,11 @@ export default function FounderDashboard() {
                 <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex justify-between">
                     <span className="text-xs sm:text-sm text-gray-600">Versés</span>
-                    <span className="font-semibold text-green-600">{formatAmount(statistics.salaries.totalPaid)}</span>
+                    <span className="font-semibold text-green-600">{formatAmount(statistics?.salaries?.totalPaid || 0)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Restant à payer</span>
-                    <span className="font-semibold text-orange-600">{formatAmount(statistics.salaries.totalOutstanding)}</span>
+                    <span className="font-semibold text-orange-600">{formatAmount(statistics?.salaries?.totalOutstanding || 0)}</span>
                   </div>
                 </div>
               </div>
@@ -470,11 +471,11 @@ export default function FounderDashboard() {
                 <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex justify-between">
                     <span className="text-xs sm:text-sm text-gray-600">Total</span>
-                    <span className="font-semibold text-rose-600 text-sm">{formatAmount(statistics.expenses.total)}</span>
+                    <span className="font-semibold text-rose-600 text-sm">{formatAmount(statistics?.expenses?.total || 0)}</span>
                   </div>
                   <div className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
                     Par catégorie:
-                    {Object.entries(statistics.expenses.byCategory).slice(0, 2).map(([cat, amount]) => (
+                    {Object.entries(statistics?.expenses?.byCategory || {}).slice(0, 2).map(([cat, amount]) => (
                       <div key={cat} className="flex justify-between">
                         <span className="capitalize">{cat}</span>
                         <span>{formatAmount(Number(amount))}</span>
@@ -495,15 +496,15 @@ export default function FounderDashboard() {
                 <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex justify-between">
                     <span className="text-xs sm:text-sm text-gray-600">Élèves actifs</span>
-                    <span className="font-semibold text-sky-600 text-sm">{statistics.students.active}</span>
+                    <span className="font-semibold text-sky-600 text-sm">{statistics?.students?.active || 0}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-xs sm:text-sm text-gray-600">Redoublants</span>
-                    <span className="font-semibold text-orange-600 text-sm">{statistics.students.repeating}</span>
+                    <span className="font-semibold text-orange-600 text-sm">{statistics?.students?.repeating || 0}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-xs sm:text-sm text-gray-600">Secrétaires</span>
-                    <span className="font-semibold text-sky-600 text-sm">{statistics.teachers.total}</span>
+                    <span className="font-semibold text-sky-600 text-sm">{statistics?.teachers?.total || 0}</span>
                   </div>
                 </div>
               </div>
