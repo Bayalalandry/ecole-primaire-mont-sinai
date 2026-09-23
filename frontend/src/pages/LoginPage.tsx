@@ -155,10 +155,6 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                onClick={(e) => {
-                  console.log('Button clicked!');
-                  e.stopPropagation();
-                }}
                 className="w-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white py-3 sm:py-3 px-4 rounded-xl font-semibold text-base sm:text-base hover:shadow-xl hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-2 relative z-50"
               >
                 {loading ? (
