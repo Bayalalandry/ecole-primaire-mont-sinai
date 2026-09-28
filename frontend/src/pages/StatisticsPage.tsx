@@ -26,9 +26,10 @@ export default function StatisticsPage() {
   const loadStatistics = async (token: string) => {
     try {
       const data = await statisticsService.getGlobalStatistics(filters, token);
-      setStatistics(data);
+      setStatistics(data || null);
     } catch (error: any) {
       console.error('Error loading statistics:', error);
+      setStatistics(null);
     } finally {
       setLoading(false);
     }
@@ -99,6 +100,25 @@ export default function StatisticsPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-blue-600 text-lg">Chargement...</div>
+      </div>
+    );
+  }
+
+  if (!statistics) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Impossible de charger les statistiques</p>
+          <button
+            onClick={() => {
+              const token = tokenStorage.getToken();
+              if (token) loadStatistics(token);
+            }}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Réessayer
+          </button>
+        </div>
       </div>
     );
   }
@@ -215,26 +235,26 @@ export default function StatisticsPage() {
                       <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Recettes (Scolarités)</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-green-600">{formatAmount(statistics.financial.totalRevenue)}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-green-600">{formatAmount(statistics?.financial?.totalRevenue || 0)}</p>
                   </div>
                   <div className="bg-gradient-to-br from-red-50 to-red-100 p-3 sm:p-4 rounded-xl border-l-4 border-red-500">
                     <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
                       <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 text-red-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Dépenses (Salaires + Autres)</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-red-600">{formatAmount(statistics.financial.totalExpenses)}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-red-600">{formatAmount(statistics?.financial?.totalExpenses || 0)}</p>
                   </div>
-                  <div className={`p-3 sm:p-4 rounded-xl border-l-4 ${statistics.financial.balance >= 0 ? 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-500' : 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-500'}`}>
+                  <div className={`p-3 sm:p-4 rounded-xl border-l-4 ${statistics?.financial?.balance >= 0 ? 'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-500' : 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-500'}`}>
                     <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
-                      {statistics.financial.balance >= 0 ? (
+                      {statistics?.financial?.balance >= 0 ? (
                         <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
                       ) : (
                         <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 text-orange-600" />
                       )}
                       <p className="text-xs sm:text-sm text-gray-700">Bilan</p>
                     </div>
-                    <p className={`text-xl sm:text-2xl font-bold ${statistics.financial.balance >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
-                      {formatAmount(statistics.financial.balance)}
+                    <p className={`text-xl sm:text-2xl font-bold ${statistics?.financial?.balance >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
+                      {formatAmount(statistics?.financial?.balance || 0)}
                     </p>
                   </div>
                 </div>
@@ -254,22 +274,22 @@ export default function StatisticsPage() {
                       <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Encaissé</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-blue-600">{formatAmount(statistics.tuition.totalCollected)}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-blue-600">{formatAmount(statistics?.tuition?.totalCollected || 0)}</p>
                   </div>
                   <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-3 sm:p-4 rounded-xl border-l-4 border-amber-500">
                     <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
                       <Minus className="w-3 h-3 sm:w-4 sm:h-4 text-amber-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Attendu</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-amber-600">{formatAmount(statistics.tuition.totalExpected)}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-amber-600">{formatAmount(statistics?.tuition?.totalExpected || 0)}</p>
                   </div>
                   <div className="bg-gradient-to-br from-red-50 to-red-100 p-3 sm:p-4 rounded-xl border-l-4 border-red-500">
                     <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
                       <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 text-red-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Impayés</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-red-600">{formatAmount(statistics.tuition.totalOutstanding)}</p>
-                    <p className="text-xs sm:text-sm text-gray-600">{statistics.tuition.outstandingStudentsCount} élèves</p>
+                    <p className="text-xl sm:text-2xl font-bold text-red-600">{formatAmount(statistics?.tuition?.totalOutstanding || 0)}</p>
+                    <p className="text-xs sm:text-sm text-gray-600">{statistics?.tuition?.outstandingStudentsCount || 0} élèves</p>
                   </div>
                 </div>
               </div>
@@ -288,21 +308,21 @@ export default function StatisticsPage() {
                       <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Versés</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-green-600">{formatAmount(statistics.salaries.totalPaid)}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-green-600">{formatAmount(statistics?.salaries?.totalPaid || 0)}</p>
                   </div>
                   <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-3 sm:p-4 rounded-xl border-l-4 border-amber-500">
                     <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
                       <Minus className="w-3 h-3 sm:w-4 sm:h-4 text-amber-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Total attendu</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-amber-600">{formatAmount(statistics.salaries.totalExpected)}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-amber-600">{formatAmount(statistics?.salaries?.totalExpected || 0)}</p>
                   </div>
                   <div className="bg-gradient-to-br from-red-50 to-red-100 p-3 sm:p-4 rounded-xl border-l-4 border-red-500">
                     <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
                       <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 text-red-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Restant à payer</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-red-600">{formatAmount(statistics.salaries.totalOutstanding)}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-red-600">{formatAmount(statistics?.salaries?.totalOutstanding || 0)}</p>
                   </div>
                 </div>
               </div>
@@ -321,12 +341,12 @@ export default function StatisticsPage() {
                       <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 text-purple-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Total dépenses</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-purple-600">{formatAmount(statistics.expenses.total)}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-purple-600">{formatAmount(statistics?.expenses?.total || 0)}</p>
                   </div>
                   <div className="bg-gray-50 p-3 sm:p-4 rounded-xl border border-gray-200">
                     <p className="text-xs sm:text-sm text-gray-700 mb-1 sm:mb-2">Par catégorie</p>
                     <div className="space-y-1">
-                      {Object.entries(statistics.expenses.byCategory).map(([category, amount]) => (
+                      {Object.entries(statistics?.expenses?.byCategory || {}).map(([category, amount]) => (
                         <div key={category} className="flex justify-between text-xs sm:text-sm">
                           <span className="capitalize text-gray-800">{category}</span>
                           <span className="font-semibold text-gray-900">{formatAmount(Number(amount))}</span>
@@ -351,28 +371,28 @@ export default function StatisticsPage() {
                       <Users className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Total</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-blue-600">{statistics.students.total}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-blue-600">{statistics?.students?.total || 0}</p>
                   </div>
                   <div className="bg-gradient-to-br from-green-50 to-green-100 p-3 sm:p-4 rounded-xl border-l-4 border-green-500">
                     <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
                       <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Actifs</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-green-600">{statistics.students.active}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-green-600">{statistics?.students?.active || 0}</p>
                   </div>
                   <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-3 sm:p-4 rounded-xl border-l-4 border-amber-500">
                     <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
                       <Minus className="w-3 h-3 sm:w-4 sm:h-4 text-amber-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Redoublants</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-amber-600">{statistics.students.repeating}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-amber-600">{statistics?.students?.repeating || 0}</p>
                   </div>
                   <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-3 sm:p-4 rounded-xl border-l-4 border-gray-500">
                     <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
                       <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                       <p className="text-xs sm:text-sm text-gray-700">Partis</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-gray-600">{statistics.students.departed}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-gray-600">{statistics?.students?.departed || 0}</p>
                   </div>
                 </div>
                 <div>
@@ -388,7 +408,7 @@ export default function StatisticsPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {statistics.students.byClass.map((classStats: any) => (
+                        {(statistics?.students?.byClass || []).map((classStats: any) => (
                           <tr key={classStats.className} className="border-b border-gray-100 hover:bg-gray-50">
                             <td className="p-2 text-gray-900 text-xs sm:text-sm">{classStats.className}</td>
                             <td className="p-2 text-right font-semibold text-green-600 text-xs sm:text-sm">{classStats.active}</td>
@@ -415,7 +435,7 @@ export default function StatisticsPage() {
                     <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
                     <p className="text-xs sm:text-sm text-gray-700">Total enseignants actifs</p>
                   </div>
-                  <p className="text-xl sm:text-2xl font-bold text-blue-600">{statistics.teachers.total}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-blue-600">{statistics?.secretaries?.total || 0}</p>
                 </div>
               </div>
             </div>
