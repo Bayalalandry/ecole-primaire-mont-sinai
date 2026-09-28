@@ -21,7 +21,7 @@ export default function SalaryPage() {
   const [salaries, setSalaries] = useState<any[]>([]);
   const [showSalaryForm, setShowSalaryForm] = useState(false);
   const [salaryForm, setSalaryForm] = useState({
-    teacherId: '',
+    secretaryId: '',
     schoolYear: '',
     monthlyAmount: '',
     effectiveDate: new Date().toISOString().split('T')[0],
@@ -31,7 +31,7 @@ export default function SalaryPage() {
   const [payments, setPayments] = useState<any[]>([]);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentForm, setPaymentForm] = useState({
-    teacherId: '',
+    secretaryId: '',
     salaryId: '',
     amount: '',
     paymentMonth: new Date().toISOString().split('T')[0].substring(0, 7) + '-01', // YYYY-MM-01 format (premier jour du mois)
@@ -88,7 +88,7 @@ export default function SalaryPage() {
       console.log('Loaded data:', { salariesData, teachersData, paymentsData, outstandingData });
 
       setSalaries(salariesData.salaries || []);
-      setTeachers(teachersData || []);
+      setTeachers(teachersData.secretaries || teachersData || []);
       setPayments(paymentsData.payments || []);
       setOutstanding(outstandingData.outstanding || []);
     } catch (error: any) {
@@ -152,7 +152,7 @@ export default function SalaryPage() {
     try {
       await salaryService.createSalary(
         {
-          teacherId: salaryForm.teacherId,
+          secretaryId: salaryForm.secretaryId,
           schoolYear: salaryForm.schoolYear,
           monthlyAmount: parseFloat(salaryForm.monthlyAmount),
           effectiveDate: salaryForm.effectiveDate,
@@ -173,7 +173,7 @@ export default function SalaryPage() {
 
       setShowSalaryForm(false);
       setSalaryForm({
-        teacherId: '',
+        secretaryId: '',
         schoolYear: salaryForm.schoolYear,
         monthlyAmount: '',
         effectiveDate: new Date().toISOString().split('T')[0],
@@ -190,7 +190,7 @@ export default function SalaryPage() {
     const token = tokenStorage.getToken();
     if (!token) return;
 
-    if (!paymentForm.teacherId) {
+    if (!paymentForm.secretaryId) {
       alert('Veuillez sélectionner un enseignant');
       return;
     }
@@ -198,7 +198,7 @@ export default function SalaryPage() {
     try {
       const result = await salaryService.createSalaryPayment(
         {
-          teacherId: paymentForm.teacherId,
+          secretaryId: paymentForm.secretaryId,
           salaryId: paymentForm.salaryId,
           amount: parseFloat(paymentForm.amount),
           paymentMonth: paymentForm.paymentMonth,
@@ -223,7 +223,7 @@ export default function SalaryPage() {
 
       setShowPaymentForm(false);
       setPaymentForm({
-        teacherId: '',
+        secretaryId: '',
         salaryId: '',
         amount: '',
         paymentMonth: new Date().toISOString().split('T')[0],
@@ -630,13 +630,13 @@ export default function SalaryPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Enseignant</label>
                     <select
-                      value={salaryForm.teacherId}
-                      onChange={(e) => setSalaryForm({ ...salaryForm, teacherId: e.target.value })}
+                      value={salaryForm.secretaryId}
+                      onChange={(e) => setSalaryForm({ ...salaryForm, secretaryId: e.target.value })}
                       className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                     >
                       <option value="">Sélectionner un enseignant</option>
-                      {teachers.filter(t => t.role === 'teacher' || t.role === 'director').map((teacher) => (
+                      {teachers.filter(t => t.role === 'secretary' || t.role === 'director').map((teacher) => (
                         <option key={teacher.id} value={teacher.id}>
                           {teacher.last_name} {teacher.first_name} {teacher.role === 'director' ? '(Directeur)' : ''}
                         </option>
@@ -782,13 +782,13 @@ export default function SalaryPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Enseignant</label>
                     <select
-                      value={paymentForm.teacherId}
-                      onChange={(e) => setPaymentForm({ ...paymentForm, teacherId: e.target.value })}
+                      value={paymentForm.secretaryId}
+                      onChange={(e) => setPaymentForm({ ...paymentForm, secretaryId: e.target.value })}
                       className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       required
                     >
                       <option value="">Sélectionner un enseignant</option>
-                      {teachers.filter(t => t.role === 'teacher' || t.role === 'director').map((teacher) => (
+                      {teachers.filter(t => t.role === 'secretary' || t.role === 'director').map((teacher) => (
                         <option key={teacher.id} value={teacher.id}>
                           {teacher.last_name} {teacher.first_name} {teacher.role === 'director' ? '(Directeur)' : ''}
                         </option>
@@ -943,7 +943,7 @@ export default function SalaryPage() {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {outstanding.map((item) => (
-                      <tr key={item.teacherId}>
+                      <tr key={item.secretaryId}>
                         <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                           {item.teacherName}
                         </td>
