@@ -22,7 +22,7 @@ import SchoolLogo from '../components/SchoolLogo';
 
 export default function DirectorDashboard() {
   const [user, setUser] = useState<any>(null);
-  const [stats, setStats] = useState({ totalTeachers: 0, totalStudents: 0, currentTrimester: '' });
+  const [stats, setStats] = useState({ totalSecretaries: 0, totalStudents: 0, currentTrimester: '' });
   const [loadingStats, setLoadingStats] = useState(true);
   const [hasAssignedClasses, setHasAssignedClasses] = useState(false);
   const [loadingClasses, setLoadingClasses] = useState(true);
@@ -180,8 +180,8 @@ export default function DirectorDashboard() {
     setSearchQuery('');
     if (result.type === 'student') {
       navigate(`/profile/student/${result.id}`);
-    } else if (result.type === 'teacher') {
-      navigate(`/profile/teacher/${result.id}`);
+    } else if (result.type === 'secretary') {
+      navigate(`/profile/secretary/${result.id}`);
     }
   };
 
@@ -337,8 +337,8 @@ export default function DirectorDashboard() {
           <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-l-6 border-purple-500">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Total enseignants</h3>
-                <p className="text-3xl sm:text-4xl font-bold text-purple-600">{loadingStats ? '...' : stats.totalTeachers}</p>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Total secrétaires</h3>
+                <p className="text-3xl sm:text-4xl font-bold text-purple-600">{loadingStats ? '...' : stats.totalSecretaries}</p>
               </div>
               <div className="p-3 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full">
                 <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
@@ -382,20 +382,6 @@ export default function DirectorDashboard() {
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les élèves</h3>
                 <p className="text-xs sm:text-sm text-gray-600">Inscriptions et fiches</p>
-              </div>
-            </div>
-          </button>
-          <button
-            onClick={() => navigate('/secretaries')}
-            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-purple-500 text-left group"
-          >
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
-                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les secrétaires</h3>
-                <p className="text-xs sm:text-sm text-gray-600">Personnel et absences</p>
               </div>
             </div>
           </button>
