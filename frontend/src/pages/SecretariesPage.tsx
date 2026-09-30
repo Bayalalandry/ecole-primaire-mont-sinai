@@ -28,7 +28,7 @@ export default function SecretariesPage() {
     const token = tokenStorage.getToken();
     const currentUser = tokenStorage.getUser();
 
-    if (!token || !currentUser || (currentUser.role !== 'founder' && currentUser.role !== 'director')) {
+    if (!token || !currentUser || currentUser.role !== 'founder') {
       navigate('/login');
       return;
     }
