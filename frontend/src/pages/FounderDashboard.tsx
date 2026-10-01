@@ -543,6 +543,20 @@ export default function FounderDashboard() {
             </div>
           </button>
           <button
+            onClick={() => navigate('/teachers-management')}
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-orange-500 text-left group"
+          >
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full group-hover:scale-110 transition-transform flex-shrink-0">
+                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les enseignants</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Salaires et paiements</p>
+              </div>
+            </div>
+          </button>
+          <button
             onClick={() => navigate('/tuition')}
             className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-6 sm:border-l-8 border-green-500 text-left group"
           >

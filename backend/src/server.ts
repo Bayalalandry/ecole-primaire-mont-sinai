@@ -18,6 +18,7 @@ import { activityLogRoutes } from './routes/activityLog';
 import { notificationRoutes } from './routes/notifications';
 import { backupRoutes } from './routes/backup';
 import pushRoutes from './routes/push';
+import teachersManagementRoutes from './routes/teachersManagement';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -52,6 +53,7 @@ app.use('/api/activity-log', activityLogRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/backup', backupRoutes);
 app.use('/api/push', pushRoutes);
+app.use('/api/teachers-management', teachersManagementRoutes);
 
 console.log('Routes loaded');
 

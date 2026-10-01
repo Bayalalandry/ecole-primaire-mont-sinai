@@ -11,6 +11,7 @@ const SecretaryDashboard = lazy(() => import('./pages/SecretaryDashboard'));
 const StudentsPage = lazy(() => import('./pages/StudentsPage'));
 
 const SecretariesPage = lazy(() => import('./pages/SecretariesPage'));
+const TeachersManagementPage = lazy(() => import('./pages/TeachersManagementPage'));
 const TuitionPage = lazy(() => import('./pages/TuitionPage'));
 const SalaryPage = lazy(() => import('./pages/SalaryPage'));
 const PassagePage = lazy(() => import('./pages/PassagePage'));
@@ -42,6 +43,7 @@ function App() {
             <Route path="/dashboard/secretary" element={<SecretaryDashboard />} />
             <Route path="/students" element={<StudentsPage />} />
             <Route path="/secretaries" element={<SecretariesPage />} />
+            <Route path="/teachers-management" element={<TeachersManagementPage />} />
             <Route path="/tuition" element={<TuitionPage />} />
             <Route path="/salaries" element={<SalaryPage />} />
             <Route path="/passage" element={<PassagePage />} />
