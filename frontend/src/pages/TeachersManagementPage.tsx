@@ -154,16 +154,16 @@ export default function TeachersManagementPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-100 flex items-center justify-center">
-        <div className="text-orange-600 text-lg">Chargement...</div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-blue-600 text-lg">Chargement...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-600 to-amber-700 text-white p-4 sm:p-6 shadow-lg">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 sm:p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 sm:gap-4">
@@ -175,12 +175,12 @@ export default function TeachersManagementPage() {
               </button>
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold">Gestion des Enseignants</h1>
-                <p className="text-xs sm:text-sm text-orange-100">Enseignants sans compte utilisateur (pour gestion salariale)</p>
+                <p className="text-xs sm:text-sm text-blue-100">Enseignants sans compte utilisateur (pour gestion salariale)</p>
               </div>
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="bg-white text-orange-600 px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-orange-50 transition-colors flex items-center gap-2 text-sm sm:text-base"
+              className="bg-white text-blue-600 px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center gap-2 text-sm sm:text-base"
             >
               <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">Ajouter</span>
@@ -193,12 +193,12 @@ export default function TeachersManagementPage() {
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {teachers.length === 0 ? (
           <div className="bg-white rounded-xl shadow-md p-8 text-center">
-            <Users className="w-16 h-16 text-orange-300 mx-auto mb-4" />
+            <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Aucun enseignant</h3>
             <p className="text-gray-500 mb-4">Commencez par ajouter des enseignants pour gérer leurs salaires</p>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Ajouter un enseignant
             </button>
@@ -222,8 +222,8 @@ export default function TeachersManagementPage() {
                     <tr key={teacher.id} className="hover:bg-gray-50">
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10 bg-orange-100 rounded-full flex items-center justify-center">
-                            <User className="h-6 w-6 text-orange-600" />
+                          <div className="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <User className="h-6 w-6 text-blue-600" />
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
@@ -249,7 +249,7 @@ export default function TeachersManagementPage() {
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
                           onClick={() => openEditModal(teacher)}
-                          className="text-orange-600 hover:text-orange-900 mr-3"
+                          className="text-blue-600 hover:text-blue-900 mr-3"
                         >
                           <Edit className="w-4 h-4 inline" />
                         </button>
@@ -272,15 +272,15 @@ export default function TeachersManagementPage() {
       {/* Modal Créer/Modifier */}
       {showCreateModal && (
         <div className="modal-overlay">
-          <div className="modal-content p-4 sm:p-6 max-w-md w-full mx-2 sm:mx-4 border-2 border-orange-200">
+          <div className="modal-content p-4 sm:p-6 max-w-md w-full mx-2 sm:mx-4 border-2 border-blue-200">
             <div className="flex items-center justify-between mb-3 sm:mb-4 border-b border-gray-200 pb-2 sm:pb-3">
               <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2 text-gray-900">
-                <User className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
+                <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 {editingTeacher ? 'Modifier l\'enseignant' : 'Ajouter un enseignant'}
               </h3>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-orange-600 transition-colors bg-gray-100 hover:bg-orange-100 rounded-full p-2"
+                className="text-gray-400 hover:text-blue-600 transition-colors bg-gray-100 hover:bg-blue-100 rounded-full p-2"
               >
                 <X className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
@@ -292,7 +292,7 @@ export default function TeachersManagementPage() {
                   type="text"
                   value={createForm.firstName}
                   onChange={(e) => setCreateForm({ ...createForm, firstName: e.target.value })}
-                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
                   required
                 />
               </div>
@@ -302,7 +302,7 @@ export default function TeachersManagementPage() {
                   type="text"
                   value={createForm.lastName}
                   onChange={(e) => setCreateForm({ ...createForm, lastName: e.target.value })}
-                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
                   required
                 />
               </div>
@@ -312,7 +312,7 @@ export default function TeachersManagementPage() {
                   type="text"
                   value={createForm.subject}
                   onChange={(e) => setCreateForm({ ...createForm, subject: e.target.value })}
-                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
                   placeholder="Ex: Mathématiques"
                 />
               </div>
@@ -322,7 +322,7 @@ export default function TeachersManagementPage() {
                   type="text"
                   value={createForm.phone}
                   onChange={(e) => setCreateForm({ ...createForm, phone: e.target.value })}
-                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
                   placeholder="Ex: +226 XX XX XX XX"
                 />
               </div>
@@ -331,7 +331,7 @@ export default function TeachersManagementPage() {
                 <textarea
                   value={createForm.notes}
                   onChange={(e) => setCreateForm({ ...createForm, notes: e.target.value })}
-                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
                   rows={3}
                   placeholder="Notes supplémentaires..."
                 />
@@ -345,7 +345,7 @@ export default function TeachersManagementPage() {
                 </button>
                 <button
                   onClick={editingTeacher ? handleUpdateTeacher : handleCreateTeacher}
-                  className="w-full sm:w-auto px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 text-sm"
+                  className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 text-sm"
                 >
                   {editingTeacher ? 'Modifier' : 'Créer'}
                 </button>
