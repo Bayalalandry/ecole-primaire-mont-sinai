@@ -41,7 +41,7 @@ function App() {
             <Route path="/dashboard/director" element={<DirectorDashboard />} />
             <Route path="/dashboard/secretary" element={<SecretaryDashboard />} />
             <Route path="/students" element={<StudentsPage />} />
-            <Route path="/teachers" element={<SecretariesPage />} />
+            <Route path="/secretaries" element={<SecretariesPage />} />
             <Route path="/tuition" element={<TuitionPage />} />
             <Route path="/salaries" element={<SalaryPage />} />
             <Route path="/passage" element={<PassagePage />} />
