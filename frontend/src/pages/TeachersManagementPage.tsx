@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { tokenStorage } from '../services/authService';
 import { teachersManagementService } from '../services/teachersManagementService';
 import { Plus, X, ArrowLeft, Users, Edit, Trash2, User } from 'lucide-react';
-import SchoolLogo from '../components/SchoolLogo';
 
 export default function TeachersManagementPage() {
   const [teachers, setTeachers] = useState<any[]>([]);
@@ -18,7 +17,6 @@ export default function TeachersManagementPage() {
     notes: '',
   });
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const token = tokenStorage.getToken();
@@ -30,7 +28,7 @@ export default function TeachersManagementPage() {
     }
 
     loadData(token);
-  }, [navigate, searchParams]);
+  }, [navigate]);
 
   const loadData = async (token: string) => {
     try {
@@ -147,7 +145,7 @@ export default function TeachersManagementPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-orange-100 text-orange-800 border border-orange-200';
+      case 'active': return 'bg-green-100 text-green-800 border border-green-200';
       case 'on_leave': return 'bg-blue-100 text-blue-800 border border-blue-200';
       case 'archived': return 'bg-gray-100 text-gray-800 border border-gray-200';
       default: return 'bg-gray-100 text-gray-800 border border-gray-200';
@@ -156,128 +154,119 @@ export default function TeachersManagementPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-blue-600 text-lg">Chargement...</div>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-100 flex items-center justify-center">
+        <div className="text-orange-600 text-lg">Chargement...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-100">
       {/* Header */}
-      <header className="bg-gradient-to-r from-orange-600 via-orange-700 to-orange-800 shadow-xl flex-shrink-0 relative z-20">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 relative z-30">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="bg-gradient-to-r from-orange-600 to-amber-700 text-white p-4 sm:p-6 shadow-lg">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="bg-white rounded-full backdrop-blur-sm border-2 border-white/50 shadow-lg flex-shrink-0" style={{ padding: 0, pointerEvents: 'none' }}>
-                <SchoolLogo size={56} inCircle={true} className="text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">Gestion des Enseignants</h1>
-                <p className="text-xs sm:text-sm text-orange-100 drop-shadow">Enseignants sans compte utilisateur (pour gestion salariale)</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2 relative z-40"
-              >
-                <Plus className="w-4 h-4" />
-                <span className="hidden sm:inline">Ajouter un enseignant</span>
-                <span className="sm:hidden">Ajouter</span>
-              </button>
               <button
                 onClick={() => navigate('/dashboard/founder')}
-                className="w-full sm:w-auto px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2 relative z-40"
+                className="p-2 hover:bg-white/20 rounded-full transition-colors"
               >
-                <ArrowLeft className="w-4 h-4" />
-                <span className="hidden sm:inline">Retour</span>
+                <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto relative z-10">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
-          {teachers.length === 0 ? (
-            <div className="bg-white rounded-xl shadow-md p-8 text-center">
-              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">Aucun enseignant</h3>
-              <p className="text-gray-500 mb-4">Commencez par ajouter des enseignants pour gérer leurs salaires</p>
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
-              >
-                Ajouter un enseignant
-              </button>
-            </div>
-          ) : (
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b">
-                    <tr>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matière</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date d'embauche</th>
-                      <th className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {teachers.map((teacher) => (
-                      <tr key={teacher.id} className="hover:bg-gray-50">
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10 bg-orange-100 rounded-full flex items-center justify-center">
-                              <User className="h-6 w-6 text-orange-600" />
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">
-                                {teacher.first_name} {teacher.last_name}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {teacher.subject || '-'}
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {teacher.phone || '-'}
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(teacher.status)}`}>
-                            {getStatusLabel(teacher.status)}
-                          </span>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {new Date(teacher.hire_date).toLocaleDateString('fr-FR')}
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <button
-                            onClick={() => openEditModal(teacher)}
-                            className="text-orange-600 hover:text-orange-900 mr-3"
-                          >
-                            <Edit className="w-4 h-4 inline" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteTeacher(teacher.id)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            <Trash2 className="w-4 h-4 inline" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold">Gestion des Enseignants</h1>
+                <p className="text-xs sm:text-sm text-orange-100">Enseignants sans compte utilisateur (pour gestion salariale)</p>
               </div>
             </div>
-          )}
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="bg-white text-orange-600 px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-orange-50 transition-colors flex items-center gap-2 text-sm sm:text-base"
+            >
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">Ajouter</span>
+            </button>
+          </div>
         </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+        {teachers.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-md p-8 text-center">
+            <Users className="w-16 h-16 text-orange-300 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Aucun enseignant</h3>
+            <p className="text-gray-500 mb-4">Commencez par ajouter des enseignants pour gérer leurs salaires</p>
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+            >
+              Ajouter un enseignant
+            </button>
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b">
+                  <tr>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matière</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date d'embauche</th>
+                    <th className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {teachers.map((teacher) => (
+                    <tr key={teacher.id} className="hover:bg-gray-50">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-10 w-10 bg-orange-100 rounded-full flex items-center justify-center">
+                            <User className="h-6 w-6 text-orange-600" />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {teacher.first_name} {teacher.last_name}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {teacher.subject || '-'}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {teacher.phone || '-'}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(teacher.status)}`}>
+                          {getStatusLabel(teacher.status)}
+                        </span>
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(teacher.hire_date).toLocaleDateString('fr-FR')}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={() => openEditModal(teacher)}
+                          className="text-orange-600 hover:text-orange-900 mr-3"
+                        >
+                          <Edit className="w-4 h-4 inline" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteTeacher(teacher.id)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          <Trash2 className="w-4 h-4 inline" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Modal Créer/Modifier */}
@@ -350,13 +339,13 @@ export default function TeachersManagementPage() {
               <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:space-x-3 pt-4">
                 <button
                   onClick={closeModal}
-                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow-md"
+                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 text-sm"
                 >
                   Annuler
                 </button>
                 <button
                   onClick={editingTeacher ? handleUpdateTeacher : handleCreateTeacher}
-                  className="w-full sm:w-auto px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow-md"
+                  className="w-full sm:w-auto px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 text-sm"
                 >
                   {editingTeacher ? 'Modifier' : 'Créer'}
                 </button>
