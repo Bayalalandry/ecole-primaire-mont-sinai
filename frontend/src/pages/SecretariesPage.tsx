@@ -19,6 +19,7 @@ export default function SecretariesPage() {
     confirmPassword: '',
     firstName: '',
     lastName: '',
+    role: 'secretary',
   });
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -105,14 +106,26 @@ export default function SecretariesPage() {
     }
 
     try {
-      await authService.createSecretary(
-        createForm.username,
-        createForm.password,
-        createForm.firstName,
-        createForm.lastName,
-        token
-      );
-      alert('Compte secrétaire créé avec succès');
+      if (createForm.role === 'director') {
+        await authService.createDirector(
+          createForm.username,
+          createForm.password,
+          createForm.firstName,
+          createForm.lastName,
+          {},
+          token
+        );
+        alert('Compte directeur créé avec succès');
+      } else {
+        await authService.createSecretary(
+          createForm.username,
+          createForm.password,
+          createForm.firstName,
+          createForm.lastName,
+          token
+        );
+        alert('Compte secrétaire créé avec succès');
+      }
       setShowCreateModal(false);
       setCreateForm({
         username: '',
@@ -120,10 +133,11 @@ export default function SecretariesPage() {
         confirmPassword: '',
         firstName: '',
         lastName: '',
+        role: 'secretary',
       });
       loadData(token);
     } catch (error: any) {
-      console.error('Error creating secretary:', error);
+      console.error('Error creating account:', error);
       alert(error.message);
     }
   };
@@ -167,8 +181,8 @@ export default function SecretariesPage() {
                 <SchoolLogo size={56} inCircle={true} className="text-white" />
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">Gestion des Secrétaires</h1>
-                <p className="text-xs sm:text-sm text-blue-100 drop-shadow">Gérer les comptes des secrétaires</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">Gestion du Personnel</h1>
+                <p className="text-xs sm:text-sm text-blue-100 drop-shadow">Gérer les comptes des secrétaires et directeurs</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -413,7 +427,7 @@ export default function SecretariesPage() {
             <div className="flex items-center justify-between mb-3 sm:mb-4 border-b border-gray-200 pb-2 sm:pb-3">
               <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2 text-gray-900">
                 <User className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
-                Créer un compte Secrétaire
+                Créer un compte {createForm.role === 'director' ? 'Directeur' : 'Secrétaire'}
               </h3>
               <button
                 onClick={() => {
@@ -424,6 +438,7 @@ export default function SecretariesPage() {
                     confirmPassword: '',
                     firstName: '',
                     lastName: '',
+                    role: 'secretary',
                   });
                 }}
                 className="text-gray-400 hover:text-green-600 transition-colors bg-gray-100 hover:bg-green-100 rounded-full p-2"
@@ -477,6 +492,17 @@ export default function SecretariesPage() {
                   className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none text-sm"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+                <select
+                  value={createForm.role}
+                  onChange={(e) => setCreateForm({ ...createForm, role: e.target.value })}
+                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none text-sm"
+                >
+                  <option value="secretary">Secrétaire</option>
+                  <option value="director">Directeur</option>
+                </select>
+              </div>
               <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:space-x-3">
                 <button
                   onClick={() => {
@@ -487,6 +513,7 @@ export default function SecretariesPage() {
                       confirmPassword: '',
                       firstName: '',
                       lastName: '',
+                      role: 'secretary',
                     });
                   }}
                   className="w-full sm:w-auto px-4 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all text-sm"

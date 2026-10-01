@@ -537,8 +537,8 @@ export default function FounderDashboard() {
                 <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer les secrétaires</h3>
-                <p className="text-xs sm:text-sm text-gray-600">Personnel et absences</p>
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Gérer le personnel</h3>
+                <p className="text-xs sm:text-sm text-gray-600">Secrétaires et directeurs</p>
               </div>
             </div>
           </button>
