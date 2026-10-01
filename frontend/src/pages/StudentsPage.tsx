@@ -33,6 +33,7 @@ export default function StudentsPage() {
     schoolYear: '2026-2027',
     photoUrl: '',
     matricule: '',
+    initialPayment: '',
   });
   const navigate = useNavigate();
 
@@ -153,6 +154,7 @@ export default function StudentsPage() {
       schoolYear: '2024-2025',
       photoUrl: '',
       matricule: '',
+      initialPayment: '',
     });
   };
 
@@ -539,6 +541,7 @@ export default function StudentsPage() {
                                           schoolYear: '2024-2025',
                                           photoUrl: student.photo_url,
                                           matricule: student.matricule || '',
+                                          initialPayment: '',
                                         });
                                         setShowModal(true);
                                       }}
@@ -696,6 +699,7 @@ export default function StudentsPage() {
                                           schoolYear: '2024-2025',
                                           photoUrl: student.photo_url,
                                           matricule: student.matricule,
+                                          initialPayment: '',
                                         });
                                         setShowModal(true);
                                       }}
@@ -878,6 +882,17 @@ export default function StudentsPage() {
                     className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-input focus:shadow-input-focus text-sm"
                     value={formData.photoUrl}
                     onChange={(e) => setFormData({ ...formData, photoUrl: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Montant versé lors de l'inscription (FCFA)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-input focus:shadow-input-focus text-sm"
+                    value={formData.initialPayment}
+                    onChange={(e) => setFormData({ ...formData, initialPayment: e.target.value })}
+                    placeholder="Ex: 50000"
                   />
                 </div>
               </div>

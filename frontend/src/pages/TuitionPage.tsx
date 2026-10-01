@@ -155,7 +155,7 @@ export default function TuitionPage() {
 
   const loadData = async (token: string, currentUser: any, schoolYear: string) => {
     try {
-      if (currentUser?.role === 'founder' || currentUser?.role === 'director') {
+      if (currentUser?.role === 'founder' || currentUser?.role === 'director' || currentUser?.role === 'secretary') {
         const [ratesData, studentsData, classesData, outstandingData, paymentsData, trimestersData] = await Promise.all([
           tuitionService.getTuitionRates(token, schoolYear),
           studentService.getStudents(token),
@@ -804,7 +804,7 @@ export default function TuitionPage() {
 
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
-          {(user?.role === 'founder' || user?.role === 'director') && (
+          {(user?.role === 'founder' || user?.role === 'director' || user?.role === 'secretary') && (
             <div className="bg-white rounded-xl shadow-card border border-gray-200 mb-4 sm:mb-6">
               <div className="flex overflow-x-auto border-b border-gray-200" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <button
@@ -1004,7 +1004,7 @@ export default function TuitionPage() {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Versements</h2>
                 <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                  {(user?.role === 'founder' || user?.role === 'director') && (
+                  {(user?.role === 'founder' || user?.role === 'director' || user?.role === 'secretary') && (
                     <button
                       onClick={() => setShowPaymentForm(!showPaymentForm)}
                       className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all font-medium shadow-card hover:shadow-card-hover flex items-center justify-center gap-2 text-sm"
@@ -1162,7 +1162,7 @@ export default function TuitionPage() {
                                 <Printer className="w-3 h-3 sm:w-4 sm:h-4" />
                                 Imprimer
                               </button>
-                              {(user?.role === 'founder' || user?.role === 'director') && (
+                              {(user?.role === 'founder' || user?.role === 'director' || user?.role === 'secretary') && (
                                 <button
                                   onClick={() => handleCancelPayment(payment.id)}
                                   className="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"

@@ -75,6 +75,7 @@ router.post('/', authenticateToken, requireFounderOrDirectorOrSecretary, async (
       schoolYear,
       photoUrl,
       matricule: manualMatricule,
+      initialPayment,
     } = req.body;
 
     console.log('Extracted data:', { firstName, lastName, classId, schoolYear });
@@ -147,6 +148,35 @@ router.post('/', authenticateToken, requireFounderOrDirectorOrSecretary, async (
     }
 
     console.log('Student created successfully:', data);
+
+    // Créer un paiement initial si initialPayment est fourni
+    if (initialPayment && parseFloat(initialPayment) > 0) {
+      try {
+        const { data: schoolYearData } = await supabase
+          .from('school_years')
+          .select('id')
+          .eq('year_label', schoolYear)
+          .single();
+
+        if (schoolYearData) {
+          await supabase
+            .from('tuition_payments')
+            .insert({
+              student_id: data.id,
+              school_year_id: schoolYearData.id,
+              amount: parseFloat(initialPayment),
+              payment_date: new Date().toISOString().split('T')[0],
+              payment_method: 'cash',
+              receipt_number: `REC${Date.now()}`,
+              notes: 'Paiement initial lors de l\'inscription',
+            });
+          console.log('Initial payment created successfully');
+        }
+      } catch (paymentError) {
+        console.error('Error creating initial payment:', paymentError);
+        // Ne pas échouer la création de l'élève si le paiement échoue
+      }
+    }
 
     // Notifier le secrétaire responsable de la classe
     try {
