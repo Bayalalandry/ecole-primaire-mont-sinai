@@ -778,7 +778,6 @@ export default function StudentsPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Date de naissance</label>
                   <input
                     type="date"
-                    required
                     className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-input focus:shadow-input-focus text-sm"
                     value={formData.dateOfBirth}
                     onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
