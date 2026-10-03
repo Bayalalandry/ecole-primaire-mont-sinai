@@ -7,11 +7,9 @@ CREATE TABLE IF NOT EXISTS teachers (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    subject VARCHAR(100), -- Matière enseignée (optionnel)
-    phone VARCHAR(20), -- Numéro de téléphone (optionnel)
+    class VARCHAR(20), -- Classe assignée (optionnel)
     status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'on_leave', 'archived')),
     hire_date DATE NOT NULL DEFAULT CURRENT_DATE,
-    notes TEXT, -- Notes supplémentaires (optionnel)
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -66,6 +64,6 @@ CREATE INDEX IF NOT EXISTS idx_teacher_salary_payments_payment_date ON teacher_s
 -- Commentaires
 -- ============================================
 
-COMMENT ON TABLE teachers IS 'Enseignants sans compte utilisateur (pour gestion salariale et statistiques)';
+COMMENT ON TABLE teachers IS 'Enseignants sans compte utilisateur (pour gestion salariale et statistiques) - Nom, Prénom, Classe';
 COMMENT ON TABLE teacher_salaries IS 'Salaires fixes des enseignants par année scolaire';
 COMMENT ON TABLE teacher_salary_payments IS 'Paiements de salaire effectués aux enseignants';

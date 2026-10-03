@@ -14,9 +14,16 @@ export const teachersService = {
 
   // Créer un enseignant
   async createTeacher(teacherData: any): Promise<any> {
+    // Only include the fields we're using: first_name, last_name, class
+    const dataToInsert = {
+      first_name: teacherData.firstName,
+      last_name: teacherData.lastName,
+      class: teacherData.class || null,
+    };
+
     const { data, error } = await supabase
       .from('teachers')
-      .insert(teacherData)
+      .insert(dataToInsert)
       .select()
       .single();
 
@@ -26,9 +33,16 @@ export const teachersService = {
 
   // Mettre à jour un enseignant
   async updateTeacher(id: string, teacherData: any): Promise<any> {
+    // Only include the fields we're using: first_name, last_name, class
+    const dataToUpdate = {
+      first_name: teacherData.firstName,
+      last_name: teacherData.lastName,
+      class: teacherData.class || null,
+    };
+
     const { data, error } = await supabase
       .from('teachers')
-      .update(teacherData)
+      .update(dataToUpdate)
       .eq('id', id)
       .select()
       .single();

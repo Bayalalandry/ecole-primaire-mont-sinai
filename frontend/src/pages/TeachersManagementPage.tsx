@@ -12,9 +12,7 @@ export default function TeachersManagementPage() {
   const [createForm, setCreateForm] = useState({
     firstName: '',
     lastName: '',
-    subject: '',
-    phone: '',
-    notes: '',
+    class: '',
   });
   const navigate = useNavigate();
 
@@ -49,7 +47,7 @@ export default function TeachersManagementPage() {
     }
 
     if (!createForm.firstName || !createForm.lastName) {
-      alert('Veuillez remplir au moins le prénom et le nom');
+      alert('Veuillez remplir le prénom et le nom');
       return;
     }
 
@@ -60,9 +58,7 @@ export default function TeachersManagementPage() {
       setCreateForm({
         firstName: '',
         lastName: '',
-        subject: '',
-        phone: '',
-        notes: '',
+        class: '',
       });
       loadData(token);
     } catch (error: any) {
@@ -83,9 +79,7 @@ export default function TeachersManagementPage() {
       setCreateForm({
         firstName: '',
         lastName: '',
-        subject: '',
-        phone: '',
-        notes: '',
+        class: '',
       });
       loadData(token);
     } catch (error: any) {
@@ -115,9 +109,7 @@ export default function TeachersManagementPage() {
     setCreateForm({
       firstName: teacher.first_name,
       lastName: teacher.last_name,
-      subject: teacher.subject || '',
-      phone: teacher.phone || '',
-      notes: teacher.notes || '',
+      class: teacher.class || '',
     });
     setShowCreateModal(true);
   };
@@ -128,28 +120,8 @@ export default function TeachersManagementPage() {
     setCreateForm({
       firstName: '',
       lastName: '',
-      subject: '',
-      phone: '',
-      notes: '',
+      class: '',
     });
-  };
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'active': return 'Actif';
-      case 'on_leave': return 'En congé';
-      case 'archived': return 'Archivé';
-      default: return status;
-    }
-  };
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-800 border border-green-200';
-      case 'on_leave': return 'bg-blue-100 text-blue-800 border border-blue-200';
-      case 'archived': return 'bg-gray-100 text-gray-800 border border-gray-200';
-      default: return 'bg-gray-100 text-gray-800 border border-gray-200';
-    }
   };
 
   if (loading) {
@@ -210,10 +182,7 @@ export default function TeachersManagementPage() {
                 <thead className="bg-gray-50 border-b">
                   <tr>
                     <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matière</th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date d'embauche</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classe</th>
                     <th className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
@@ -233,18 +202,7 @@ export default function TeachersManagementPage() {
                         </div>
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {teacher.subject || '-'}
-                      </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {teacher.phone || '-'}
-                      </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(teacher.status)}`}>
-                          {getStatusLabel(teacher.status)}
-                        </span>
-                      </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(teacher.hire_date).toLocaleDateString('fr-FR')}
+                        {teacher.class || '-'}
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
@@ -307,33 +265,13 @@ export default function TeachersManagementPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Matière enseignée</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Classe</label>
                 <input
                   type="text"
-                  value={createForm.subject}
-                  onChange={(e) => setCreateForm({ ...createForm, subject: e.target.value })}
+                  value={createForm.class}
+                  onChange={(e) => setCreateForm({ ...createForm, class: e.target.value })}
                   className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
-                  placeholder="Ex: Mathématiques"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
-                <input
-                  type="text"
-                  value={createForm.phone}
-                  onChange={(e) => setCreateForm({ ...createForm, phone: e.target.value })}
-                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
-                  placeholder="Ex: +226 XX XX XX XX"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                <textarea
-                  value={createForm.notes}
-                  onChange={(e) => setCreateForm({ ...createForm, notes: e.target.value })}
-                  className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
-                  rows={3}
-                  placeholder="Notes supplémentaires..."
+                  placeholder="Ex: CP1, CE2, CM1..."
                 />
               </div>
               <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:space-x-3 pt-4">
