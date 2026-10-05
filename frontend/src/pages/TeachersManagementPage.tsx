@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { tokenStorage } from '../services/authService';
 import { teachersManagementService } from '../services/teachersManagementService';
+import { classService } from '../services/classService';
 import { Plus, X, ArrowLeft, Users, Edit, Trash2, User } from 'lucide-react';
 
 export default function TeachersManagementPage() {
   const [teachers, setTeachers] = useState<any[]>([]);
+  const [classes, setClasses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingTeacher, setEditingTeacher] = useState<any>(null);
@@ -26,6 +28,7 @@ export default function TeachersManagementPage() {
     }
 
     loadData(token);
+    loadClasses(token);
   }, [navigate]);
 
   const loadData = async (token: string) => {
@@ -36,6 +39,15 @@ export default function TeachersManagementPage() {
       console.error('Error loading teachers:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadClasses = async (token: string) => {
+    try {
+      const data = await classService.getClasses(token);
+      setClasses(data.classes || []);
+    } catch (error: any) {
+      console.error('Error loading classes:', error);
     }
   };
 
@@ -109,7 +121,7 @@ export default function TeachersManagementPage() {
     setCreateForm({
       firstName: teacher.first_name,
       lastName: teacher.last_name,
-      class: teacher.class || '',
+      class: teacher.class_id || '',
     });
     setShowCreateModal(true);
   };
@@ -202,7 +214,7 @@ export default function TeachersManagementPage() {
                         </div>
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {teacher.class || '-'}
+                        {teacher.classes?.name || '-'}
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
@@ -266,13 +278,18 @@ export default function TeachersManagementPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Classe</label>
-                <input
-                  type="text"
+                <select
                   value={createForm.class}
                   onChange={(e) => setCreateForm({ ...createForm, class: e.target.value })}
                   className="w-full border border-gray-300 rounded-xl px-3 sm:px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
-                  placeholder="Ex: CP1, CE2, CM1..."
-                />
+                >
+                  <option value="">Sélectionner une classe</option>
+                  {classes.map((cls) => (
+                    <option key={cls.id} value={cls.id}>
+                      {cls.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:space-x-3 pt-4">
                 <button

@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS teachers (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    class VARCHAR(20), -- Classe assignée (optionnel)
+    class_id UUID REFERENCES classes(id) ON DELETE SET NULL, -- Classe assignée (optionnel)
     status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'on_leave', 'archived')),
     hire_date DATE NOT NULL DEFAULT CURRENT_DATE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

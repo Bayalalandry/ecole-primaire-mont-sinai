@@ -5,7 +5,13 @@ export const teachersService = {
   async getAllTeachers(): Promise<any> {
     const { data, error } = await supabase
       .from('teachers')
-      .select('*')
+      .select(`
+        *,
+        classes!left (
+          id,
+          name
+        )
+      `)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -14,11 +20,11 @@ export const teachersService = {
 
   // Créer un enseignant
   async createTeacher(teacherData: any): Promise<any> {
-    // Only include the fields we're using: first_name, last_name, class
+    // Only include the fields we're using: first_name, last_name, class_id
     const dataToInsert = {
       first_name: teacherData.firstName,
       last_name: teacherData.lastName,
-      class: teacherData.class || null,
+      class_id: teacherData.class || null,
     };
 
     const { data, error } = await supabase
@@ -33,11 +39,11 @@ export const teachersService = {
 
   // Mettre à jour un enseignant
   async updateTeacher(id: string, teacherData: any): Promise<any> {
-    // Only include the fields we're using: first_name, last_name, class
+    // Only include the fields we're using: first_name, last_name, class_id
     const dataToUpdate = {
       first_name: teacherData.firstName,
       last_name: teacherData.lastName,
-      class: teacherData.class || null,
+      class_id: teacherData.class || null,
     };
 
     const { data, error } = await supabase
