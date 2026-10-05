@@ -44,6 +44,7 @@ export default function SalaryPage() {
 
   // Teachers state
   const [teachers, setTeachers] = useState<any[]>([]);
+  const [personnelTeachers, setPersonnelTeachers] = useState<any[]>([]);
 
   // Fonction utilitaire pour formater les dates en DD/MM/YYYY
   const formatDate = (dateString: string): string => {
@@ -78,17 +79,19 @@ export default function SalaryPage() {
         outstandingParams.paymentMonth = filterMonth + '-01';
       }
 
-      const [salariesData, teachersData, paymentsData, outstandingData] = await Promise.all([
+      const [salariesData, teachersData, personnelTeachersData, paymentsData, outstandingData] = await Promise.all([
         salaryService.getSalaries(token, currentSchoolYear),
         salaryService.getAllSecretaries(token),
+        salaryService.getAllTeachers(token),
         salaryService.getSalaryPayments(token, { schoolYear: currentSchoolYear }),
         salaryService.getSalaryOutstanding(token, outstandingParams),
       ]);
 
-      console.log('Loaded data:', { salariesData, teachersData, paymentsData, outstandingData });
+      console.log('Loaded data:', { salariesData, teachersData, personnelTeachersData, paymentsData, outstandingData });
 
       setSalaries(salariesData.salaries || []);
       setTeachers(teachersData.secretaries || teachersData || []);
+      setPersonnelTeachers(personnelTeachersData.teachers || []);
       setPayments(paymentsData.payments || []);
       setOutstanding(outstandingData.outstanding || []);
     } catch (error: any) {
@@ -636,13 +639,22 @@ export default function SalaryPage() {
                       required
                     >
                       <option value="">Sélectionner un enseignant</option>
-                      {teachers.filter(t => t.role === 'secretary' || t.role === 'director').map((teacher) => (
-                        <option key={teacher.id} value={teacher.id}>
-                          {teacher.last_name} {teacher.first_name} {teacher.role === 'director' ? '(Directeur)' : ''}
-                        </option>
-                      ))}
+                      <optgroup label="Secrétaires et Directeurs">
+                        {teachers.filter(t => t.role === 'secretary' || t.role === 'director').map((teacher) => (
+                          <option key={teacher.id} value={teacher.id}>
+                            {teacher.last_name} {teacher.first_name} {teacher.role === 'director' ? '(Directeur)' : ''}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Enseignants (personnel)">
+                        {personnelTeachers.map((teacher) => (
+                          <option key={teacher.id} value={`teacher-${teacher.id}`}>
+                            {teacher.last_name} {teacher.first_name} {teacher.classes?.name ? `(${teacher.classes.name})` : ''}
+                          </option>
+                        ))}
+                      </optgroup>
                     </select>
-                    {teachers.length === 0 && (
+                    {teachers.length === 0 && personnelTeachers.length === 0 && (
                       <p className="text-xs text-red-500 mt-1">Aucun enseignant disponible</p>
                     )}
                   </div>

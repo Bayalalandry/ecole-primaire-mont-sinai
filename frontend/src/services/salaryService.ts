@@ -74,6 +74,22 @@ export const salaryService = {
     return response.json();
   },
 
+  // Récupérer tous les enseignants (personnel sans compte utilisateur)
+  getAllTeachers: async (token: string) => {
+    const response = await fetch(`${API_URL}/teachers-management`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Erreur lors de la récupération des enseignants');
+    }
+
+    return response.json();
+  },
+
   // Récupérer tous les paiements de salaire (pour SalaryPage)
   getSalaryPayments: async (token: string, filters?: { schoolYear?: string; paymentMonth?: string }) => {
     const params = new URLSearchParams();

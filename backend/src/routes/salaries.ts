@@ -125,11 +125,7 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
   try {
     const { schoolYear } = req.query;
 
-    let query = supabase
-      .from('secretary_salaries')
-      .select('*, school_years (*)')
-      .order('effective_date', { ascending: false });
-
+    let schoolYearId = null;
     if (schoolYear) {
       const { data: schoolYearData } = await supabase
         .from('school_years')
@@ -137,39 +133,81 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
         .eq('year_label', schoolYear)
         .maybeSingle();
 
-      if (schoolYearData) {
-        query = query.eq('school_year_id', schoolYearData.id);
-      }
+      schoolYearId = schoolYearData?.id;
     }
 
-    const { data, error } = await query;
+    // Récupérer les salaires des secrétaires
+    let secretaryQuery = supabase
+      .from('secretary_salaries')
+      .select('*, school_years (*)')
+      .order('effective_date', { ascending: false });
 
-    if (error) throw error;
+    if (schoolYearId) {
+      secretaryQuery = secretaryQuery.eq('school_year_id', schoolYearId);
+    }
 
-    // Récupérer les informations des enseignants manuellement
-    const secretaryIds = (data || []).map((s: any) => s.secretary_id);
-    const { data: teachersData } = await supabase
-      .from('teachers')
-      .select('user_id, status')
-      .in('user_id', secretaryIds);
+    const { data: secretarySalaries, error: secretaryError } = await secretaryQuery;
 
+    if (secretaryError) throw secretaryError;
+
+    // Récupérer les salaires des enseignants
+    let teacherQuery = supabase
+      .from('teacher_salaries')
+      .select('*, school_years (*)')
+      .order('effective_date', { ascending: false });
+
+    if (schoolYearId) {
+      teacherQuery = teacherQuery.eq('school_year_id', schoolYearId);
+    }
+
+    const { data: teacherSalaries, error: teacherError } = await teacherQuery;
+
+    if (teacherError) throw teacherError;
+
+    // Combiner les salaires avec un marqueur pour distinguer
+    const combinedSalaries = [
+      ...(secretarySalaries || []).map((s: any) => ({ ...s, type: 'secretary' })),
+      ...(teacherSalaries || []).map((s: any) => ({ ...s, type: 'teacher' })),
+    ];
+
+    // Récupérer les informations des secrétaires/directeurs (users)
+    const secretaryIds = (secretarySalaries || []).map((s: any) => s.secretary_id);
     const { data: usersData } = await supabase
       .from('users')
       .select('id, first_name, last_name, role')
       .in('id', secretaryIds);
 
+    // Récupérer les informations des enseignants (personnel)
+    const teacherIds = (teacherSalaries || []).map((s: any) => s.teacher_id);
+    const { data: teachersData } = await supabase
+      .from('teachers')
+      .select('id, first_name, last_name, class_id, classes (name)')
+      .in('id', teacherIds);
+
     // Combiner les données avec gestion des cas manquants
-    const salariesWithTeachers = (data || []).map((salary: any) => {
-      const teacher = teachersData?.find((t: any) => t.user_id === salary.secretary_id);
-      const user = usersData?.find((u: any) => u.id === salary.secretary_id);
-      
-      return {
-        ...salary,
-        users: user || { id: salary.secretary_id, first_name: 'Enseignant', last_name: 'Inconnu', role: 'teacher' },
-      };
+    const salariesWithInfo = combinedSalaries.map((salary: any) => {
+      if (salary.type === 'secretary') {
+        const user = usersData?.find((u: any) => u.id === salary.secretary_id);
+        return {
+          ...salary,
+          users: user || { id: salary.secretary_id, first_name: 'Inconnu', last_name: '', role: 'secretary' },
+        };
+      } else {
+        const teacher = teachersData?.find((t: any) => t.id === salary.teacher_id);
+        return {
+          ...salary,
+          users: {
+            id: salary.teacher_id,
+            first_name: teacher?.first_name || 'Inconnu',
+            last_name: teacher?.last_name || '',
+            role: 'teacher',
+          },
+          classes: teacher?.classes || null,
+        };
+      }
     });
 
-    res.json({ salaries: salariesWithTeachers || [] });
+    res.json({ salaries: salariesWithInfo || [] });
   } catch (error: any) {
     console.error('Get salaries error:', error);
     res.status(500).json({ error: 'Erreur lors de la récupération des salaires' });
@@ -318,6 +356,10 @@ router.post('/', authenticateToken, requireFounder, async (req: AuthRequest, res
       return res.status(400).json({ error: 'Champs requis: secretaryId, monthlyAmount, effectiveDate' });
     }
 
+    // Déterminer si c'est un enseignant (personnel) ou un secrétaire/directeur
+    const isTeacher = secretaryId.startsWith('teacher-');
+    const personnelId = isTeacher ? secretaryId.replace('teacher-', '') : secretaryId;
+
     // Récupérer l'ID de l'année scolaire
     let schoolYearId = null;
     if (schoolYear) {
@@ -339,16 +381,36 @@ router.post('/', authenticateToken, requireFounder, async (req: AuthRequest, res
       schoolYearId = currentYear?.id || null;
     }
 
-    const { data, error } = await supabase
-      .from('secretary_salaries')
-      .insert({
-        secretary_id: secretaryId,
-        school_year_id: schoolYearId,
-        monthly_amount: monthlyAmount,
-        effective_date: effectiveDate,
-      })
-      .select()
-      .single();
+    let data, error;
+    if (isTeacher) {
+      // Créer dans teacher_salaries
+      const result = await supabase
+        .from('teacher_salaries')
+        .insert({
+          teacher_id: personnelId,
+          school_year_id: schoolYearId,
+          monthly_amount: monthlyAmount,
+          effective_date: effectiveDate,
+        })
+        .select()
+        .single();
+      data = result.data;
+      error = result.error;
+    } else {
+      // Créer dans secretary_salaries
+      const result = await supabase
+        .from('secretary_salaries')
+        .insert({
+          secretary_id: personnelId,
+          school_year_id: schoolYearId,
+          monthly_amount: monthlyAmount,
+          effective_date: effectiveDate,
+        })
+        .select()
+        .single();
+      data = result.data;
+      error = result.error;
+    }
 
     if (error) throw error;
 
