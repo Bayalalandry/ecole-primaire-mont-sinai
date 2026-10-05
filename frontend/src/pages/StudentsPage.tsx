@@ -255,8 +255,8 @@ export default function StudentsPage() {
       doc.setFontSize(9);
       doc.setFont('helvetica', 'bold');
       doc.text('Matricule', 14, y);
-      doc.text('Nom', 50, y);
-      doc.text('Prénom', 90, y);
+      doc.text('Nom', 45, y);
+      doc.text('Prénom', 75, y);
       doc.text('Date Naiss.', 125, y);
       doc.text('Genre', 150, y);
       doc.text('Statut', 170, y);
@@ -292,8 +292,8 @@ export default function StudentsPage() {
           doc.setFontSize(9);
           doc.setFont('helvetica', 'bold');
           doc.text('Matricule', 14, y);
-          doc.text('Nom', 50, y);
-          doc.text('Prénom', 90, y);
+          doc.text('Nom', 45, y);
+          doc.text('Prénom', 75, y);
           doc.text('Date Naiss.', 125, y);
           doc.text('Genre', 150, y);
           doc.text('Statut', 170, y);
@@ -308,8 +308,8 @@ export default function StudentsPage() {
         }
 
         const matricule = student.matricule || '';
-        const lastName = (student.last_name || '').substring(0, 20);
-        const firstName = (student.first_name || '').substring(0, 20);
+        const lastName = (student.last_name || '').substring(0, 18);
+        const firstName = (student.first_name || '').substring(0, 22);
         const dateOfBirth = student.date_of_birth ? new Date(student.date_of_birth).toLocaleDateString('fr-FR') : 'N/A';
         const gender = student.gender === 'M' ? 'M' : student.gender === 'F' ? 'F' : 'N/A';
         const status = translateStatus(student.status) || 'N/A';
@@ -317,42 +317,17 @@ export default function StudentsPage() {
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(8);
         doc.text(matricule, 14, y);
-        doc.setFontSize(10);
-        doc.text(lastName, 50, y);
-        doc.text(firstName, 90, y);
         doc.setFontSize(9);
+        doc.text(lastName, 45, y);
+        doc.text(firstName, 75, y);
         doc.text(dateOfBirth, 125, y);
         doc.text(gender, 150, y);
-        doc.setFontSize(10);
+        doc.setFontSize(9);
         doc.text(status, 170, y);
         y += 8;
       });
 
-      y += 40; // Espace entre les classes
-
-      // Saut de page explicite si on est trop bas pour le prochain en-tête de classe
-      if (y > 230) {
-        doc.addPage();
-        pageCount++;
-        y = 20;
-        // Bannière bleue
-        doc.setFillColor(30, 64, 175);
-        doc.rect(0, 0, 210, 35, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(18);
-        doc.setFont('helvetica', 'bold');
-        doc.text(schoolName, 14, 15);
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Liste des Élèves', 14, 24);
-        doc.setFontSize(9);
-        doc.text(`Date de génération: ${generationDate}`, 14, 32);
-        doc.text(`Exporté par: ${exportedBy}`, 110, 32);
-        doc.text(`Page ${pageCount}`, 180, 32);
-        y = 45;
-        // Réinitialiser la couleur du texte à noir après la bannière
-        doc.setTextColor(0, 0, 0);
-      }
+      y += 10; // Espace entre les classes
     });
 
     doc.save('liste_eleves.pdf');
