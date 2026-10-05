@@ -192,7 +192,7 @@ export default function SecretariesPage() {
                   className="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-2 border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all font-medium shadow-lg backdrop-blur-sm flex items-center justify-center gap-2 relative z-40"
                 >
                   <Plus className="w-4 h-4" />
-                  <span className="hidden sm:inline">Ajouter un secrétaire</span>
+                  <span className="hidden sm:inline">Ajouter personnel</span>
                   <span className="sm:hidden">Ajouter</span>
                 </button>
               )}
