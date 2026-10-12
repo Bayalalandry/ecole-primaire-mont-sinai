@@ -138,8 +138,9 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
     const totalTeacherSalariesPaid = teacherSalaryPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
     const totalSalariesPaid = totalSecretarySalariesPaid + totalTeacherSalariesPaid;
 
-    const totalSecretarySalariesExpected = secretarySalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
-    const totalTeacherSalariesExpected = teacherSalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
+    // Salaires attendus = nombre de secrétaires/directeurs × 12 mois + nombre d'enseignants × 12 mois
+    const totalSecretarySalariesExpected = secretarySalaries.data?.reduce((sum, r) => sum + (Number(r.monthly_amount) * 12), 0) || 0;
+    const totalTeacherSalariesExpected = teacherSalaries.data?.reduce((sum, r) => sum + (Number(r.monthly_amount) * 12), 0) || 0;
     const totalSalariesExpected = totalSecretarySalariesExpected + totalTeacherSalariesExpected;
 
     const totalSalariesOutstanding = totalSalariesExpected - totalSalariesPaid;
