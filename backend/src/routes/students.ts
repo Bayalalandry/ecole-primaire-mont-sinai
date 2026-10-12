@@ -311,7 +311,7 @@ router.get('/:id', authenticateToken, async (req: AuthRequest, res) => {
 });
 
 // Mettre à jour un élève
-router.put('/:id', authenticateToken, requireFounderOrDirector, async (req: AuthRequest, res) => {
+router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async (req: AuthRequest, res) => {
   try {
     const { id } = req.params;
     const {
@@ -326,6 +326,8 @@ router.put('/:id', authenticateToken, requireFounderOrDirector, async (req: Auth
       photoUrl,
       status,
       matricule: newMatricule, // Modification du matricule (déconseillé mais possible)
+      initialPayment,
+      schoolYear,
     } = req.body;
 
     // Si modification du matricule, vérifier qu'il n'existe pas déjà
@@ -372,6 +374,68 @@ router.put('/:id', authenticateToken, requireFounderOrDirector, async (req: Auth
 
     if (!data) {
       return res.status(404).json({ error: 'Élève non trouvé' });
+    }
+
+    // Gérer le paiement initial si fourni
+    if (initialPayment !== undefined && schoolYear) {
+      try {
+        const { data: schoolYearData } = await supabase
+          .from('school_years')
+          .select('id')
+          .eq('year_label', schoolYear)
+          .single();
+
+        if (schoolYearData) {
+          // Vérifier si un paiement initial existe déjà pour cet élève
+          const { data: existingPayment } = await supabase
+            .from('tuition_payments')
+            .select('id')
+            .eq('student_id', id)
+            .eq('school_year_id', schoolYearData.id)
+            .ilike('notes', '%inscription%')
+            .maybeSingle();
+
+          const paymentAmount = parseFloat(initialPayment);
+
+          if (paymentAmount > 0) {
+            if (existingPayment) {
+              // Mettre à jour le paiement existant
+              await supabase
+                .from('tuition_payments')
+                .update({
+                  amount: paymentAmount,
+                  payment_date: new Date().toISOString().split('T')[0],
+                })
+                .eq('id', existingPayment.id);
+              console.log('Initial payment updated successfully');
+            } else {
+              // Créer un nouveau paiement initial
+              await supabase
+                .from('tuition_payments')
+                .insert({
+                  student_id: id,
+                  school_year_id: schoolYearData.id,
+                  amount: paymentAmount,
+                  payment_date: new Date().toISOString().split('T')[0],
+                  payment_method: 'cash',
+                  receipt_number: `REC${Date.now()}`,
+                  notes: 'Paiement initial lors de l\'inscription',
+                });
+              console.log('Initial payment created successfully');
+            }
+          } else if (existingPayment && paymentAmount === 0) {
+            // Supprimer le paiement initial si le montant est 0
+            await supabase
+              .from('tuition_payments')
+              .delete()
+              .eq('id', existingPayment.id);
+            console.log('Initial payment deleted successfully');
+          }
+        }
+      } catch (paymentError) {
+        console.error('Error updating initial payment:', paymentError);
+        // Ne pas échouer la mise à jour de l'élève si le paiement échoue
+      }
     }
 
     res.json({ student: data });

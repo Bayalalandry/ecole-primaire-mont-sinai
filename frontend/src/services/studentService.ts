@@ -5,13 +5,13 @@ interface Student {
   matricule: string;
   first_name: string;
   last_name: string;
-  date_of_birth: string;
+  date_of_birth: string | null;
   gender: 'M' | 'F';
-  parent_name: string;
-  parent_phone: string;
-  parent_address: string;
-  current_class_id: string; // Utiliser current_class_id pour correspondre à la base
-  school_year: string;
+  parent_name: string | null;
+  parent_phone: string | null;
+  parent_address: string | null;
+  current_class_id: string | null; // Utiliser current_class_id pour correspondre à la base
+  school_year: string | null;
   photo_url: string | null;
   status: 'active' | 'repeating' | 'archived';
   final_grade: number | null;

@@ -44,7 +44,9 @@
       "Exec(mv)",
       "Exec(mkdir)",
       "Exec(cp)",
-      "Exec(git reset)"
+      "Exec(git reset)",
+      "Exec(Get-ChildItem)",
+      "Exec(Rename-Item)"
     ]
   }
 }

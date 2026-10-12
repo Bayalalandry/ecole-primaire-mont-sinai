@@ -130,8 +130,8 @@ export default function StudentsPage() {
     const token = tokenStorage.getToken();
     if (!token) return;
 
-    // Vérifier le paiement initial lors de l'inscription
-    if (!editingStudent && formData.initialPayment && parseFloat(formData.initialPayment) > 0) {
+    // Vérifier le paiement initial (création ou modification)
+    if (formData.initialPayment && parseFloat(formData.initialPayment) > 0) {
       const classRate = rates.find(r => r.class_id === formData.classId && r.school_year === formData.schoolYear);
       if (classRate) {
         const maxAmount = parseFloat(classRate.amount);
@@ -156,10 +156,11 @@ export default function StudentsPage() {
       setEditingStudent(null);
       resetForm();
       loadStudents(token);
-      
-      // Rafraîchir les stats du dashboard directeur
+
+      // Rafraîchir les stats du dashboard
       localStorage.setItem('directorStatsUpdate', Date.now().toString());
-      
+      localStorage.setItem('teacherStatsUpdate', Date.now().toString());
+
       // Faire disparaître le message après 3 secondes
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error: any) {
@@ -177,7 +178,7 @@ export default function StudentsPage() {
       parentPhone: '',
       parentAddress: '',
       classId: '',
-      schoolYear: '2024-2025',
+      schoolYear: '2026-2027',
       photoUrl: '',
       matricule: '',
       initialPayment: '',
@@ -528,9 +529,10 @@ export default function StudentsPage() {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                   <div className="flex items-center gap-2">
                                     <button
-                                      onClick={() => {
+                                      onClick={async () => {
                                         setEditingStudent(student);
-                                        setFormData({
+                                        const studentSchoolYear = (student.school_year as string) || '2026-2027';
+                                        const studentFormData = {
                                           firstName: student.first_name,
                                           lastName: student.last_name,
                                           dateOfBirth: student.date_of_birth,
@@ -538,12 +540,32 @@ export default function StudentsPage() {
                                           parentName: student.parent_name,
                                           parentPhone: student.parent_phone,
                                           parentAddress: student.parent_address,
-                                          classId: student.current_class_id,
-                                          schoolYear: '2024-2025',
+                                          classId: (student.current_class_id as string) || '',
+                                          schoolYear: studentSchoolYear,
                                           photoUrl: student.photo_url,
                                           matricule: student.matricule || '',
                                           initialPayment: '',
-                                        });
+                                        };
+
+                                        // Récupérer le paiement initial existant
+                                        try {
+                                          const token = tokenStorage.getToken();
+                                          const studentId = student.id;
+                                          if (studentId) {
+                                            // @ts-ignore
+                                            const paymentsData = await tuitionService.getStudentTuitionPayments(studentId, token);
+                                            const initialPayment = paymentsData.payments?.find((p: any) =>
+                                              p.notes && p.notes.includes('inscription')
+                                            );
+                                            if (initialPayment) {
+                                              studentFormData.initialPayment = initialPayment.amount.toString();
+                                            }
+                                          }
+                                        } catch (error) {
+                                          console.error('Error fetching initial payment:', error);
+                                        }
+
+                                        setFormData(studentFormData);
                                         setShowModal(true);
                                       }}
                                       className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors"
@@ -686,9 +708,10 @@ export default function StudentsPage() {
                                 <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                                   <div className="flex items-center gap-1 sm:gap-2">
                                     <button
-                                      onClick={() => {
+                                      onClick={async () => {
                                         setEditingStudent(student);
-                                        setFormData({
+                                        const studentSchoolYear = (student.school_year as string) || '2026-2027';
+                                        const studentFormData = {
                                           firstName: student.first_name,
                                           lastName: student.last_name,
                                           dateOfBirth: student.date_of_birth,
@@ -696,12 +719,32 @@ export default function StudentsPage() {
                                           parentName: student.parent_name,
                                           parentPhone: student.parent_phone,
                                           parentAddress: student.parent_address,
-                                          classId: student.current_class_id,
-                                          schoolYear: '2024-2025',
+                                          classId: (student.current_class_id as string) || '',
+                                          schoolYear: studentSchoolYear,
                                           photoUrl: student.photo_url,
                                           matricule: student.matricule,
                                           initialPayment: '',
-                                        });
+                                        };
+
+                                        // Récupérer le paiement initial existant
+                                        try {
+                                          const token = tokenStorage.getToken();
+                                          const studentId = student.id;
+                                          if (studentId) {
+                                            // @ts-ignore
+                                            const paymentsData = await tuitionService.getStudentTuitionPayments(studentId, token);
+                                            const initialPayment = paymentsData.payments?.find((p: any) =>
+                                              p.notes && p.notes.includes('inscription')
+                                            );
+                                            if (initialPayment) {
+                                              studentFormData.initialPayment = initialPayment.amount.toString();
+                                            }
+                                          }
+                                        } catch (error) {
+                                          console.error('Error fetching initial payment:', error);
+                                        }
+
+                                        setFormData(studentFormData);
                                         setShowModal(true);
                                       }}
                                       className="px-2 sm:px-3 py-1.5 sm:py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"
