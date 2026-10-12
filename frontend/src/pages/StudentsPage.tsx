@@ -130,8 +130,8 @@ export default function StudentsPage() {
     const token = tokenStorage.getToken();
     if (!token) return;
 
-    // Vérifier le paiement initial (création ou modification)
-    if (formData.initialPayment && parseFloat(formData.initialPayment) > 0) {
+    // Vérifier le paiement initial uniquement lors de la création
+    if (!editingStudent && formData.initialPayment && parseFloat(formData.initialPayment) > 0) {
       const classRate = rates.find(r => r.class_id === formData.classId && r.school_year === formData.schoolYear);
       if (classRate) {
         const maxAmount = parseFloat(classRate.amount);
@@ -146,7 +146,9 @@ export default function StudentsPage() {
 
     try {
       if (editingStudent) {
-        await studentService.updateStudent(editingStudent.id, { ...formData, gender: formData.gender as 'M' | 'F' }, token);
+        // Ne pas envoyer initialPayment lors de la modification
+        const { initialPayment, ...studentData } = formData;
+        await studentService.updateStudent(editingStudent.id, { ...studentData, gender: formData.gender as 'M' | 'F' }, token);
         setSuccessMessage('Élève modifié avec succès !');
       } else {
         await studentService.createStudent({ ...formData, gender: formData.gender as 'M' | 'F' }, token);
@@ -529,10 +531,9 @@ export default function StudentsPage() {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                   <div className="flex items-center gap-2">
                                     <button
-                                      onClick={async () => {
+                                      onClick={() => {
                                         setEditingStudent(student);
-                                        const studentSchoolYear = (student.school_year as string) || '2026-2027';
-                                        const studentFormData = {
+                                        setFormData({
                                           firstName: student.first_name,
                                           lastName: student.last_name,
                                           dateOfBirth: student.date_of_birth,
@@ -540,34 +541,12 @@ export default function StudentsPage() {
                                           parentName: student.parent_name,
                                           parentPhone: student.parent_phone,
                                           parentAddress: student.parent_address,
-                                          classId: (student.current_class_id as string) || '',
-                                          schoolYear: studentSchoolYear,
+                                          classId: student.current_class_id,
+                                          schoolYear: (student.school_year as string) || '2026-2027',
                                           photoUrl: student.photo_url,
                                           matricule: student.matricule || '',
                                           initialPayment: '',
-                                        };
-
-                                        // Récupérer le paiement initial existant (premier paiement de l'année)
-                                        try {
-                                          const token = tokenStorage.getToken();
-                                          const studentId = student.id;
-                                          if (studentId) {
-                                            // @ts-ignore
-                                            const paymentsData = await tuitionService.getStudentTuitionPayments(studentId, token);
-                                            const payments = paymentsData.payments || [];
-                                            // Prendre le premier paiement (le plus ancien) comme paiement initial
-                                            if (payments.length > 0) {
-                                              const sortedPayments = [...payments].sort((a: any, b: any) =>
-                                                new Date(a.payment_date).getTime() - new Date(b.payment_date).getTime()
-                                              );
-                                              studentFormData.initialPayment = sortedPayments[0].amount.toString();
-                                            }
-                                          }
-                                        } catch (error) {
-                                          console.error('Error fetching initial payment:', error);
-                                        }
-
-                                        setFormData(studentFormData);
+                                        });
                                         setShowModal(true);
                                       }}
                                       className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors"
@@ -710,10 +689,9 @@ export default function StudentsPage() {
                                 <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                                   <div className="flex items-center gap-1 sm:gap-2">
                                     <button
-                                      onClick={async () => {
+                                      onClick={() => {
                                         setEditingStudent(student);
-                                        const studentSchoolYear = (student.school_year as string) || '2026-2027';
-                                        const studentFormData = {
+                                        setFormData({
                                           firstName: student.first_name,
                                           lastName: student.last_name,
                                           dateOfBirth: student.date_of_birth,
@@ -721,34 +699,12 @@ export default function StudentsPage() {
                                           parentName: student.parent_name,
                                           parentPhone: student.parent_phone,
                                           parentAddress: student.parent_address,
-                                          classId: (student.current_class_id as string) || '',
-                                          schoolYear: studentSchoolYear,
+                                          classId: student.current_class_id,
+                                          schoolYear: (student.school_year as string) || '2026-2027',
                                           photoUrl: student.photo_url,
                                           matricule: student.matricule,
                                           initialPayment: '',
-                                        };
-
-                                        // Récupérer le paiement initial existant (premier paiement de l'année)
-                                        try {
-                                          const token = tokenStorage.getToken();
-                                          const studentId = student.id;
-                                          if (studentId) {
-                                            // @ts-ignore
-                                            const paymentsData = await tuitionService.getStudentTuitionPayments(studentId, token);
-                                            const payments = paymentsData.payments || [];
-                                            // Prendre le premier paiement (le plus ancien) comme paiement initial
-                                            if (payments.length > 0) {
-                                              const sortedPayments = [...payments].sort((a: any, b: any) =>
-                                                new Date(a.payment_date).getTime() - new Date(b.payment_date).getTime()
-                                              );
-                                              studentFormData.initialPayment = sortedPayments[0].amount.toString();
-                                            }
-                                          }
-                                        } catch (error) {
-                                          console.error('Error fetching initial payment:', error);
-                                        }
-
-                                        setFormData(studentFormData);
+                                        });
                                         setShowModal(true);
                                       }}
                                       className="px-2 sm:px-3 py-1.5 sm:py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs sm:text-sm"
@@ -931,17 +887,19 @@ export default function StudentsPage() {
                     onChange={(e) => setFormData({ ...formData, photoUrl: e.target.value })}
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Montant versé lors de l'inscription (FCFA)</label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-input focus:shadow-input-focus text-sm"
-                    value={formData.initialPayment}
-                    onChange={(e) => setFormData({ ...formData, initialPayment: e.target.value })}
-                    placeholder="Ex: 50000"
-                  />
-                </div>
+                {!editingStudent && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Montant versé lors de l'inscription (FCFA)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-input focus:shadow-input-focus text-sm"
+                      value={formData.initialPayment}
+                      onChange={(e) => setFormData({ ...formData, initialPayment: e.target.value })}
+                      placeholder="Ex: 50000"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:space-x-3 pt-4">

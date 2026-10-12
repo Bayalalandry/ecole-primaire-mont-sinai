@@ -325,14 +325,7 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
       photoUrl,
       status,
       matricule: newMatricule, // Modification du matricule (déconseillé mais possible)
-      initialPayment,
-      schoolYear,
     } = req.body;
-
-    console.log('=== UPDATE STUDENT ===');
-    console.log('Student ID:', id);
-    console.log('Initial Payment:', initialPayment);
-    console.log('School Year:', schoolYear);
 
     // Si modification du matricule, vérifier qu'il n'existe pas déjà
     if (newMatricule) {
@@ -378,91 +371,6 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
 
     if (!data) {
       return res.status(404).json({ error: 'Élève non trouvé' });
-    }
-
-    // Gérer le paiement initial si fourni
-    if (initialPayment !== undefined && schoolYear) {
-      console.log('Processing initial payment update...');
-      try {
-        const { data: schoolYearData } = await supabase
-          .from('school_years')
-          .select('id')
-          .eq('year_label', schoolYear)
-          .single();
-
-        console.log('School year data:', schoolYearData);
-
-        if (schoolYearData) {
-          // Prendre le premier paiement de l'année scolaire comme paiement initial
-          const { data: existingPayment } = await supabase
-            .from('tuition_payments')
-            .select('id')
-            .eq('student_id', id)
-            .eq('school_year_id', schoolYearData.id)
-            .order('payment_date', { ascending: true })
-            .limit(1)
-            .maybeSingle();
-
-          console.log('First payment of school year:', existingPayment);
-
-          const paymentAmount = parseFloat(initialPayment);
-          console.log('Payment amount to set:', paymentAmount);
-
-          if (paymentAmount > 0) {
-            if (existingPayment) {
-              // Mettre à jour le paiement existant
-              const { error: updateError } = await supabase
-                .from('tuition_payments')
-                .update({
-                  amount: paymentAmount,
-                  payment_date: new Date().toISOString().split('T')[0],
-                })
-                .eq('id', existingPayment.id);
-
-              if (updateError) {
-                console.error('Error updating payment:', updateError);
-              } else {
-                console.log('Initial payment updated successfully');
-              }
-            } else {
-              // Créer un nouveau paiement initial
-              const { error: insertError } = await supabase
-                .from('tuition_payments')
-                .insert({
-                  student_id: id,
-                  school_year_id: schoolYearData.id,
-                  amount: paymentAmount,
-                  payment_date: new Date().toISOString().split('T')[0],
-                  payment_method: 'cash',
-                  receipt_number: `REC${Date.now()}`,
-                });
-
-              if (insertError) {
-                console.error('Error inserting payment:', insertError);
-              } else {
-                console.log('Initial payment created successfully');
-              }
-            }
-          } else if (existingPayment && paymentAmount === 0) {
-            // Supprimer le paiement initial si le montant est 0
-            const { error: deleteError } = await supabase
-              .from('tuition_payments')
-              .delete()
-              .eq('id', existingPayment.id);
-
-            if (deleteError) {
-              console.error('Error deleting payment:', deleteError);
-            } else {
-              console.log('Initial payment deleted successfully');
-            }
-          }
-        }
-      } catch (paymentError) {
-        console.error('Error updating initial payment:', paymentError);
-        // Ne pas échouer la mise à jour de l'élève si le paiement échoue
-      }
-    } else {
-      console.log('Initial payment not provided or school year missing');
     }
 
     res.json({ student: data });
