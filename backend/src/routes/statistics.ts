@@ -63,11 +63,9 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       filterSchoolYearId
         ? supabase.from('salary_payments').select('amount, payment_date').eq('school_year_id', filterSchoolYearId)
         : supabase.from('salary_payments').select('amount, payment_date'),
-      supabase.from('secretary_salaries').select('monthly_amount').eq('school_year_id', filterSchoolYearId || statsSchoolYearId),
-      // 3. Statistiques dépenses - filtrer par année scolaire si spécifiée
-      filterSchoolYearId
-        ? supabase.from('expenses').select('category, amount').eq('school_year_id', filterSchoolYearId)
-        : supabase.from('expenses').select('category, amount'),
+      supabase.from('secretary_salaries').select('monthly_amount').eq('school_year_id', filterSchoolYearId || currentSchoolYear?.id),
+      // 3. Statistiques dépenses - table n'a pas school_year_id, donc pas de filtre
+      supabase.from('expenses').select('category, amount'),
       // 4. Statistiques élèves
       supabase.from('students').select('status, current_class_id'),
       // 5. Statistiques secrétaires
@@ -82,7 +80,7 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
         filterSchoolYearId
           ? supabase.from('teacher_salary_payments').select('amount, payment_date').eq('school_year_id', filterSchoolYearId)
           : supabase.from('teacher_salary_payments').select('amount, payment_date'),
-        supabase.from('teacher_salaries').select('monthly_amount').eq('school_year_id', filterSchoolYearId || statsSchoolYearId),
+        supabase.from('teacher_salaries').select('monthly_amount').eq('school_year_id', filterSchoolYearId || currentSchoolYear?.id),
       ]);
       teacherSalaryPayments = teacherPayments;
       teacherSalaries = teacherSals;
@@ -138,9 +136,8 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
     const totalTeacherSalariesPaid = teacherSalaryPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
     const totalSalariesPaid = totalSecretarySalariesPaid + totalTeacherSalariesPaid;
 
-    // Salaires attendus = nombre de secrétaires/directeurs × 12 mois + nombre d'enseignants × 12 mois
-    const totalSecretarySalariesExpected = secretarySalaries.data?.reduce((sum, r) => sum + (Number(r.monthly_amount) * 12), 0) || 0;
-    const totalTeacherSalariesExpected = teacherSalaries.data?.reduce((sum, r) => sum + (Number(r.monthly_amount) * 12), 0) || 0;
+    const totalSecretarySalariesExpected = secretarySalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
+    const totalTeacherSalariesExpected = teacherSalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
     const totalSalariesExpected = totalSecretarySalariesExpected + totalTeacherSalariesExpected;
 
     const totalSalariesOutstanding = totalSalariesExpected - totalSalariesPaid;
