@@ -330,6 +330,11 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
       schoolYear,
     } = req.body;
 
+    console.log('=== UPDATE STUDENT ===');
+    console.log('Student ID:', id);
+    console.log('Initial Payment:', initialPayment);
+    console.log('School Year:', schoolYear);
+
     // Si modification du matricule, vérifier qu'il n'existe pas déjà
     if (newMatricule) {
       const { data: existing } = await supabase
@@ -378,12 +383,15 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
 
     // Gérer le paiement initial si fourni
     if (initialPayment !== undefined && schoolYear) {
+      console.log('Processing initial payment update...');
       try {
         const { data: schoolYearData } = await supabase
           .from('school_years')
           .select('id')
           .eq('year_label', schoolYear)
           .single();
+
+        console.log('School year data:', schoolYearData);
 
         if (schoolYearData) {
           // Vérifier si un paiement initial existe déjà pour cet élève
@@ -396,6 +404,8 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
             .ilike('notes', '%inscription%')
             .maybeSingle();
 
+          console.log('Existing payment with inscription note:', existingPayment);
+
           // Si pas de paiement avec note "inscription", prendre le premier paiement de l'année
           if (!existingPayment) {
             const { data: firstPayment } = await supabase
@@ -407,14 +417,16 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
               .limit(1)
               .maybeSingle();
             existingPayment = firstPayment;
+            console.log('First payment of school year:', existingPayment);
           }
 
           const paymentAmount = parseFloat(initialPayment);
+          console.log('Payment amount to set:', paymentAmount);
 
           if (paymentAmount > 0) {
             if (existingPayment) {
               // Mettre à jour le paiement existant
-              await supabase
+              const { error: updateError } = await supabase
                 .from('tuition_payments')
                 .update({
                   amount: paymentAmount,
@@ -422,10 +434,15 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
                   notes: 'Paiement initial lors de l\'inscription', // Ajouter la note pour les paiements importés
                 })
                 .eq('id', existingPayment.id);
-              console.log('Initial payment updated successfully');
+
+              if (updateError) {
+                console.error('Error updating payment:', updateError);
+              } else {
+                console.log('Initial payment updated successfully');
+              }
             } else {
               // Créer un nouveau paiement initial
-              await supabase
+              const { error: insertError } = await supabase
                 .from('tuition_payments')
                 .insert({
                   student_id: id,
@@ -436,21 +453,33 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
                   receipt_number: `REC${Date.now()}`,
                   notes: 'Paiement initial lors de l\'inscription',
                 });
-              console.log('Initial payment created successfully');
+
+              if (insertError) {
+                console.error('Error inserting payment:', insertError);
+              } else {
+                console.log('Initial payment created successfully');
+              }
             }
           } else if (existingPayment && paymentAmount === 0) {
             // Supprimer le paiement initial si le montant est 0
-            await supabase
+            const { error: deleteError } = await supabase
               .from('tuition_payments')
               .delete()
               .eq('id', existingPayment.id);
-            console.log('Initial payment deleted successfully');
+
+            if (deleteError) {
+              console.error('Error deleting payment:', deleteError);
+            } else {
+              console.log('Initial payment deleted successfully');
+            }
           }
         }
       } catch (paymentError) {
         console.error('Error updating initial payment:', paymentError);
         // Ne pas échouer la mise à jour de l'élève si le paiement échoue
       }
+    } else {
+      console.log('Initial payment not provided or school year missing');
     }
 
     res.json({ student: data });
