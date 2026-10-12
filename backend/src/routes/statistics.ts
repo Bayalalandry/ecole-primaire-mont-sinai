@@ -35,10 +35,17 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       filterSchoolYearId = syData?.id;
     }
 
+    // Récupérer l'année scolaire actuelle pour fallback
+    const { data: currentSchoolYear } = await supabase
+      .from('school_years')
+      .select('id')
+      .eq('is_current', true)
+      .maybeSingle();
+    const statsSchoolYearId = currentSchoolYear?.id;
+
     // Exécuter toutes les requêtes indépendantes en parallèle avec Promise.all
     const [
       tuitionPayments,
-      tuitionSchoolYear,
       activeStudentsForTuition,
       salaryPayments,
       secretarySalaries,
@@ -46,25 +53,45 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       allStudents,
       secretaries
     ] = await Promise.all([
-      // 1. Statistiques scolarités
-      supabase.from('tuition_payments').select('amount, payment_date, student_id').order('payment_date'),
-      // Récupérer l'année scolaire actuelle pour les scolarités
-      supabase.from('school_years').select('id').eq('is_current', true).maybeSingle(),
+      // 1. Statistiques scolarités - filtrer par année scolaire si spécifiée
+      filterSchoolYearId
+        ? supabase.from('tuition_payments').select('amount, payment_date, student_id').eq('school_year_id', filterSchoolYearId).order('payment_date')
+        : supabase.from('tuition_payments').select('amount, payment_date, student_id').order('payment_date'),
       // Calculer le total attendu : pour chaque élève actif, récupérer le tarif de sa classe
       supabase.from('students').select('id, current_class_id').eq('status', 'active'),
-      // 2. Statistiques salaires
-      supabase.from('salary_payments').select('amount, payment_date'),
-      supabase.from('secretary_salaries').select('monthly_amount'),
-      // 3. Statistiques dépenses
-      supabase.from('expenses').select('category, amount'),
+      // 2. Statistiques salaires des secrétaires/directeurs
+      filterSchoolYearId
+        ? supabase.from('salary_payments').select('amount, payment_date').eq('school_year_id', filterSchoolYearId)
+        : supabase.from('salary_payments').select('amount, payment_date'),
+      supabase.from('secretary_salaries').select('monthly_amount').eq('school_year_id', filterSchoolYearId || statsSchoolYearId),
+      // 3. Statistiques dépenses - filtrer par année scolaire si spécifiée
+      filterSchoolYearId
+        ? supabase.from('expenses').select('category, amount').eq('school_year_id', filterSchoolYearId)
+        : supabase.from('expenses').select('category, amount'),
       // 4. Statistiques élèves
       supabase.from('students').select('status, current_class_id'),
       // 5. Statistiques secrétaires
       supabase.from('users').select('id').eq('role', 'secretary'),
     ]);
 
+    // 2b. Statistiques salaires des enseignants (table peut ne pas exister)
+    let teacherSalaryPayments = { data: [] };
+    let teacherSalaries = { data: [] };
+    try {
+      const [teacherPayments, teacherSals] = await Promise.all([
+        filterSchoolYearId
+          ? supabase.from('teacher_salary_payments').select('amount, payment_date').eq('school_year_id', filterSchoolYearId)
+          : supabase.from('teacher_salary_payments').select('amount, payment_date'),
+        supabase.from('teacher_salaries').select('monthly_amount').eq('school_year_id', filterSchoolYearId || statsSchoolYearId),
+      ]);
+      teacherSalaryPayments = teacherPayments;
+      teacherSalaries = teacherSals;
+    } catch (error) {
+      console.warn('Teacher salary tables not found or query failed:', error);
+      // Continue with empty data
+    }
+
     const totalTuitionCollected = tuitionPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
-    const statsSchoolYearId = tuitionSchoolYear.data?.id;
     const tuitionClassIds = [...new Set(activeStudentsForTuition.data?.map(s => s.current_class_id) || [])];
 
     // Récupérer les tarifs de scolarité (dépend de activeStudentsForTuition et tuitionSchoolYear)
@@ -106,9 +133,15 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
 
     const totalTuitionOutstanding = Math.max(0, totalTuitionExpected - totalTuitionCollected);
 
-    // 2. Statistiques salaires
-    const totalSalariesPaid = salaryPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
-    const totalSalariesExpected = secretarySalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
+    // 2. Statistiques salaires (secrétaires/directeurs + enseignants)
+    const totalSecretarySalariesPaid = salaryPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
+    const totalTeacherSalariesPaid = teacherSalaryPayments.data?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
+    const totalSalariesPaid = totalSecretarySalariesPaid + totalTeacherSalariesPaid;
+
+    const totalSecretarySalariesExpected = secretarySalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
+    const totalTeacherSalariesExpected = teacherSalaries.data?.reduce((sum, r) => sum + Number(r.monthly_amount), 0) || 0;
+    const totalSalariesExpected = totalSecretarySalariesExpected + totalTeacherSalariesExpected;
+
     const totalSalariesOutstanding = totalSalariesExpected - totalSalariesPaid;
 
     // 3. Statistiques dépenses
