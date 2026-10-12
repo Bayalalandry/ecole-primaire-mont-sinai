@@ -547,18 +547,20 @@ export default function StudentsPage() {
                                           initialPayment: '',
                                         };
 
-                                        // Récupérer le paiement initial existant
+                                        // Récupérer le paiement initial existant (premier paiement de l'année)
                                         try {
                                           const token = tokenStorage.getToken();
                                           const studentId = student.id;
                                           if (studentId) {
                                             // @ts-ignore
                                             const paymentsData = await tuitionService.getStudentTuitionPayments(studentId, token);
-                                            const initialPayment = paymentsData.payments?.find((p: any) =>
-                                              p.notes && p.notes.includes('inscription')
-                                            );
-                                            if (initialPayment) {
-                                              studentFormData.initialPayment = initialPayment.amount.toString();
+                                            const payments = paymentsData.payments || [];
+                                            // Prendre le premier paiement (le plus ancien) comme paiement initial
+                                            if (payments.length > 0) {
+                                              const sortedPayments = [...payments].sort((a: any, b: any) =>
+                                                new Date(a.payment_date).getTime() - new Date(b.payment_date).getTime()
+                                              );
+                                              studentFormData.initialPayment = sortedPayments[0].amount.toString();
                                             }
                                           }
                                         } catch (error) {
@@ -726,18 +728,20 @@ export default function StudentsPage() {
                                           initialPayment: '',
                                         };
 
-                                        // Récupérer le paiement initial existant
+                                        // Récupérer le paiement initial existant (premier paiement de l'année)
                                         try {
                                           const token = tokenStorage.getToken();
                                           const studentId = student.id;
                                           if (studentId) {
                                             // @ts-ignore
                                             const paymentsData = await tuitionService.getStudentTuitionPayments(studentId, token);
-                                            const initialPayment = paymentsData.payments?.find((p: any) =>
-                                              p.notes && p.notes.includes('inscription')
-                                            );
-                                            if (initialPayment) {
-                                              studentFormData.initialPayment = initialPayment.amount.toString();
+                                            const payments = paymentsData.payments || [];
+                                            // Prendre le premier paiement (le plus ancien) comme paiement initial
+                                            if (payments.length > 0) {
+                                              const sortedPayments = [...payments].sort((a: any, b: any) =>
+                                                new Date(a.payment_date).getTime() - new Date(b.payment_date).getTime()
+                                              );
+                                              studentFormData.initialPayment = sortedPayments[0].amount.toString();
                                             }
                                           }
                                         } catch (error) {

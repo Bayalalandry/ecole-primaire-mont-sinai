@@ -168,7 +168,6 @@ router.post('/', authenticateToken, requireFounderOrDirectorOrSecretary, async (
               payment_date: new Date().toISOString().split('T')[0],
               payment_method: 'cash',
               receipt_number: `REC${Date.now()}`,
-              notes: 'Paiement initial lors de l\'inscription',
             });
           console.log('Initial payment created successfully');
         }
@@ -394,31 +393,17 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
         console.log('School year data:', schoolYearData);
 
         if (schoolYearData) {
-          // Vérifier si un paiement initial existe déjà pour cet élève
-          // Chercher d'abord un paiement avec la note "inscription"
-          let { data: existingPayment } = await supabase
+          // Prendre le premier paiement de l'année scolaire comme paiement initial
+          const { data: existingPayment } = await supabase
             .from('tuition_payments')
-            .select('id, notes')
+            .select('id')
             .eq('student_id', id)
             .eq('school_year_id', schoolYearData.id)
-            .ilike('notes', '%inscription%')
+            .order('payment_date', { ascending: true })
+            .limit(1)
             .maybeSingle();
 
-          console.log('Existing payment with inscription note:', existingPayment);
-
-          // Si pas de paiement avec note "inscription", prendre le premier paiement de l'année
-          if (!existingPayment) {
-            const { data: firstPayment } = await supabase
-              .from('tuition_payments')
-              .select('id, notes')
-              .eq('student_id', id)
-              .eq('school_year_id', schoolYearData.id)
-              .order('payment_date', { ascending: true })
-              .limit(1)
-              .maybeSingle();
-            existingPayment = firstPayment;
-            console.log('First payment of school year:', existingPayment);
-          }
+          console.log('First payment of school year:', existingPayment);
 
           const paymentAmount = parseFloat(initialPayment);
           console.log('Payment amount to set:', paymentAmount);
@@ -431,7 +416,6 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
                 .update({
                   amount: paymentAmount,
                   payment_date: new Date().toISOString().split('T')[0],
-                  notes: 'Paiement initial lors de l\'inscription', // Ajouter la note pour les paiements importés
                 })
                 .eq('id', existingPayment.id);
 
@@ -451,7 +435,6 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
                   payment_date: new Date().toISOString().split('T')[0],
                   payment_method: 'cash',
                   receipt_number: `REC${Date.now()}`,
-                  notes: 'Paiement initial lors de l\'inscription',
                 });
 
               if (insertError) {
