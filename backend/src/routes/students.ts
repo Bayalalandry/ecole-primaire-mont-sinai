@@ -387,13 +387,27 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
 
         if (schoolYearData) {
           // Vérifier si un paiement initial existe déjà pour cet élève
-          const { data: existingPayment } = await supabase
+          // Chercher d'abord un paiement avec la note "inscription"
+          let { data: existingPayment } = await supabase
             .from('tuition_payments')
-            .select('id')
+            .select('id, notes')
             .eq('student_id', id)
             .eq('school_year_id', schoolYearData.id)
             .ilike('notes', '%inscription%')
             .maybeSingle();
+
+          // Si pas de paiement avec note "inscription", prendre le premier paiement de l'année
+          if (!existingPayment) {
+            const { data: firstPayment } = await supabase
+              .from('tuition_payments')
+              .select('id, notes')
+              .eq('student_id', id)
+              .eq('school_year_id', schoolYearData.id)
+              .order('payment_date', { ascending: true })
+              .limit(1)
+              .maybeSingle();
+            existingPayment = firstPayment;
+          }
 
           const paymentAmount = parseFloat(initialPayment);
 
@@ -405,6 +419,7 @@ router.put('/:id', authenticateToken, requireFounderOrDirectorOrSecretary, async
                 .update({
                   amount: paymentAmount,
                   payment_date: new Date().toISOString().split('T')[0],
+                  notes: 'Paiement initial lors de l\'inscription', // Ajouter la note pour les paiements importés
                 })
                 .eq('id', existingPayment.id);
               console.log('Initial payment updated successfully');
