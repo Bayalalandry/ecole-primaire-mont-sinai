@@ -229,6 +229,20 @@ export default function TuitionPage() {
       return;
     }
 
+    // Vérifier que le montant ne dépasse pas le tarif fixé
+    const selectedStudent = students.find(s => s.id === paymentForm.studentId);
+    if (selectedStudent) {
+      const classRate = rates.find(r => r.class_id === selectedStudent.current_class_id && r.school_year === paymentForm.schoolYear);
+      if (classRate) {
+        const maxAmount = parseFloat(classRate.amount);
+        const paymentAmount = parseFloat(paymentForm.amount);
+        if (paymentAmount > maxAmount) {
+          alert(`Le montant ne peut pas dépasser le tarif fixé de ${formatAmount(maxAmount)} pour la classe ${selectedStudent.classes?.name || 'N/A'}.`);
+          return;
+        }
+      }
+    }
+
     try {
       const result = await tuitionService.createTuitionPayment(
         {

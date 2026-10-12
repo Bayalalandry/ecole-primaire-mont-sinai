@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { tokenStorage } from '../services/authService';
 import { studentService } from '../services/studentService';
 import { classService } from '../services/classService';
+import { tuitionService } from '../services/tuitionService';
 import { API_URL } from '../config/apiConfig';
 import jsPDF from 'jspdf';
 import { Plus, FileText, ArrowLeft, Edit, X, Info, Users, CheckCircle, Archive, Clock, UserPlus, User } from 'lucide-react';
@@ -14,6 +15,7 @@ export default function StudentsPage() {
   const [filteredStudents, setFilteredStudents] = useState<any[]>([]);
   const [classes, setClasses] = useState<any[]>([]);
   const [secretaries, setSecretaries] = useState<any[]>([]);
+  const [rates, setRates] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<any>(null);
@@ -50,6 +52,7 @@ export default function StudentsPage() {
     loadStudents(token);
     loadClasses(token);
     loadSecretaries(token);
+    loadRates(token);
     // Secretaries see all classes, no need for assigned classes logic
   }, [navigate]);
 
@@ -89,6 +92,15 @@ export default function StudentsPage() {
     }
   };
 
+  const loadRates = async (token: string) => {
+    try {
+      const data = await tuitionService.getTuitionRates(token, '2026-2027');
+      setRates(data.rates || []);
+    } catch (error) {
+      console.error('Error loading tuition rates:', error);
+    }
+  };
+
   // Traduire le statut en français
   const translateStatus = (status: string): string => {
     switch (status) {
@@ -117,6 +129,20 @@ export default function StudentsPage() {
     e.preventDefault();
     const token = tokenStorage.getToken();
     if (!token) return;
+
+    // Vérifier le paiement initial lors de l'inscription
+    if (!editingStudent && formData.initialPayment && parseFloat(formData.initialPayment) > 0) {
+      const classRate = rates.find(r => r.class_id === formData.classId && r.school_year === formData.schoolYear);
+      if (classRate) {
+        const maxAmount = parseFloat(classRate.amount);
+        const paymentAmount = parseFloat(formData.initialPayment);
+        if (paymentAmount > maxAmount) {
+          const className = classes.find(c => c.id === formData.classId)?.name || 'N/A';
+          alert(`Le montant initial ne peut pas dépasser le tarif fixé de ${maxAmount.toLocaleString()} FCFA pour la classe ${className}.`);
+          return;
+        }
+      }
+    }
 
     try {
       if (editingStudent) {
