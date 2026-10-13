@@ -186,7 +186,7 @@ export default function StudentsPage() {
     });
   };
 
-  // Grouper les élèves par classe
+  // Grouper les élèves par classe et trier par ordre alphabétique
   const studentsByClass = filteredStudents.reduce((acc: any, student: any) => {
     const className = student.classes?.name || 'Non assigné';
     if (!acc[className]) {
@@ -195,6 +195,15 @@ export default function StudentsPage() {
     acc[className].push(student);
     return acc;
   }, {});
+
+  // Trier les élèves dans chaque classe par ordre alphabétique
+  Object.keys(studentsByClass).forEach(className => {
+    studentsByClass[className].sort((a: any, b: any) => {
+      const nameA = `${a.last_name || ''} ${a.first_name || ''}`;
+      const nameB = `${b.last_name || ''} ${b.first_name || ''}`;
+      return nameA.localeCompare(nameB);
+    });
+  });
 
   const exportToPDF = () => {
     const classesToExport = selectedClassesForExport.length > 0
@@ -229,7 +238,13 @@ export default function StudentsPage() {
     let y = 45;
 
     classesToExport.forEach((className) => {
-      const classStudents = filteredStudents.filter(s => s.classes?.name === className);
+      const classStudents = filteredStudents
+        .filter(s => s.classes?.name === className)
+        .sort((a, b) => {
+          const nameA = `${a.last_name || ''} ${a.first_name || ''}`;
+          const nameB = `${b.last_name || ''} ${b.first_name || ''}`;
+          return nameA.localeCompare(nameB);
+        });
 
       if (classStudents.length === 0) return;
 

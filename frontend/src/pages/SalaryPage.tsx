@@ -416,7 +416,14 @@ export default function SalaryPage() {
     doc.text('Date', 140, y);
     y += 10;
 
-    payments.forEach((payment, index) => {
+    // Trier les paiements par ordre alphabétique de l'enseignant
+    const sortedPayments = [...payments].sort((a, b) => {
+      const nameA = `${a.users?.last_name || ''} ${a.users?.first_name || ''}`;
+      const nameB = `${b.users?.last_name || ''} ${b.users?.first_name || ''}`;
+      return nameA.localeCompare(nameB);
+    });
+
+    sortedPayments.forEach((payment, index) => {
       if (y > 280) {
         doc.addPage();
         pageCount++;

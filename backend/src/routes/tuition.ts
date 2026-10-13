@@ -406,7 +406,7 @@ router.get('/payments', authenticateToken, async (req: AuthRequest, res) => {
       query = query.eq('trimester', parseInt(trimester as string));
     }
 
-    const { data, error } = await query.order('payment_date', { ascending: false });
+    const { data, error } = await query.order('students(last_name)', { ascending: true }).order('students(first_name)', { ascending: true });
 
     if (error) {
       if (error.message?.includes('school_year')) {
@@ -423,7 +423,7 @@ router.get('/payments', authenticateToken, async (req: AuthRequest, res) => {
         if (studentId) query2 = query2.eq('student_id', studentId);
         if (trimester) query2 = query2.eq('trimester', parseInt(trimester as string));
 
-        const { data: data2, error: error2 } = await query2.order('payment_date', { ascending: false });
+        const { data: data2, error: error2 } = await query2.order('students(last_name)', { ascending: true }).order('students(first_name)', { ascending: true });
         if (error2) throw error2;
 
         let filteredData = data2;
@@ -819,6 +819,9 @@ router.get('/outstanding', authenticateToken, requireFounderOrDirector, async (r
         });
       }
     }
+
+    // Trier la liste des impayés par ordre alphabétique
+    outstandingList.sort((a, b) => a.studentName.localeCompare(b.studentName));
 
     console.log('Outstanding list:', outstandingList.length);
     res.json({ outstanding: outstandingList });

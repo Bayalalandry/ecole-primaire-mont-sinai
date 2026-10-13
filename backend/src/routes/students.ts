@@ -233,7 +233,7 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
       query = query.eq('status', status);
     }
 
-    const { data, error } = await query.order('created_at', { ascending: false });
+    const { data, error } = await query.order('last_name', { ascending: true }).order('first_name', { ascending: true });
 
     if (error) throw error;
 

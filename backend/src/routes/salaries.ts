@@ -207,6 +207,13 @@ router.get('/', authenticateToken, requireFounder, async (req: AuthRequest, res)
       }
     });
 
+    // Trier par ordre alphabétique du nom
+    salariesWithInfo.sort((a, b) => {
+      const nameA = `${a.users.last_name} ${a.users.first_name}`;
+      const nameB = `${b.users.last_name} ${b.users.first_name}`;
+      return nameA.localeCompare(nameB);
+    });
+
     res.json({ salaries: salariesWithInfo || [] });
   } catch (error: any) {
     console.error('Get salaries error:', error);

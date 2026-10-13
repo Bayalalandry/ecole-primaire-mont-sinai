@@ -474,7 +474,14 @@ export default function TuitionPage() {
     doc.text('Trimestre', 155, y);
     y += 10;
 
-    payments.forEach((payment, index) => {
+    // Trier les paiements par ordre alphabétique de l'élève
+    const sortedPayments = [...payments].sort((a, b) => {
+      const nameA = `${a.students?.last_name || ''} ${a.students?.first_name || ''}`;
+      const nameB = `${b.students?.last_name || ''} ${b.students?.first_name || ''}`;
+      return nameA.localeCompare(nameB);
+    });
+
+    sortedPayments.forEach((payment, index) => {
       if (y > 280) {
         doc.addPage();
         pageCount++;
@@ -608,7 +615,9 @@ export default function TuitionPage() {
     const classNames = Object.keys(outstandingByClass).sort();
 
     classNames.forEach((className) => {
-      const classOutstanding = outstandingByClass[className];
+      const classOutstanding = outstandingByClass[className].sort((a: any, b: any) => {
+        return a.studentName.localeCompare(b.studentName);
+      });
 
       if (classOutstanding.length === 0) return;
 
