@@ -168,11 +168,8 @@ export default function SalaryPage() {
       const salariesData = await salaryService.getSalaries(token, salaryForm.schoolYear);
       setSalaries(salariesData.salaries || []);
 
-      // Rafraîchir les stats du dashboard fondateur
-      localStorage.setItem('globalStatsUpdate', Date.now().toString());
-
-      // Rafraîchir les stats du dashboard directeur (impayés de salaires)
-      localStorage.setItem('directorStatsUpdate', Date.now().toString());
+      // Rafraîchir les stats du dashboard fondateur et directeur
+      window.dispatchEvent(new CustomEvent('statsUpdate', { detail: { source: 'salary' } }));
 
       setShowSalaryForm(false);
       setSalaryForm({
@@ -218,11 +215,8 @@ export default function SalaryPage() {
       const outstandingData = await salaryService.getSalaryOutstanding(token);
       setOutstanding(outstandingData.outstanding || []);
 
-      // Rafraîchir les stats du dashboard fondateur
-      localStorage.setItem('globalStatsUpdate', Date.now().toString());
-
-      // Rafraîchir les stats du dashboard directeur (impayés de salaires)
-      localStorage.setItem('directorStatsUpdate', Date.now().toString());
+      // Rafraîchir les stats du dashboard fondateur et directeur
+      window.dispatchEvent(new CustomEvent('statsUpdate', { detail: { source: 'salary' } }));
 
       setShowPaymentForm(false);
       setPaymentForm({
@@ -253,11 +247,8 @@ export default function SalaryPage() {
       const outstandingData = await salaryService.getSalaryOutstanding(token);
       setOutstanding(outstandingData.outstanding || []);
 
-      // Rafraîchir les stats du dashboard fondateur
-      localStorage.setItem('globalStatsUpdate', Date.now().toString());
-
-      // Rafraîchir les stats du dashboard directeur (impayés de salaires)
-      localStorage.setItem('directorStatsUpdate', Date.now().toString());
+      // Rafraîchir les stats du dashboard fondateur et directeur
+      window.dispatchEvent(new CustomEvent('statsUpdate', { detail: { source: 'salary' } }));
     } catch (error: any) {
       alert(error.message);
     }

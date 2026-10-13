@@ -159,9 +159,8 @@ export default function StudentsPage() {
       resetForm();
       loadStudents(token);
 
-      // Rafraîchir les stats du dashboard
-      localStorage.setItem('directorStatsUpdate', Date.now().toString());
-      localStorage.setItem('teacherStatsUpdate', Date.now().toString());
+      // Rafraîchir les stats du dashboard via événement personnalisé
+      window.dispatchEvent(new CustomEvent('statsUpdate', { detail: { source: 'student' } }));
 
       // Faire disparaître le message après 3 secondes
       setTimeout(() => setSuccessMessage(''), 3000);

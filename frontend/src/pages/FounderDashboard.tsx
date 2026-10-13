@@ -59,13 +59,19 @@ export default function FounderDashboard() {
       loadUnreadCount(token);
     }, 30000);
 
-    // Écouter l'événement de mise à jour des stats via localStorage
+    // Écouter l'événement de mise à jour des stats via localStorage et événement personnalisé
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'globalStatsUpdate' || e.key === 'directorStatsUpdate') {
         loadStatistics(token);
       }
     };
     window.addEventListener('storage', handleStorageChange);
+
+    // Écouter l'événement personnalisé (même onglet)
+    const handleCustomEvent = () => {
+      loadStatistics(token);
+    };
+    window.addEventListener('statsUpdate', handleCustomEvent);
 
     // Vérifier au montage si une mise à jour est nécessaire
     const lastUpdate = localStorage.getItem('globalStatsUpdate') || localStorage.getItem('directorStatsUpdate');
@@ -78,6 +84,7 @@ export default function FounderDashboard() {
     return () => {
       clearInterval(interval);
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('statsUpdate', handleCustomEvent);
     };
   }, [navigate]);
 

@@ -60,6 +60,12 @@ export default function SecretaryDashboard() {
     };
     window.addEventListener('storage', handleStorageChange);
 
+    // Écouter l'événement personnalisé (même onglet)
+    const handleCustomEvent = () => {
+      loadSecretaryStats(token);
+    };
+    window.addEventListener('statsUpdate', handleCustomEvent);
+
     // Vérifier au montage si une mise à jour est nécessaire
     const lastUpdate = localStorage.getItem('secretaryStatsUpdate');
     if (lastUpdate) {
@@ -76,6 +82,7 @@ export default function SecretaryDashboard() {
     return () => {
       clearInterval(interval);
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('statsUpdate', handleCustomEvent);
       window.removeEventListener('focus', handleFocus);
     };
   }, [navigate]);

@@ -125,9 +125,7 @@ export const teachersService = {
         school_year_id: schoolYearId,
         amount: amount,
         payment_date: new Date().toISOString().split('T')[0],
-        payment_method: paymentMethod,
         receipt_number: receiptNumber,
-        notes: notes || null,
       })
       .select()
       .single();

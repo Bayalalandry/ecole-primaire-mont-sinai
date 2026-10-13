@@ -166,7 +166,6 @@ router.post('/', authenticateToken, requireFounderOrDirectorOrSecretary, async (
               school_year_id: schoolYearData.id,
               amount: parseFloat(initialPayment),
               payment_date: new Date().toISOString().split('T')[0],
-              payment_method: 'cash',
               receipt_number: `REC${Date.now()}`,
             });
           console.log('Initial payment created successfully');

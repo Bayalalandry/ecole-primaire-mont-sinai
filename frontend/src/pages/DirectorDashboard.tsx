@@ -59,6 +59,12 @@ export default function DirectorDashboard() {
     };
     window.addEventListener('storage', handleStorageChange);
 
+    // Écouter l'événement personnalisé (même onglet)
+    const handleCustomEvent = () => {
+      loadDirectorStats(token);
+    };
+    window.addEventListener('statsUpdate', handleCustomEvent);
+
     // Vérifier au montage si une mise à jour est nécessaire
     const lastUpdate = localStorage.getItem('directorStatsUpdate');
     if (lastUpdate) {
@@ -68,6 +74,7 @@ export default function DirectorDashboard() {
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('statsUpdate', handleCustomEvent);
     };
   }, [navigate]);
 

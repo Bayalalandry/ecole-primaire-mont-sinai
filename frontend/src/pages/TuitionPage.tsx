@@ -205,7 +205,7 @@ export default function TuitionPage() {
 
       const ratesData = await tuitionService.getTuitionRates(token, rateForm.schoolYear);
       setRates(ratesData.rates || []);
-      localStorage.setItem('directorStatsUpdate', Date.now().toString());
+      window.dispatchEvent(new CustomEvent('statsUpdate', { detail: { source: 'tuition' } }));
 
       setShowRateForm(false);
       setRateForm({
@@ -273,8 +273,7 @@ export default function TuitionPage() {
       const outstandingData = await tuitionService.getOutstandingPayments(token, { schoolYear: paymentForm.schoolYear });
       setOutstanding(outstandingData.outstanding || []);
 
-      localStorage.setItem('teacherStatsUpdate', Date.now().toString());
-      localStorage.setItem('directorStatsUpdate', Date.now().toString());
+      window.dispatchEvent(new CustomEvent('statsUpdate', { detail: { source: 'tuition' } }));
 
       // Afficher le message de succès après la fermeture
       alert(`Versement enregistré avec succès !\nNuméro de reçu: ${result.payment.receipt_number}`);
@@ -300,8 +299,7 @@ export default function TuitionPage() {
       const outstandingData = await tuitionService.getOutstandingPayments(token, { schoolYear: paymentForm.schoolYear });
       setOutstanding(outstandingData.outstanding || []);
 
-      localStorage.setItem('teacherStatsUpdate', Date.now().toString());
-      localStorage.setItem('directorStatsUpdate', Date.now().toString());
+      window.dispatchEvent(new CustomEvent('statsUpdate', { detail: { source: 'tuition' } }));
     } catch (error: any) {
       alert(error.message);
     }
