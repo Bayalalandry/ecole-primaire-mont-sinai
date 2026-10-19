@@ -88,6 +88,8 @@ export default function SalaryPage() {
       ]);
 
       console.log('Loaded data:', { salariesData, teachersData, personnelTeachersData, paymentsData, outstandingData });
+      console.log('Teachers (secretaries + directors):', teachersData.secretaries || teachersData);
+      console.log('Personnel teachers:', personnelTeachersData.teachers);
 
       setSalaries(salariesData.salaries || []);
       setTeachers(teachersData.secretaries || teachersData || []);
@@ -798,13 +800,22 @@ export default function SalaryPage() {
                       required
                     >
                       <option value="">Sélectionner un enseignant</option>
-                      {teachers.filter(t => t.role === 'secretary' || t.role === 'director').map((teacher) => (
-                        <option key={teacher.id} value={teacher.id}>
-                          {teacher.last_name} {teacher.first_name} {teacher.role === 'director' ? '(Directeur)' : ''}
-                        </option>
-                      ))}
+                      <optgroup label="Secrétaires et Directeurs">
+                        {teachers.filter(t => t.role === 'secretary' || t.role === 'director').map((teacher) => (
+                          <option key={teacher.id} value={teacher.id}>
+                            {teacher.last_name} {teacher.first_name} {teacher.role === 'director' ? '(Directeur)' : ''}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Enseignants (personnel)">
+                        {personnelTeachers.map((teacher) => (
+                          <option key={teacher.id} value={`teacher-${teacher.id}`}>
+                            {teacher.last_name} {teacher.first_name} {teacher.classes?.name ? `(${teacher.classes.name})` : ''}
+                          </option>
+                        ))}
+                      </optgroup>
                     </select>
-                    {teachers.length === 0 && (
+                    {teachers.length === 0 && personnelTeachers.length === 0 && (
                       <p className="text-xs text-red-500 mt-1">Aucun enseignant disponible</p>
                     )}
                   </div>

@@ -226,56 +226,84 @@ router.get('/payments', authenticateToken, requireFounder, async (req: AuthReque
   try {
     const { schoolYear, paymentMonth } = req.query;
 
-    let query = supabase
-      .from('salary_payments')
-      .select('*')
-      .eq('cancelled', false)
-      .order('payment_date', { ascending: false });
-
+    let schoolYearId = null;
     if (schoolYear) {
       const { data: schoolYearData } = await supabase
         .from('school_years')
         .select('id')
         .eq('year_label', schoolYear)
         .maybeSingle();
-
-      if (schoolYearData) {
-        query = query.eq('school_year_id', schoolYearData.id);
-      }
+      schoolYearId = schoolYearData?.id;
     }
 
+    // Récupérer les paiements des secrétaires/directeurs
+    let secretaryQuery = supabase
+      .from('salary_payments')
+      .select('*')
+      .eq('cancelled', false)
+      .order('payment_date', { ascending: false });
+
+    if (schoolYearId) {
+      secretaryQuery = secretaryQuery.eq('school_year_id', schoolYearId);
+    }
     if (paymentMonth) {
-      query = query.eq('payment_month', paymentMonth);
+      secretaryQuery = secretaryQuery.eq('payment_month', paymentMonth);
     }
 
-    const { data, error } = await query;
+    const { data: secretaryPayments, error: secretaryError } = await secretaryQuery;
 
-    if (error) throw error;
+    // Récupérer les paiements des enseignants du personnel
+    let teacherQuery = supabase
+      .from('teacher_salary_payments')
+      .select('*')
+      .eq('cancelled', false)
+      .order('payment_date', { ascending: false });
 
-    // Récupérer les informations des enseignants et utilisateurs manuellement
-    const secretaryIds = (data || []).map((p: any) => p.secretary_id);
-    const { data: teachersData } = await supabase
-      .from('teachers')
-      .select('user_id, status')
-      .in('user_id', secretaryIds);
+    if (schoolYearId) {
+      teacherQuery = teacherQuery.eq('school_year_id', schoolYearId);
+    }
+    if (paymentMonth) {
+      teacherQuery = teacherQuery.eq('payment_month', paymentMonth);
+    }
 
+    const { data: teacherPayments, error: teacherError } = await teacherQuery;
+
+    // Récupérer les informations des utilisateurs (secrétaires/directeurs)
+    const secretaryIds = (secretaryPayments || []).map((p: any) => p.secretary_id);
     const { data: usersData } = await supabase
       .from('users')
       .select('id, first_name, last_name, role')
       .in('id', secretaryIds);
 
-    // Combiner les données avec gestion des cas manquants
-    const paymentsWithTeachers = (data || []).map((payment: any) => {
-      const teacher = teachersData?.find((t: any) => t.user_id === payment.secretary_id);
+    // Récupérer les informations des enseignants du personnel
+    const teacherIds = (teacherPayments || []).map((p: any) => p.teacher_id);
+    const { data: teachersData } = await supabase
+      .from('teachers')
+      .select('id, first_name, last_name, class_id, classes (name)')
+      .in('id', teacherIds);
+
+    // Combiner les paiements secrétaires avec les informations utilisateurs
+    const secretaryPaymentsWithInfo = (secretaryPayments || []).map((payment: any) => {
       const user = usersData?.find((u: any) => u.id === payment.secretary_id);
-      
       return {
         ...payment,
-        teachers: teacher ? { ...teacher, users: user } : { user_id: payment.secretary_id, users: user || { id: payment.secretary_id, first_name: 'Enseignant', last_name: 'Inconnu' } },
+        teachers: { users: user || { id: payment.secretary_id, first_name: 'Enconnu', last_name: '', role: 'secretary' } },
       };
     });
 
-    res.json({ payments: paymentsWithTeachers || [] });
+    // Combiner les paiements enseignants avec les informations enseignants
+    const teacherPaymentsWithInfo = (teacherPayments || []).map((payment: any) => {
+      const teacher = teachersData?.find((t: any) => t.id === payment.teacher_id);
+      return {
+        ...payment,
+        teachers: teacher || { id: payment.teacher_id, first_name: 'Inconnu', last_name: '', classes: null },
+      };
+    });
+
+    // Combiner tous les paiements
+    const allPayments = [...secretaryPaymentsWithInfo, ...teacherPaymentsWithInfo];
+
+    res.json({ payments: allPayments || [] });
   } catch (error: any) {
     console.error('Get salary payments error:', error);
     res.status(500).json({ error: 'Erreur lors de la récupération des paiements' });
@@ -297,28 +325,36 @@ router.get('/outstanding', authenticateToken, requireFounder, async (req: AuthRe
       schoolYearId = schoolYearData?.id;
     }
 
-    // Récupérer tous les salaires
-    const { data: salaries } = await supabase
+    // Récupérer tous les salaires des secrétaires/directeurs
+    const { data: secretarySalaries } = await supabase
       .from('secretary_salaries')
       .select('*')
       .order('effective_date', { ascending: false });
 
-    // Récupérer les informations des enseignants et utilisateurs
-    const secretaryIds = (salaries || []).map((s: any) => s.secretary_id);
-    const { data: teachersData } = await supabase
-      .from('teachers')
-      .select('user_id, status')
-      .in('user_id', secretaryIds);
+    // Récupérer tous les salaires des enseignants du personnel
+    const { data: teacherSalaries } = await supabase
+      .from('teacher_salaries')
+      .select('*')
+      .order('effective_date', { ascending: false });
 
+    // Récupérer les informations des utilisateurs (secrétaires/directeurs)
+    const secretaryIds = (secretarySalaries || []).map((s: any) => s.secretary_id);
     const { data: usersData } = await supabase
       .from('users')
       .select('id, first_name, last_name')
       .in('id', secretaryIds);
 
+    // Récupérer les informations des enseignants du personnel
+    const teacherIds = (teacherSalaries || []).map((s: any) => s.teacher_id);
+    const { data: teachersData } = await supabase
+      .from('teachers')
+      .select('id, first_name, last_name')
+      .in('id', teacherIds);
+
     const outstanding: any[] = [];
 
-    for (const salary of salaries || []) {
-      // Calculer le total payé pour ce salaire
+    // Calculer les impayés pour les secrétaires/directeurs
+    for (const salary of secretarySalaries || []) {
       let paymentsQuery = supabase
         .from('salary_payments')
         .select('amount')
@@ -339,6 +375,36 @@ router.get('/outstanding', authenticateToken, requireFounder, async (req: AuthRe
         outstanding.push({
           secretaryId: salary.secretary_id,
           teacherName: user ? `${user.last_name} ${user.first_name}` : 'Inconnu',
+          monthlyAmount: salary.monthly_amount,
+          totalPaid,
+          totalOutstanding,
+          schoolYearId: salary.school_year_id,
+        });
+      }
+    }
+
+    // Calculer les impayés pour les enseignants du personnel
+    for (const salary of teacherSalaries || []) {
+      let paymentsQuery = supabase
+        .from('teacher_salary_payments')
+        .select('amount')
+        .eq('teacher_id', salary.teacher_id)
+        .eq('cancelled', false);
+
+      if (schoolYearId) {
+        paymentsQuery = paymentsQuery.eq('school_year_id', schoolYearId);
+      }
+
+      const { data: payments } = await paymentsQuery;
+
+      const totalPaid = (payments || []).reduce((sum: number, p: any) => sum + Number(p.amount), 0);
+      const totalOutstanding = Number(salary.monthly_amount) - totalPaid;
+
+      if (totalOutstanding > 0) {
+        const teacher = teachersData?.find((t: any) => t.id === salary.teacher_id);
+        outstanding.push({
+          secretaryId: `teacher-${salary.teacher_id}`,
+          teacherName: teacher ? `${teacher.last_name} ${teacher.first_name}` : 'Inconnu',
           monthlyAmount: salary.monthly_amount,
           totalPaid,
           totalOutstanding,
@@ -437,37 +503,66 @@ router.post('/payments', authenticateToken, requireFounder, async (req: AuthRequ
       return res.status(400).json({ error: 'Champs requis: secretaryId, amount, paymentMonth, paymentDate' });
     }
 
+    // Déterminer si c'est un enseignant (personnel) ou un secrétaire/directeur
+    const isTeacher = secretaryId.startsWith('teacher-');
+    const personnelId = isTeacher ? secretaryId.replace('teacher-', '') : secretaryId;
+
     // Générer un numéro de reçu unique
     const receiptNumber = `SAL${Date.now().toString().slice(-10)}${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
 
-    const { data, error } = await supabase
-      .from('salary_payments')
-      .insert({
-        salary_id: salaryId,
-        secretary_id: secretaryId,
-        amount,
-        payment_month: paymentMonth,
-        payment_date: paymentDate,
-        receipt_number: receiptNumber,
-        created_by: req.user?.id,
-      })
-      .select()
-      .single();
+    let data, error;
+    if (isTeacher) {
+      // Créer dans teacher_salary_payments
+      const result = await supabase
+        .from('teacher_salary_payments')
+        .insert({
+          salary_id: salaryId,
+          teacher_id: personnelId,
+          amount,
+          payment_month: paymentMonth,
+          payment_date: paymentDate,
+          receipt_number: receiptNumber,
+          created_by: req.user?.id,
+        })
+        .select()
+        .single();
+      data = result.data;
+      error = result.error;
+    } else {
+      // Créer dans salary_payments
+      const result = await supabase
+        .from('salary_payments')
+        .insert({
+          salary_id: salaryId,
+          secretary_id: personnelId,
+          amount,
+          payment_month: paymentMonth,
+          payment_date: paymentDate,
+          receipt_number: receiptNumber,
+          created_by: req.user?.id,
+        })
+        .select()
+        .single();
+      data = result.data;
+      error = result.error;
+    }
 
     if (error) throw error;
 
-    // Notifier l'enseignant du paiement
-    try {
-      await createNotification(
-        secretaryId,
-        'salary_payment',
-        'Salaire payé',
-        `Votre salaire de ${formatAmount(amount)} a été payé pour le mois de ${new Date(paymentMonth).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}.`,
-        'salary_payment',
-        data.id
-      );
-    } catch (notifError) {
-      console.error('Error sending notification:', notifError);
+    // Notifier l'enseignant du paiement (seulement pour les utilisateurs, pas le personnel)
+    if (!isTeacher) {
+      try {
+        await createNotification(
+          personnelId,
+          'salary_payment',
+          'Salaire payé',
+          `Votre salaire de ${formatAmount(amount)} a été payé pour le mois de ${new Date(paymentMonth).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}.`,
+          'salary_payment',
+          data.id
+        );
+      } catch (notifError) {
+        console.error('Error sending notification:', notifError);
+      }
     }
 
     res.json({ payment: data });
@@ -482,7 +577,8 @@ router.post('/payments/:paymentId/cancel', authenticateToken, requireFounder, as
   try {
     const { paymentId } = req.params;
 
-    const { data, error } = await supabase
+    // Essayer d'abord dans salary_payments
+    let { data, error } = await supabase
       .from('salary_payments')
       .update({
         cancelled: true,
@@ -492,6 +588,22 @@ router.post('/payments/:paymentId/cancel', authenticateToken, requireFounder, as
       .eq('id', paymentId)
       .select()
       .maybeSingle();
+
+    // Si pas trouvé, essayer dans teacher_salary_payments
+    if (!data && error) {
+      const result = await supabase
+        .from('teacher_salary_payments')
+        .update({
+          cancelled: true,
+          cancelled_by: req.user?.id,
+          cancelled_at: new Date().toISOString(),
+        })
+        .eq('id', paymentId)
+        .select()
+        .maybeSingle();
+      data = result.data;
+      error = result.error;
+    }
 
     if (error) throw error;
 
