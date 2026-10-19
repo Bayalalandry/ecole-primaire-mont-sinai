@@ -55,5 +55,5 @@ CREATE INDEX IF NOT EXISTS idx_teacher_salaries_teacher_id ON teacher_salaries(t
 CREATE INDEX IF NOT EXISTS idx_teacher_salaries_school_year_id ON teacher_salaries(school_year_id);
 CREATE INDEX IF NOT EXISTS idx_teacher_salary_payments_teacher_id ON teacher_salary_payments(teacher_id);
 CREATE INDEX IF NOT EXISTS idx_teacher_salary_payments_salary_id ON teacher_salary_payments(salary_id);
-CREATE INDEX IF NOT EXISTS idx_teacher_salary_payments_school_year_id ON teacher_salary_payments(school_year_id);
 CREATE INDEX IF NOT EXISTS idx_teacher_salary_payments_payment_date ON teacher_salary_payments(payment_date);
+CREATE INDEX IF NOT EXISTS idx_teacher_salary_payments_payment_month ON teacher_salary_payments(payment_month);

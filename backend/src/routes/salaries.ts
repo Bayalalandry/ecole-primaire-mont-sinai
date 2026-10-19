@@ -226,16 +226,6 @@ router.get('/payments', authenticateToken, requireFounder, async (req: AuthReque
   try {
     const { schoolYear, paymentMonth } = req.query;
 
-    let schoolYearId = null;
-    if (schoolYear) {
-      const { data: schoolYearData } = await supabase
-        .from('school_years')
-        .select('id')
-        .eq('year_label', schoolYear)
-        .maybeSingle();
-      schoolYearId = schoolYearData?.id;
-    }
-
     // Récupérer les paiements des secrétaires/directeurs
     let secretaryQuery = supabase
       .from('salary_payments')
@@ -243,9 +233,6 @@ router.get('/payments', authenticateToken, requireFounder, async (req: AuthReque
       .eq('cancelled', false)
       .order('payment_date', { ascending: false });
 
-    if (schoolYearId) {
-      secretaryQuery = secretaryQuery.eq('school_year_id', schoolYearId);
-    }
     if (paymentMonth) {
       secretaryQuery = secretaryQuery.eq('payment_month', paymentMonth);
     }
@@ -259,9 +246,6 @@ router.get('/payments', authenticateToken, requireFounder, async (req: AuthReque
       .eq('cancelled', false)
       .order('payment_date', { ascending: false });
 
-    if (schoolYearId) {
-      teacherQuery = teacherQuery.eq('school_year_id', schoolYearId);
-    }
     if (paymentMonth) {
       teacherQuery = teacherQuery.eq('payment_month', paymentMonth);
     }
@@ -315,16 +299,6 @@ router.get('/outstanding', authenticateToken, requireFounder, async (req: AuthRe
   try {
     const { schoolYear, paymentMonth } = req.query;
 
-    let schoolYearId = null;
-    if (schoolYear) {
-      const { data: schoolYearData } = await supabase
-        .from('school_years')
-        .select('id')
-        .eq('year_label', schoolYear)
-        .maybeSingle();
-      schoolYearId = schoolYearData?.id;
-    }
-
     // Récupérer tous les salaires des secrétaires/directeurs
     const { data: secretarySalaries } = await supabase
       .from('secretary_salaries')
@@ -361,10 +335,6 @@ router.get('/outstanding', authenticateToken, requireFounder, async (req: AuthRe
         .eq('secretary_id', salary.secretary_id)
         .eq('cancelled', false);
 
-      if (schoolYearId) {
-        paymentsQuery = paymentsQuery.eq('school_year_id', schoolYearId);
-      }
-
       const { data: payments } = await paymentsQuery;
 
       const totalPaid = (payments || []).reduce((sum: number, p: any) => sum + Number(p.amount), 0);
@@ -378,7 +348,6 @@ router.get('/outstanding', authenticateToken, requireFounder, async (req: AuthRe
           monthlyAmount: salary.monthly_amount,
           totalPaid,
           totalOutstanding,
-          schoolYearId: salary.school_year_id,
         });
       }
     }
@@ -390,10 +359,6 @@ router.get('/outstanding', authenticateToken, requireFounder, async (req: AuthRe
         .select('amount')
         .eq('teacher_id', salary.teacher_id)
         .eq('cancelled', false);
-
-      if (schoolYearId) {
-        paymentsQuery = paymentsQuery.eq('school_year_id', schoolYearId);
-      }
 
       const { data: payments } = await paymentsQuery;
 
@@ -408,7 +373,6 @@ router.get('/outstanding', authenticateToken, requireFounder, async (req: AuthRe
           monthlyAmount: salary.monthly_amount,
           totalPaid,
           totalOutstanding,
-          schoolYearId: salary.school_year_id,
         });
       }
     }
